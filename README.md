@@ -10,3 +10,4 @@
 
 1. [HLO + Analogues.md](docs/HLO%20%2B%20Analogues.md)
 2. [Use cases.md](docs/Use%20cases.md)
+3. [Persistence.md](docs/Persistence.md)
