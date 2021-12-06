@@ -8,9 +8,4 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import java.util.Optional;
 
 public interface TrackRepo extends PagingAndSortingRepository<Track, Long> {
-    @Override
-    Page<Track> findAll(Pageable pageable);
-
-    @Override
-    Optional<Track> findById(Long aLong);
 }

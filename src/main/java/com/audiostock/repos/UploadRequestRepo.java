@@ -6,6 +6,4 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import java.util.Optional;
 
 public interface UploadRequestRepo extends PagingAndSortingRepository<UploadRequest, Long> {
-    @Override
-    Optional<UploadRequest> findById(Long aLong);
 }
