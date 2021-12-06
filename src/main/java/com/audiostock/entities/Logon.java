@@ -8,7 +8,8 @@ public class Logon {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private Long ip;
+    @Column(length = 4)
+    private Byte[] ip;
 
     @ManyToOne
     private User user;
@@ -24,11 +25,11 @@ public class Logon {
         this.id = id;
     }
 
-    public Long getIp() {
+    public Byte[] getIp() {
         return ip;
     }
 
-    public void setIp(Long ip) {
+    public void setIp(Byte[] ip) {
         this.ip = ip;
     }
 

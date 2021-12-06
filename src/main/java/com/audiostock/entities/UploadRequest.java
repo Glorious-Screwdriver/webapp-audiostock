@@ -9,6 +9,7 @@ public class UploadRequest {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(length = 9)
     private Long id;
 
     @ManyToOne
@@ -22,8 +23,12 @@ public class UploadRequest {
 
     private boolean solution;
 
+    @Column(length = 50)
     private String rejectionReason;
+
+    @Column(nullable = false)
     private LocalDateTime creationDate;
+
     private LocalDateTime reviewDate;
 
     public UploadRequest() {

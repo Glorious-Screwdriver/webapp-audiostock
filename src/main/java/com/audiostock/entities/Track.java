@@ -6,9 +6,11 @@ import java.sql.Blob;
 @Entity
 public class Track {
     @Id
+    @Column(length = 7)
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Column(length = 30)
     private String name;
 
     @Lob
@@ -17,14 +19,19 @@ public class Track {
     @Lob
     private Blob file;
 
+    @Column(length = 300)
     private String description;
 
+    @Column(length = 10)
     private String genre;
 
+    @Column(length = 10)
     private String mood;
 
+    @Column(length = 3)
     private Long bpm;
 
+    @Column(nullable = false, length = 4)
     private Long price;
 
     public Track() {

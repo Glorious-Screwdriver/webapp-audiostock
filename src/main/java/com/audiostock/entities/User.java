@@ -1,5 +1,7 @@
 package com.audiostock.entities;
 
+import net.bytebuddy.implementation.bind.annotation.Default;
+
 import javax.persistence.*;
 import java.sql.Blob;
 import java.util.Set;
@@ -8,23 +10,31 @@ import java.util.Set;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(length = 6)
     private Long id;
 
+    @Column(unique = true, nullable = false, length = 16)
     private String login;
 
+    @Column(nullable = false, length = 30)
     private String password;
 
     @OneToOne
     private Status status;
 
+    @Column(length = 30)
     private String firstname;
 
+    @Column(length = 30)
     private String middlename;
 
+    @Column(length = 30)
     private String lastname;
 
-    private Long balance;
+    @Column(length = 7)
+    private Long balance = 0L;
 
+    @Column(length = 100)
     private String biography;
 
     @Lob
