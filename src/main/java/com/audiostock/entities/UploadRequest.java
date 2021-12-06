@@ -1,17 +1,17 @@
 package com.audiostock.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
-public class Request {
+public class UploadRequest {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @OneToOne
+    @ManyToOne
     private User author;
 
     @OneToOne
@@ -23,10 +23,10 @@ public class Request {
     private boolean solution;
 
     private String rejectionReason;
-    private Date creationDate;
-    private Date reviewDate;
+    private LocalDateTime creationDate;
+    private LocalDateTime reviewDate;
 
-    public Request() {
+    public UploadRequest() {
     }
 
     public Long getId() {
@@ -77,19 +77,19 @@ public class Request {
         this.rejectionReason = rejectionReason;
     }
 
-    public Date getCreationDate() {
+    public LocalDateTime getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(Date creationDate) {
+    public void setCreationDate(LocalDateTime creationDate) {
         this.creationDate = creationDate;
     }
 
-    public Date getReviewDate() {
+    public LocalDateTime getReviewDate() {
         return reviewDate;
     }
 
-    public void setReviewDate(Date reviewDate) {
+    public void setReviewDate(LocalDateTime reviewDate) {
         this.reviewDate = reviewDate;
     }
 }

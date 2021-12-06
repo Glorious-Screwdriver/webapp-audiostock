@@ -42,9 +42,6 @@ public class User {
     @OneToMany
     private Set<Track> purchased;
 
-    @OneToMany
-    private Set<Logon> logons;
-
     public User() {
     }
 
@@ -158,13 +155,5 @@ public class User {
 
     public void setPurchased(Set<Track> purchased) {
         this.purchased = purchased;
-    }
-
-    public Set<Logon> getLogons() {
-        return logons;
-    }
-
-    public void setLogons(Set<Logon> logons) {
-        this.logons = logons;
     }
 }
