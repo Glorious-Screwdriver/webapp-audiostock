@@ -14,7 +14,7 @@ public class User {
     private Long id;
 
     @Column(unique = true, nullable = false, length = 16)
-    private String login;
+    private String login; // also known as nickname
 
     @Column(nullable = false, length = 30)
     private String password;
