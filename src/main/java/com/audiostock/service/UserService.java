@@ -61,7 +61,7 @@ public class UserService {
         user.getCart().add(track);
     }
 
-    public boolean removeFromCart(User user, Track track) {
+    public boolean removeTrackFromCart(User user, Track track) {
         if (!user.getCart().contains(track)) {
             System.out.println(user.getLogin() + " doesn't have track " + track.getName() + " in the cart");
             return false;
