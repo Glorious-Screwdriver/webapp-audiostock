@@ -23,6 +23,10 @@ public class UserService {
         this.userRepo = userRepo;
     }
 
+    // Authorisation
+
+    //TODO
+
     // Representation
 
     /**
@@ -116,10 +120,6 @@ public class UserService {
         return true;
     }
 
-    public void updateStatus(User user, Status status) {
-        user.setStatus(status);
-    }
-
     // Author side
 
     public void addTrack(User user, Track track) {
@@ -173,6 +173,32 @@ public class UserService {
 
     public boolean changeProfileAvatar(User user, Blob avatar) {
         user.setAvatar(avatar);
+        return true;
+    }
+
+    // Status manipulations
+
+    public void updateStatus(User user, Status status) {
+        user.setStatus(status);
+    }
+
+    public boolean ban(User user) {
+        if (user.isBanned()) {
+            System.out.println(user.getLogin() + " is already banned");
+            return false;
+        }
+
+        user.setBanned(true);
+        return true;
+    }
+
+    public boolean unban(User user) {
+        if (!user.isBanned()) {
+            System.out.println(user.getLogin() + " is already unbanned");
+            return false;
+        }
+
+        user.setBanned(false);
         return true;
     }
 

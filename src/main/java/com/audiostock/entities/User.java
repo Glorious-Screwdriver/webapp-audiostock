@@ -52,6 +52,8 @@ public class User {
     @OneToMany
     private Set<Track> purchased;
 
+    private boolean banned = false;
+
     public User() {
     }
 
@@ -165,5 +167,13 @@ public class User {
 
     public void setPurchased(Set<Track> purchased) {
         this.purchased = purchased;
+    }
+
+    public boolean isBanned() {
+        return banned;
+    }
+
+    public void setBanned(boolean banned) {
+        this.banned = banned;
     }
 }
