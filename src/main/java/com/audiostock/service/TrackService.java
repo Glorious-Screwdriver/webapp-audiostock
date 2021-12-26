@@ -19,9 +19,11 @@ public class TrackService {
         trackRepo.save(track);
         return track.getId();
     }
+
     List<Track> getCatalogue(int page, int size, String sorting, String mood, String genre, Long lbpm, Long hbpm){
         return trackRepo.findAllByGenreIsNearAndMoodIsNearAndBpmIsGreaterThanAndBpmIsLessThan(PageRequest.of(page, size).withSort(Sort.by(sorting)), genre, mood, lbpm, hbpm).stream().collect(Collectors.toList());
     }
+
     List<Track> getCatalogue(int page, int size) {
         return getCatalogue(page, size,"name", "", "",0L,999L);
     }

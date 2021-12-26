@@ -13,11 +13,13 @@ public class HelloController {
     public String index(){
         return "catal";
     }
+
     @GetMapping(value = "/login")
     public String hello() {
         System.err.println("login get");
         return "login";
     }
+
     @PostMapping("/login")
     public void login(HttpServletRequest request){
         System.out.println(request.getRequestURL());
