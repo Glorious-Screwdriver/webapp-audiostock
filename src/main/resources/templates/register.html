@@ -4,6 +4,8 @@
     <title>register</title>
     <style>
         body{
+            background-image: url("../../img/ripples.png");
+            background-repeat: repeat;
             font-family: Cambria, "Hoefler Text", "Liberation Serif", Times, "Times New Roman", "serif";
         }
         *,
@@ -16,6 +18,9 @@
         body{
             background-color: #FFF;
             color:#000000
+        }
+        a{
+            text-decoration: none;
         }
         form{
             height: 520px;
@@ -58,7 +63,7 @@
         }
         label{
             display: block;
-            margin-top: 25px;
+            margin-top: 20px;
             font-size: 16px;
             font-weight: 500;
         }
@@ -81,7 +86,7 @@
 
 <body>
 <form id="form1" name="form1" method="post">
-    <h3>WYM</h3>
+    <a href="http://127.0.0.1:8080"><h3>WYM</h3></a>
     <label for="textfield">логин:</label>
     <input type="text" placeholder="abobus" name="textfield" id="textfield">
     <label for="password">пароль:</label>
