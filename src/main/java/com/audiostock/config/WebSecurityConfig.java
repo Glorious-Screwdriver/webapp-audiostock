@@ -28,8 +28,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        //TODO configure HttpSecurity
-        super.configure(http);
+        http.authorizeRequests()
+                .antMatchers("/", "/register").permitAll()
+                .anyRequest().authenticated()
+            .and()
+                .formLogin()
+                .loginPage("/login")
+                .successForwardUrl("/")
+                .permitAll()
+            .and()
+                .logout()
+                .permitAll();
     }
 
     @Override
@@ -37,13 +46,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(username -> {
             try {
                 User candidate = userRepo.findByLogin(username).orElseThrow();
-
-                return org.springframework.security.core.userdetails.User.withUsername(candidate.getLogin())
+                return org.springframework.security.core.userdetails.User
+                        .withUsername(candidate.getLogin())
                         .password(candidate.getPassword())
+                        .roles("USER")
                         .build();
             } catch (Exception e) {
                 e.printStackTrace();
             }
+
             throw new UsernameNotFoundException(username);
         });
     }
