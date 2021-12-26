@@ -17,7 +17,7 @@ public class HelloController {
     @GetMapping(value = "/login")
     public String hello() {
         System.err.println("login get");
-        return "login";
+        return "/WEB-INF/jsp/login.html";
     }
     @GetMapping(value = "/register")
     public String reg() {
