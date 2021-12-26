@@ -123,7 +123,8 @@
 <div class="container">
     <header>
         <h1>WYM</h1>
-        <a>Вход</a>
+        <a href="http://127.0.0.1:8080/login">Вход</a>
+        <a href="http://127.0.0.1:8080/register">Регистрация</a>
     </header>
     <section class="searchbar">
         <div class="bar">

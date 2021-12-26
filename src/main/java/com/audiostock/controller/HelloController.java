@@ -19,6 +19,11 @@ public class HelloController {
         System.err.println("login get");
         return "login";
     }
+    @GetMapping(value = "/register")
+    public String reg() {
+        System.err.println("reg get");
+        return "register";
+    }
 
     @PostMapping("/login")
     public void login(HttpServletRequest request){
