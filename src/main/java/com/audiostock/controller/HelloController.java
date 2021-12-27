@@ -3,7 +3,6 @@ package com.audiostock.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 
 import java.security.Principal;
 
@@ -26,6 +25,16 @@ public class HelloController {
     public String getLogin() {
         System.err.println("GET /login");
         return "login";
+    }
+
+    @GetMapping("/cart")
+    public String getCart(){
+        return "cart";
+    }
+
+    @GetMapping("favorite")
+    public String getFavorite(){
+        return "favorite";
     }
 
     // Этот маппинг замещается SpringSecurity

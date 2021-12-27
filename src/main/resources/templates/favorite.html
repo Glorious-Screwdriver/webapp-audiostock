@@ -2,17 +2,16 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>main</title>
+    <title>cart</title>
     <link rel="stylesheet" th:href="@{/styles/cssandjs/main.css}" href="../static/styles/cssandjs/main.css">
 
 </head>
 <body>
 <div class="container">
-    <div th:replace="fragments/header :: ${logged}?'user-header':'guest-header'"></div>
-    <div th:replace="fragments/searchbar :: searchbar"></div>
+    <div th:replace="fragments/header :: user-header"></div>
     <section class="catalogue">
         <ul>
-            <li>
+             <li>
                 <div class="track">
                     <div>
                         <a>

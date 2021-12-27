@@ -35,7 +35,7 @@ header{
 header h1{
     display:inline-block;
 }
-header a{
+header a.nav{
     color:#969696;
     position: relative;
     display: inline-block;
@@ -49,6 +49,12 @@ header a.profile-mini{
     top:-20px;
     right: -10px;
     position: relative;
+    color:#969696;
+    display: inline-block;
+    vertical-align: middle;
+    float:right;
+    margin-top:8px;
+    margin-right:20px;
 }
 .searchbar{
     width: auto;
@@ -68,7 +74,7 @@ header a.profile-mini{
     float: left;
 }
 .searchbar .mood{
-    float:right;
+    float: right;
 }
 .searchbar .genre{
     float: right;
@@ -113,6 +119,7 @@ header a.profile-mini{
     height: 40px;
 }
 .track .audio p{
+	width: 360px;
     text-align:center;
 }
 .track .buttons{
@@ -128,6 +135,17 @@ header a.profile-mini{
     cursor: pointer;
     border: 1px solid #DCDCDC;
 }
+.track .buttons button.cost{
+	font-size: 18px;
+	color: #A0A0A0;
+	background-color: white;
+	width: 40px;
+    height:40px;
+    margin-right: 25px;
+    margin-top:20px;
+	border: none;
+	cursor: default;
+}
 #search{
     margin-left: 40px;
 }
@@ -139,4 +157,32 @@ img.profile-mini{
     height: 60px;
     width: 60px;
     border-radius: 30px ;
+}
+li.checkout{
+	height: 60px;
+	border: 2px solid #CBCBCB;
+	display: table-cell;
+	width: 800px;
+	vertical-align: middle;
+}
+.checkout div{
+	display: inline-block;
+}
+.checkout .sum{
+	width:500px;
+	text-align: center;
+}
+.checkout button{
+	margin-left: 40px;
+	height: 50px;
+	cursor: pointer;
+	width: 200px;
+	border-radius: 10px;
+	border:none;
+	font-size: 18px;
+	color: #6C6C6C
+}
+.checkout div:nth-of-type(1){
+	width: 480px;
+	text-align: center;
 }
