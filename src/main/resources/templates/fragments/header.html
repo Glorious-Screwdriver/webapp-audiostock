@@ -20,7 +20,7 @@
 <div th:fragment="user-header">
     <header>
         <h1>WYM</h1>
-        <a class="profile-mini" th:href = "@{/users/{u}(u=${username})}"><img src="#" class="profile-mini"></a>
+        <a class="profile-mini" th:href = "@{/user/{u}(u=${username})}"><img src="#" class="profile-mini"></a>
         <a th:href = "@{/users/{u}(u=${username})}" th:text="${username}">имя пользователя</a>
         <a th:href = "@{/favorite}">избранное</a>
         <a th:href = "@{/cart}">корзина</a>
