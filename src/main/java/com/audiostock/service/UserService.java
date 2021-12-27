@@ -3,6 +3,7 @@ package com.audiostock.service;
 import com.audiostock.entities.Status;
 import com.audiostock.entities.Track;
 import com.audiostock.entities.User;
+import com.audiostock.repos.StatusRepo;
 import com.audiostock.repos.UserRepo;
 import com.audiostock.service.exceptions.UsernameIsAlreadyTakenException;
 import com.audiostock.service.exceptions.PasswordsDoNotMatchException;
@@ -22,10 +23,12 @@ import java.util.stream.Collectors;
 public class UserService {
 
     UserRepo userRepo;
+    StatusRepo statusRepo;
     PasswordEncoder encoder;
 
-    public UserService(UserRepo userRepo, PasswordEncoder encoder) {
+    public UserService(UserRepo userRepo, StatusRepo statusRepo, PasswordEncoder encoder) {
         this.userRepo = userRepo;
+        this.statusRepo = statusRepo;
         this.encoder = encoder;
     }
 
@@ -43,7 +46,8 @@ public class UserService {
             throw new PasswordsDoNotMatchException();
         }
 
-        userRepo.save(new User(username, encoder.encode(password)));
+        final Status status = statusRepo.findById(1L).orElseThrow();
+        userRepo.save(new User(username, encoder.encode(password), status));
     }
 
     // Representation

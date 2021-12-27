@@ -13,9 +13,9 @@ public class HelloController {
     @GetMapping("/")
     public String index(Principal principal, Model model) {
         System.err.println("GET /"); //TODO triple GET
-//        model.addAttribute("logged", principal != null);
-//        if (principal != null) model.addAttribute("username", principal.getName());
-//        System.out.println("logged " + (principal != null));
+        model.addAttribute("logged", principal != null);
+        if (principal != null) model.addAttribute("username", principal.getName());
+        System.out.println("logged " + (principal != null));
         return "index";
     }
 

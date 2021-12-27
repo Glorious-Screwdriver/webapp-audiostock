@@ -25,7 +25,7 @@ public class UserEntityDetailsService implements UserDetailsService {
             return org.springframework.security.core.userdetails.User
                     .withUsername(candidate.getLogin())
                     .password(candidate.getPassword())
-                    .roles("USER") //TODO userdetails.User roles
+                    .roles(candidate.getStatus().getName())
                     .build();
         } catch (NoSuchElementException e) {
             throw new UsernameNotFoundException(username, e);

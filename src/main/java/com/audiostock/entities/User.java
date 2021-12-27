@@ -17,7 +17,7 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @OneToOne
+    @OneToOne(optional = false)
     private Status status;
 
     @Column(length = 30)
@@ -55,9 +55,10 @@ public class User {
     public User() {
     }
 
-    public User(String login, String password) {
+    public User(String login, String password, Status status) {
         this.login = login;
         this.password = password;
+        this.status = status;
     }
 
     public Long getId() {
