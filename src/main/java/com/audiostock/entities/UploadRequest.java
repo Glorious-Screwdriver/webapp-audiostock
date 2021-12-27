@@ -2,7 +2,6 @@ package com.audiostock.entities;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
 public class UploadRequest {
@@ -13,13 +12,13 @@ public class UploadRequest {
     private Long id;
 
     @ManyToOne
-    private User author;
+    private UserEntity author;
 
     @OneToOne
     private Track track;
 
     @OneToOne
-    private User moderator;
+    private UserEntity moderator;
 
     private boolean solution;
 
@@ -42,11 +41,11 @@ public class UploadRequest {
         this.id = id;
     }
 
-    public User getAuthor() {
+    public UserEntity getAuthor() {
         return author;
     }
 
-    public void setAuthor(User author) {
+    public void setAuthor(UserEntity author) {
         this.author = author;
     }
 
@@ -58,11 +57,11 @@ public class UploadRequest {
         this.track = track;
     }
 
-    public User getModerator() {
+    public UserEntity getModerator() {
         return moderator;
     }
 
-    public void setModerator(User moderator) {
+    public void setModerator(UserEntity moderator) {
         this.moderator = moderator;
     }
 

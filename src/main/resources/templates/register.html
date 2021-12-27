@@ -1,10 +1,9 @@
-<%@ page contentType="text/html;charset=UTF-8"%>
 <html>
 <head>
     <title>register</title>
     <style>
         body{
-            background-image: url("../../img/ripples.png");
+            background-image: url([[@{../static/img/ripples.png}]]);
             background-repeat: repeat;
             font-family: Cambria, "Hoefler Text", "Liberation Serif", Times, "Times New Roman", "serif";
         }
@@ -43,7 +42,7 @@
             outline: none;
             border: none;
         }
-        button{
+        input[type="submit"]{
             margin-top: 50px;
             width: 100%;
             background-color: #E1E1E1;
@@ -85,15 +84,16 @@
 </head>
 
 <body>
-<form id="form1" name="form1" method="post">
-    <a href="http://127.0.0.1:8080"><h3>WYM</h3></a>
-    <label for="textfield">логин:</label>
-    <input type="text" placeholder="abobus" name="textfield" id="textfield">
+<form th:action="@{/register}" id="register-form" name="register-form" method="post">
+    <a th:href="@{/}"><h3>WYM</h3></a>
+    <p th:if="${message!=null}" class="error" th:text="${message}">aghh...</p>
+    <label for="username">логин:</label>
+    <input type="text" placeholder="abobus" name="username" id="username">
     <label for="password">пароль:</label>
     <input type="password" placeholder="*****" name="password" id="password">
 	<label for="repeat">пароль:</label>
     <input type="password" placeholder="*****" name="repeat" id="repeat">
-    <button>Отправить</button>
+    <input type="submit" value="Отправить">
 </form>
 </body>
 </html>

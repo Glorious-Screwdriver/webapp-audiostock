@@ -1,7 +1,7 @@
 package com.audiostock.service;
 
 import com.audiostock.entities.Logon;
-import com.audiostock.entities.User;
+import com.audiostock.entities.UserEntity;
 import com.audiostock.repos.LogonRepo;
 import com.audiostock.repos.UserRepo;
 import org.springframework.data.domain.Sort;
@@ -21,11 +21,11 @@ public class LogonService {
         this.logonRepo = logonRepo;
     }
 
-    void logon(User user, Byte[] ip) {
+    void logon(UserEntity user, Byte[] ip) {
         logonRepo.save(new Logon(user, ip, LocalDateTime.now()));
     }
 
-    List<Logon> getLogonsByUser(User user) {
+    List<Logon> getLogonsByUser(UserEntity user) {
         return logonRepo.findAllByUser(user, Sort.by("date_and_time"));
     }
 

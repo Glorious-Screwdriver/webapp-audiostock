@@ -1,10 +1,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="java">
 <head>
     <title>login</title>
-    <style>
+    <style th:inline="text">
         body{
             font-family: Cambria, "Hoefler Text", "Liberation Serif", Times, "Times New Roman", "serif";
-            background-image: url("../../img/leaves.png");
+            background-image: url([[@{../static/img/leaves.png}]]);
             background-repeat: repeat;
         }
         *,
@@ -42,7 +42,7 @@
         a{
             text-decoration: none;
         }
-        button{
+        input[type = "submit"]{
             margin-top: 50px;
             width: 100%;
             background-color: #E1E1E1;
@@ -52,6 +52,9 @@
             font-weight: 600;
             border-radius: 5px;
             cursor: pointer;
+        }
+        form .error{
+            color: #cd4d4d;
         }
         form h3{
             font-size: 32px;
@@ -83,14 +86,14 @@
 </head>
 
 <body>
-<form th:action="@{/login.html}" id="login-form" name="login-form" method="post">
-    <a href="http://127.0.0.1:8080"><h3>WYM</h3></a>
+<form th:action="@{/login}" id="login-form" name="login-form" method="post">
+    <a th:href="@{/}"><h3>WYM</h3></a>
     <p th:if="${loginError}" class="error">Wrong user or password</p>
-    <label for="textfield">логин:</label>
-    <input type="text" placeholder="abobus" name="textfield" id="textfield">
+    <label for="username">логин:</label>
+    <input type="text" placeholder="abobus" name="username" id="username">
     <label for="password">пароль:</label>
     <input type="password" placeholder="*****" name="password" id="password">
-    <button>Отправить</button>
+    <input type="submit" value="Вход">
 </form>
 </body>
 </html>

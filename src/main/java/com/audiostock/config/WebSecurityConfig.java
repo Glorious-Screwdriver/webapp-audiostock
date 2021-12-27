@@ -1,6 +1,6 @@
 package com.audiostock.config;
 
-import com.audiostock.entities.User;
+import com.audiostock.entities.UserEntity;
 import com.audiostock.repos.UserRepo;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,8 +18,8 @@ import javax.sql.DataSource;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private DataSource dataSource;
-    private UserRepo userRepo;
+    private final DataSource dataSource;
+    private final UserRepo userRepo;
 
     public WebSecurityConfig(final DataSource dataSource, final UserRepo userRepo) {
         this.dataSource = dataSource;
@@ -34,7 +34,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .and()
                 .formLogin()
                 .loginPage("/login")
-                .successForwardUrl("/")
+                .failureUrl("/login-error")
+                .successForwardUrl("/home")
                 .permitAll()
             .and()
                 .logout()
@@ -45,7 +46,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(username -> {
             try {
-                User candidate = userRepo.findByLogin(username).orElseThrow();
+                System.out.println(username);
+                UserEntity candidate = userRepo.findByLogin(username).orElseThrow();
                 return org.springframework.security.core.userdetails.User
                         .withUsername(candidate.getLogin())
                         .password(candidate.getPassword())
@@ -60,7 +62,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
+    public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 }

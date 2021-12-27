@@ -1,12 +1,14 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java"%>
-<html>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
     <title>main</title>
-    <link rel="stylesheet" href="../../css/main.css">
+    <link rel="stylesheet" th:href="@{../static/styles/cssandjs/main.css}" href="../static/styles/cssandjs/main.css">
+
 </head>
 <body>
 <div class="container">
-    <%@include file="guest-header.jsp"%>
+    <div th:replace="fragments/header :: ${logged}?'user-header':'guest-header'"></div>
     <section class="catalogue">
         <ul>
             <li>

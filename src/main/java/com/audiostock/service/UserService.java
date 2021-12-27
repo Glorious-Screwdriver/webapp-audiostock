@@ -2,7 +2,7 @@ package com.audiostock.service;
 
 import com.audiostock.entities.Status;
 import com.audiostock.entities.Track;
-import com.audiostock.entities.User;
+import com.audiostock.entities.UserEntity;
 import com.audiostock.repos.UserRepo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -32,14 +32,14 @@ public class UserService {
     /**
      * Вывод всех авторов, сортируя по никнейму (логину)
      */
-    public List<User> getAuthorsSortedByNickname(int page, int size) {
+    public List<UserEntity> getAuthorsSortedByNickname(int page, int size) {
         return userRepo.findAll(PageRequest.of(page, size).withSort(Sort.by("login"))).getContent();
     }
 
     /**
      * Вывод всех авторов, сортируя по количеству треков
      */
-    public Page<User> getAuthorsSortedByTracks(int page, int size) {
+    public Page<UserEntity> getAuthorsSortedByTracks(int page, int size) {
         //TODO
         throw new UnsupportedOperationException();
     }
@@ -48,8 +48,8 @@ public class UserService {
      * Поиск авторов по никнейму (логину). Проверяет, содержится ли строка в имени автора
      * @param nickname Никнейм автора
      */
-    public List<User> findAuthorsByNickname(String nickname, int page, int size) {
-        Page<User> allAuthors = userRepo.findAll(PageRequest.of(page, size).withSort(Sort.by("login")));
+    public List<UserEntity> findAuthorsByNickname(String nickname, int page, int size) {
+        Page<UserEntity> allAuthors = userRepo.findAll(PageRequest.of(page, size).withSort(Sort.by("login")));
         return allAuthors.get()
                 .filter((user) -> user.getLogin().contains(nickname))
                 .collect(Collectors.toList());
@@ -57,11 +57,11 @@ public class UserService {
 
     // Consumer side
 
-    public void addTrackToCart(User user, Track track) {
+    public void addTrackToCart(UserEntity user, Track track) {
         user.getCart().add(track);
     }
 
-    public boolean removeTrackFromCart(User user, Track track) {
+    public boolean removeTrackFromCart(UserEntity user, Track track) {
         if (!user.getCart().contains(track)) {
             System.out.println(user.getLogin() + " doesn't have track " + track.getName() + " in the cart");
             return false;
@@ -71,7 +71,7 @@ public class UserService {
         return true;
     }
 
-    public boolean checkout(User user) {
+    public boolean checkout(UserEntity user) {
         final Set<Track> cart = user.getCart();
         Long totalPrice = 0L;
 
@@ -96,11 +96,11 @@ public class UserService {
         return true;
     }
 
-    public void makeDeposit(User user, Long amount) {
+    public void makeDeposit(UserEntity user, Long amount) {
         user.setBalance(user.getBalance() + amount);
     }
 
-    public boolean addTrackToFavorites(User user, Track track) {
+    public boolean addTrackToFavorites(UserEntity user, Track track) {
         if (user.getFavorites().contains(track)) {
             System.out.println(user.getLogin() + " already has this track in favorites");
             return false;
@@ -110,7 +110,7 @@ public class UserService {
         return true;
     }
 
-    public boolean removeTrackFromFavorites(User user, Track track) {
+    public boolean removeTrackFromFavorites(UserEntity user, Track track) {
         if (!user.getFavorites().contains(track)) {
             System.out.println(user.getLogin() + " already doesn't have this track in favorites");
             return false;
@@ -122,11 +122,11 @@ public class UserService {
 
     // Author side
 
-    public void addTrack(User user, Track track) {
+    public void addTrack(UserEntity user, Track track) {
         user.getReleases().add(track);
     }
 
-    public boolean removeTrack(User user, Track track) {
+    public boolean removeTrack(UserEntity user, Track track) {
         if (!user.getReleases().contains(track)) {
             System.out.println(user.getLogin() + " doesn't have such track");
             return false;
@@ -136,7 +136,7 @@ public class UserService {
         return true;
     }
 
-    public boolean withdrawFunds(User user, Long amount) {
+    public boolean withdrawFunds(UserEntity user, Long amount) {
         if (user.getBalance() < amount) {
             System.out.println(user.getLogin() + " doesn't have enough money to withdraw");
             return false;
@@ -147,7 +147,7 @@ public class UserService {
     }
 
     public boolean changeProfileInfo(
-            User user,
+            UserEntity user,
             String firstname,
             String middlename,
             String lastname,
@@ -171,18 +171,18 @@ public class UserService {
         return true;
     }
 
-    public boolean changeProfileAvatar(User user, Blob avatar) {
+    public boolean changeProfileAvatar(UserEntity user, Blob avatar) {
         user.setAvatar(avatar);
         return true;
     }
 
     // Status manipulations
 
-    public void updateStatus(User user, Status status) {
+    public void updateStatus(UserEntity user, Status status) {
         user.setStatus(status);
     }
 
-    public boolean ban(User user) {
+    public boolean ban(UserEntity user) {
         if (user.isBanned()) {
             System.out.println(user.getLogin() + " is already banned");
             return false;
@@ -192,7 +192,7 @@ public class UserService {
         return true;
     }
 
-    public boolean unban(User user) {
+    public boolean unban(UserEntity user) {
         if (!user.isBanned()) {
             System.out.println(user.getLogin() + " is already unbanned");
             return false;

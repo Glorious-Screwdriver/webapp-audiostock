@@ -7,7 +7,7 @@ import java.sql.Blob;
 import java.util.Set;
 
 @Entity
-public class User {
+public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(length = 6)
@@ -16,7 +16,7 @@ public class User {
     @Column(unique = true, nullable = false, length = 16)
     private String login; // also known as nickname
 
-    @Column(nullable = false, length = 30)
+    @Column(nullable = false)
     private String password;
 
     @OneToOne
@@ -54,10 +54,10 @@ public class User {
 
     private boolean banned = false;
 
-    public User() {
+    public UserEntity() {
     }
 
-    public User(String login, String password) {
+    public UserEntity(String login, String password) {
         this.login = login;
         this.password = password;
     }
