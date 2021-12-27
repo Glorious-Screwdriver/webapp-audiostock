@@ -27,16 +27,6 @@ public class HelloController {
         return "login";
     }
 
-    @GetMapping("/cart")
-    public String getCart(){
-        return "cart";
-    }
-
-    @GetMapping("favorite")
-    public String getFavorite(){
-        return "favorite";
-    }
-
     // Этот маппинг замещается SpringSecurity
 //    @PostMapping("/login")
 //    public String postLogin() {

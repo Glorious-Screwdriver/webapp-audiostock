@@ -5,6 +5,7 @@ import com.audiostock.entities.User;
 import com.audiostock.service.UserService;
 import com.audiostock.service.exceptions.UserNotFoundException;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -22,12 +23,12 @@ public class FavoriteController {
     }
 
     @GetMapping
-    public String favorite(Principal principal) {
+    public String favorite(Principal principal, Model model) {
         User user = getUserFromPrincipal(principal);
         List<Track> favorites = userService.getFavoriteSortedByName(user);
+        model.addAttribute("username", principal.getName());
 
-        //TODO /favorite view
-        throw new UnsupportedOperationException();
+        return "favorite";
     }
 
     private User getUserFromPrincipal(Principal principal) {

@@ -5,6 +5,7 @@ import com.audiostock.entities.User;
 import com.audiostock.service.UserService;
 import com.audiostock.service.exceptions.UserNotFoundException;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,14 +24,13 @@ public class CartController {
     }
 
     @GetMapping
-    public String cart(Principal principal) {
+    public String cart(Principal principal, Model model) {
         User user = getUserFromPrincipal(principal);
-
+        model.addAttribute("username", principal.getName());
         List<Track> cart = userService.getCartSortedByName(user);
         Long totalCost = userService.totalCartPrice(user);
 
-        //TODO /cart view
-        throw new UnsupportedOperationException();
+        return "cart";
     }
 
     @GetMapping("/checkout")
