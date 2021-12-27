@@ -5,6 +5,7 @@ import com.audiostock.entities.Track;
 import com.audiostock.entities.User;
 import com.audiostock.repos.StatusRepo;
 import com.audiostock.repos.UserRepo;
+import com.audiostock.service.exceptions.UserNotFoundException;
 import com.audiostock.service.exceptions.UsernameIsAlreadyTakenException;
 import com.audiostock.service.exceptions.PasswordsDoNotMatchException;
 import org.springframework.data.domain.Page;
@@ -52,6 +53,10 @@ public class UserService {
 
     // Representation
 
+    public User getUserByUsername(String username) throws UserNotFoundException {
+        return userRepo.findByLogin(username).orElseThrow(() -> new UserNotFoundException(username));
+    }
+
     /**
      * Вывод всех авторов, сортируя по имени пользователя (логину)
      */
@@ -70,10 +75,34 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
+    public List<Track> getReleasesSortedByName(User user) {
+        return makeASortedList(user.getReleases());
+    }
+
+    public List<Track> getCartSortedByName(User user) {
+        return makeASortedList(user.getCart());
+    }
+
+    public List<Track> getFavoriteSortedByName(User user) {
+        return makeASortedList(user.getFavorites());
+    }
+
+    private List<Track> makeASortedList(Set<Track> set) {
+        return set.stream()
+                .sorted((o1, o2) -> o1.getName().compareToIgnoreCase(o2.getName()))
+                .collect(Collectors.toList());
+    }
+
     // Consumer side
 
-    public void addTrackToCart(User user, Track track) {
+    public boolean addTrackToCart(User user, Track track) {
+        if (user.getCart().contains(track)) {
+            System.out.println(user.getLogin() + " already has track " + track.getName() + " in the cart");
+            return false;
+        }
+
         user.getCart().add(track);
+        return true;
     }
 
     public boolean removeTrackFromCart(User user, Track track) {
@@ -111,13 +140,19 @@ public class UserService {
         return true;
     }
 
+    public Long totalCartPrice(User user) {
+        return user.getCart().stream()
+                .mapToLong(Track::getPrice)
+                .sum();
+    }
+
     public void makeDeposit(User user, Long amount) {
         user.setBalance(user.getBalance() + amount);
     }
 
-    public boolean addTrackToFavorites(User user, Track track) {
+    public boolean addTrackToFavorite(User user, Track track) {
         if (user.getFavorites().contains(track)) {
-            System.out.println(user.getLogin() + " already has this track in favorites");
+            System.out.println(user.getLogin() + " already has track " + track.getName() + " in favorites");
             return false;
         }
 
