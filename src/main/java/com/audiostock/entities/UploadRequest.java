@@ -2,7 +2,6 @@ package com.audiostock.entities;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
 public class UploadRequest {

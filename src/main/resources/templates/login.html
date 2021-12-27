@@ -1,10 +1,13 @@
-<%@ page contentType="text/html;charset=UTF-8"%>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      lang="java">
 <head>
-    <title>register</title>
-    <style>
+    <title>login</title>
+    <style th:inline="text">
         body{
             font-family: Cambria, "Hoefler Text", "Liberation Serif", Times, "Times New Roman", "serif";
+            background-image: url([[@{/img/leaves.png}]]);
+            background-repeat: repeat;
         }
         *,
         *:before,
@@ -38,7 +41,10 @@
             outline: none;
             border: none;
         }
-        button{
+        a{
+            text-decoration: none;
+        }
+        input[type = "submit"]{
             margin-top: 50px;
             width: 100%;
             background-color: #E1E1E1;
@@ -49,7 +55,9 @@
             border-radius: 5px;
             cursor: pointer;
         }
-
+        form .error{
+            color: #cd4d4d;
+        }
         form h3{
             font-size: 32px;
             font-weight: 500;
@@ -58,7 +66,7 @@
         }
         label{
             display: block;
-            margin-top: 25px;
+            margin-top: 30px;
             font-size: 16px;
             font-weight: 500;
         }
@@ -80,15 +88,21 @@
 </head>
 
 <body>
-<form id="form1" name="form1" method="post">
-    <h3>WYM</h3>
-    <label for="textfield">логин:</label>
-    <input type="text" placeholder="abobus" name="textfield" id="textfield">
-    <label for="password">пароль:</label>
+<form th:action="@{/login}" id="login-form" name="login-form" method="post">
+    <a th:href="@{/}"><h3>WYM</h3></a>
+
+    <p th:if="${param.error}">
+        Invalid username and password.
+    </p>
+    <p th:if="${param.logout}">
+        You have been logged out.
+    </p>
+
+    <label for="username">Логин:</label>
+    <input type="text" placeholder="abobus" name="username" id="username">
+    <label for="password">Пароль:</label>
     <input type="password" placeholder="*****" name="password" id="password">
-	<label for="repeat">пароль:</label>
-    <input type="password" placeholder="*****" name="repeat" id="repeat">
-    <button>Отправить</button>
+    <input type="submit" value="Вход">
 </form>
 </body>
 </html>

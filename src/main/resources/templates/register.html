@@ -1,10 +1,13 @@
-<%@ page contentType="text/html;charset=UTF-8"%>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      lang="java">
 <head>
-    <title>login</title>
+    <title>register</title>
     <style>
         body{
             font-family: Cambria, "Hoefler Text", "Liberation Serif", Times, "Times New Roman", "serif";
+            background-image: url([[@{/img/ripples.png}]]);
+            background-repeat: repeat;
         }
         *,
         *:before,
@@ -16,6 +19,9 @@
         body{
             background-color: #FFF;
             color:#000000
+        }
+        a{
+            text-decoration: none;
         }
         form{
             height: 520px;
@@ -38,7 +44,7 @@
             outline: none;
             border: none;
         }
-        button{
+        input[type="submit"]{
             margin-top: 50px;
             width: 100%;
             background-color: #E1E1E1;
@@ -58,7 +64,7 @@
         }
         label{
             display: block;
-            margin-top: 30px;
+            margin-top: 20px;
             font-size: 16px;
             font-weight: 500;
         }
@@ -80,13 +86,16 @@
 </head>
 
 <body>
-<form id="form1" name="form1" method="post">
-    <h3>WYM</h3>
-    <label for="textfield">логин:</label>
-    <input type="text" placeholder="abobus" name="textfield" id="textfield">
+<form th:action="@{/register}" id="register-form" name="register-form" method="post">
+    <a th:href="@{/}"><h3>WYM</h3></a>
+    <p th:if="${message!=null}" class="error" th:text="${message}">aghh...</p>
+    <label for="username">логин:</label>
+    <input type="text" placeholder="abobus" name="username" id="username">
     <label for="password">пароль:</label>
     <input type="password" placeholder="*****" name="password" id="password">
-    <button>Отправить</button>
+	<label for="repeat">пароль:</label>
+    <input type="password" placeholder="*****" name="repeat" id="repeat">
+    <input type="submit" value="Отправить">
 </form>
 </body>
 </html>

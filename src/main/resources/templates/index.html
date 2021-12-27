@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>main</title>
+    <link rel="stylesheet" th:href="@{/styles/cssandjs/main.css}">
+
+</head>
+<body>
+<div class="container">
+    <div th:replace="fragments/header :: ${logged}?'user-header':'guest-header'"></div>
+    <section class="catalogue">
+        <ul>
+            <li>
+                <div class="track">
+                    <div>
+                        <a>
+                            <img src="#">
+                        </a>
+                    </div>
+                    <div class="info">
+                        <a>Название</a>
+                        <a>Автор</a>
+                    </div>
+                    <div class="audio">
+                        <audio controls src="#">audio is not supported</audio>
+                        <p>джаз/грусть</p>
+                    </div>
+                    <div class = "buttons">
+                        <button>star</button>
+                        <button>cart</button>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </section>
+</div>
+</body>
+</html>

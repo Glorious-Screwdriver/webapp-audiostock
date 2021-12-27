@@ -4,13 +4,17 @@ import com.audiostock.entities.Status;
 import com.audiostock.entities.Track;
 import com.audiostock.entities.User;
 import com.audiostock.repos.UserRepo;
+import com.audiostock.service.exceptions.UsernameIsAlreadyTakenException;
+import com.audiostock.service.exceptions.PasswordsDoNotMatchException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.sql.Blob;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -18,40 +22,47 @@ import java.util.stream.Collectors;
 public class UserService {
 
     UserRepo userRepo;
+    PasswordEncoder encoder;
 
-    public UserService(UserRepo userRepo) {
+    public UserService(UserRepo userRepo, PasswordEncoder encoder) {
         this.userRepo = userRepo;
+        this.encoder = encoder;
     }
 
     // Authorisation
 
-    //TODO
+    public void register(String username, String password, String repeat)
+            throws UsernameIsAlreadyTakenException, PasswordsDoNotMatchException {
+
+        Optional<User> userWithSameName = userRepo.findByLogin(username);
+        if (userWithSameName.isPresent()) {
+            throw new UsernameIsAlreadyTakenException(username);
+        }
+
+        if (!password.equals(repeat)) {
+            throw new PasswordsDoNotMatchException();
+        }
+
+        userRepo.save(new User(username, encoder.encode(password)));
+    }
 
     // Representation
 
     /**
-     * Вывод всех авторов, сортируя по никнейму (логину)
+     * Вывод всех авторов, сортируя по имени пользователя (логину)
      */
-    public List<User> getAuthorsSortedByNickname(int page, int size) {
+    public List<User> getAuthorsSortedByUsername(int page, int size) {
         return userRepo.findAll(PageRequest.of(page, size).withSort(Sort.by("login"))).getContent();
     }
 
     /**
-     * Вывод всех авторов, сортируя по количеству треков
+     * Поиск авторов по имени пользователя (логину). Проверяет, содержится ли строка в имени автора
+     * @param username Никнейм автора
      */
-    public Page<User> getAuthorsSortedByTracks(int page, int size) {
-        //TODO
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * Поиск авторов по никнейму (логину). Проверяет, содержится ли строка в имени автора
-     * @param nickname Никнейм автора
-     */
-    public List<User> findAuthorsByNickname(String nickname, int page, int size) {
+    public List<User> findAuthorsByUsername(String username, int page, int size) {
         Page<User> allAuthors = userRepo.findAll(PageRequest.of(page, size).withSort(Sort.by("login")));
         return allAuthors.get()
-                .filter((user) -> user.getLogin().contains(nickname))
+                .filter((user) -> user.getLogin().contains(username))
                 .collect(Collectors.toList());
     }
 

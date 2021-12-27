@@ -1,7 +1,5 @@
 package com.audiostock.entities;
 
-import net.bytebuddy.implementation.bind.annotation.Default;
-
 import javax.persistence.*;
 import java.sql.Blob;
 import java.util.Set;
@@ -16,7 +14,7 @@ public class User {
     @Column(unique = true, nullable = false, length = 16)
     private String login; // also known as nickname
 
-    @Column(nullable = false, length = 30)
+    @Column(nullable = false)
     private String password;
 
     @OneToOne
@@ -55,6 +53,11 @@ public class User {
     private boolean banned = false;
 
     public User() {
+    }
+
+    public User(String login, String password) {
+        this.login = login;
+        this.password = password;
     }
 
     public Long getId() {
