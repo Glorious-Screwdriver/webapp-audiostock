@@ -12,12 +12,12 @@ public class User {
     private Long id;
 
     @Column(unique = true, nullable = false, length = 16)
-    private String login; // also known as nickname
+    private String login; // also known as username
 
     @Column(nullable = false)
     private String password;
 
-    @OneToOne(optional = false)
+    @ManyToOne(optional = false)
     private Status status;
 
     @Column(length = 30)
