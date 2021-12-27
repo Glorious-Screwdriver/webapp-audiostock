@@ -2,6 +2,7 @@ package com.audiostock.service;
 
 import com.audiostock.entities.Track;
 import com.audiostock.repos.TrackRepo;
+import com.audiostock.service.exceptions.TrackNotFoundException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -11,13 +12,15 @@ import java.util.stream.Collectors;
 
 @Service
 public class TrackService {
+
     private TrackRepo trackRepo;
+
     public TrackService(TrackRepo trackRepo){
         this.trackRepo = trackRepo;
     }
-    public Long addTrack(Track track){
-        trackRepo.save(track);
-        return track.getId();
+
+    public Track getTrackById(Long id) throws TrackNotFoundException {
+        return trackRepo.findById(id).orElseThrow(() -> new TrackNotFoundException(String.valueOf(id)));
     }
 
     List<Track> getCatalogue(int page, int size, String sorting, String mood, String genre, Long lbpm, Long hbpm){
@@ -26,5 +29,10 @@ public class TrackService {
 
     List<Track> getCatalogue(int page, int size) {
         return getCatalogue(page, size,"name", "", "",0L,999L);
+    }
+
+    public Long addTrack(Track track){
+        trackRepo.save(track);
+        return track.getId();
     }
 }

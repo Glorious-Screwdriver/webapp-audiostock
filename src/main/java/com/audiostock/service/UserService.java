@@ -95,8 +95,14 @@ public class UserService {
 
     // Consumer side
 
-    public void addTrackToCart(User user, Track track) {
+    public boolean addTrackToCart(User user, Track track) {
+        if (user.getCart().contains(track)) {
+            System.out.println(user.getLogin() + " already has track " + track.getName() + " in the cart");
+            return false;
+        }
+
         user.getCart().add(track);
+        return true;
     }
 
     public boolean removeTrackFromCart(User user, Track track) {
@@ -146,7 +152,7 @@ public class UserService {
 
     public boolean addTrackToFavorite(User user, Track track) {
         if (user.getFavorites().contains(track)) {
-            System.out.println(user.getLogin() + " already has this track in favorites");
+            System.out.println(user.getLogin() + " already has track " + track.getName() + " in favorites");
             return false;
         }
 
