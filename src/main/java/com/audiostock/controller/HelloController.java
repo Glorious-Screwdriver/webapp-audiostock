@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.security.Principal;
 import java.util.Map;
 import java.util.Optional;
-
+//ToDo
 @Controller
 public class HelloController {
 
@@ -29,7 +29,8 @@ public class HelloController {
     @GetMapping("/")
     public String index(Principal principal, Model model){
         model.addAttribute("logged",principal!=null);
-        System.out.println("required: " + (principal==null));
+        if(principal!=null)model.addAttribute("username", principal.getName());
+        System.out.println("logged " + (principal!=null));
         return "index";
     }
     @GetMapping("/login")

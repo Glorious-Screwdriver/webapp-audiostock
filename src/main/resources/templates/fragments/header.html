@@ -2,7 +2,7 @@
     <header>
         <h1>WYM</h1>
         <a th:href="@{/login}">Вход</a>
-        <a href="http://127.0.0.1:8080/register">Регистрация</a>
+        <a th:href="@{/register}">Регистрация</a>
     </header>
     <section class="searchbar">
         <div class="bar">
@@ -20,8 +20,10 @@
 <div th:fragment="user-header">
     <header>
         <h1>WYM</h1>
-        <a href="http://127.0.0.1:8080/login">Вход</a>
-        <a href="http://127.0.0.1:8080/register">Регистрация</a>
+        <a class="profile-mini" th:href = "@{/users/{u}(u=${username})}"><img src="#" class="profile-mini"></a>
+        <a th:href = "@{/users/{u}(u=${username})}" th:text="${username}">имя пользователя</a>
+        <a th:href = "@{/favorite}">избранное</a>
+        <a th:href = "@{/cart}">корзина</a>
     </header>
     <section class="searchbar">
         <div class="bar">
