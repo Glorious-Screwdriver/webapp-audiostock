@@ -12,13 +12,13 @@ public class UploadRequest {
     private Long id;
 
     @ManyToOne
-    private UserEntity author;
+    private User author;
 
     @OneToOne
     private Track track;
 
     @OneToOne
-    private UserEntity moderator;
+    private User moderator;
 
     private boolean solution;
 
@@ -41,11 +41,11 @@ public class UploadRequest {
         this.id = id;
     }
 
-    public UserEntity getAuthor() {
+    public User getAuthor() {
         return author;
     }
 
-    public void setAuthor(UserEntity author) {
+    public void setAuthor(User author) {
         this.author = author;
     }
 
@@ -57,11 +57,11 @@ public class UploadRequest {
         this.track = track;
     }
 
-    public UserEntity getModerator() {
+    public User getModerator() {
         return moderator;
     }
 
-    public void setModerator(UserEntity moderator) {
+    public void setModerator(User moderator) {
         this.moderator = moderator;
     }
 

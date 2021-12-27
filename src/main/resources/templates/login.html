@@ -1,4 +1,6 @@
-<html xmlns="http://www.w3.org/1999/xhtml" lang="java">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      lang="java">
 <head>
     <title>login</title>
     <style th:inline="text">
@@ -88,10 +90,17 @@
 <body>
 <form th:action="@{/login}" id="login-form" name="login-form" method="post">
     <a th:href="@{/}"><h3>WYM</h3></a>
-    <p th:if="${loginError}" class="error">Wrong user or password</p>
-    <label for="username">логин:</label>
+
+    <p th:if="${param.error}">
+        Invalid username and password.
+    </p>
+    <p th:if="${param.logout}">
+        You have been logged out.
+    </p>
+
+    <label for="username">Логин:</label>
     <input type="text" placeholder="abobus" name="username" id="username">
-    <label for="password">пароль:</label>
+    <label for="password">Пароль:</label>
     <input type="password" placeholder="*****" name="password" id="password">
     <input type="submit" value="Вход">
 </form>

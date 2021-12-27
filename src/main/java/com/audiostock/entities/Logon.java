@@ -10,7 +10,7 @@ public class Logon {
     private Long id;
 
     @ManyToOne
-    private UserEntity user;
+    private User user;
 
     @Column(length = 4)
     private Byte[] ip;
@@ -21,7 +21,7 @@ public class Logon {
     public Logon() {
     }
 
-    public Logon(UserEntity user, Byte[] ip, LocalDateTime dateTime) {
+    public Logon(User user, Byte[] ip, LocalDateTime dateTime) {
         this.user = user;
         this.ip = ip;
         this.dateTime = dateTime;
@@ -43,11 +43,11 @@ public class Logon {
         this.ip = ip;
     }
 
-    public UserEntity getUser() {
+    public User getUser() {
         return user;
     }
 
-    public void setUser(UserEntity user) {
+    public void setUser(User user) {
         this.user = user;
     }
 }

@@ -1,13 +1,11 @@
 package com.audiostock.entities;
 
-import net.bytebuddy.implementation.bind.annotation.Default;
-
 import javax.persistence.*;
 import java.sql.Blob;
 import java.util.Set;
 
 @Entity
-public class UserEntity {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(length = 6)
@@ -54,10 +52,10 @@ public class UserEntity {
 
     private boolean banned = false;
 
-    public UserEntity() {
+    public User() {
     }
 
-    public UserEntity(String login, String password) {
+    public User(String login, String password) {
         this.login = login;
         this.password = password;
     }

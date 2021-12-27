@@ -2,15 +2,19 @@ package com.audiostock.service;
 
 import com.audiostock.entities.Status;
 import com.audiostock.entities.Track;
-import com.audiostock.entities.UserEntity;
+import com.audiostock.entities.User;
 import com.audiostock.repos.UserRepo;
+import com.audiostock.service.exceptions.LoginIsAlreadyTakenException;
+import com.audiostock.service.exceptions.PasswordsDoNotMatchException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.sql.Blob;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -18,38 +22,45 @@ import java.util.stream.Collectors;
 public class UserService {
 
     UserRepo userRepo;
+    PasswordEncoder encoder;
 
-    public UserService(UserRepo userRepo) {
+    public UserService(UserRepo userRepo, PasswordEncoder encoder) {
         this.userRepo = userRepo;
+        this.encoder = encoder;
     }
 
     // Authorisation
 
-    //TODO
+    public void register(String login, String password, String repeat)
+            throws LoginIsAlreadyTakenException, PasswordsDoNotMatchException {
+
+        Optional<User> userWithSameName = userRepo.findByLogin(login);
+        if (userWithSameName.isPresent()) {
+            throw new LoginIsAlreadyTakenException(login);
+        }
+
+        if (!password.equals(repeat)) {
+            throw new PasswordsDoNotMatchException();
+        }
+
+        userRepo.save(new User(login, encoder.encode(password)));
+    }
 
     // Representation
 
     /**
      * Вывод всех авторов, сортируя по никнейму (логину)
      */
-    public List<UserEntity> getAuthorsSortedByNickname(int page, int size) {
+    public List<User> getAuthorsSortedByNickname(int page, int size) {
         return userRepo.findAll(PageRequest.of(page, size).withSort(Sort.by("login"))).getContent();
-    }
-
-    /**
-     * Вывод всех авторов, сортируя по количеству треков
-     */
-    public Page<UserEntity> getAuthorsSortedByTracks(int page, int size) {
-        //TODO
-        throw new UnsupportedOperationException();
     }
 
     /**
      * Поиск авторов по никнейму (логину). Проверяет, содержится ли строка в имени автора
      * @param nickname Никнейм автора
      */
-    public List<UserEntity> findAuthorsByNickname(String nickname, int page, int size) {
-        Page<UserEntity> allAuthors = userRepo.findAll(PageRequest.of(page, size).withSort(Sort.by("login")));
+    public List<User> findAuthorsByNickname(String nickname, int page, int size) {
+        Page<User> allAuthors = userRepo.findAll(PageRequest.of(page, size).withSort(Sort.by("login")));
         return allAuthors.get()
                 .filter((user) -> user.getLogin().contains(nickname))
                 .collect(Collectors.toList());
@@ -57,11 +68,11 @@ public class UserService {
 
     // Consumer side
 
-    public void addTrackToCart(UserEntity user, Track track) {
+    public void addTrackToCart(User user, Track track) {
         user.getCart().add(track);
     }
 
-    public boolean removeTrackFromCart(UserEntity user, Track track) {
+    public boolean removeTrackFromCart(User user, Track track) {
         if (!user.getCart().contains(track)) {
             System.out.println(user.getLogin() + " doesn't have track " + track.getName() + " in the cart");
             return false;
@@ -71,7 +82,7 @@ public class UserService {
         return true;
     }
 
-    public boolean checkout(UserEntity user) {
+    public boolean checkout(User user) {
         final Set<Track> cart = user.getCart();
         Long totalPrice = 0L;
 
@@ -96,11 +107,11 @@ public class UserService {
         return true;
     }
 
-    public void makeDeposit(UserEntity user, Long amount) {
+    public void makeDeposit(User user, Long amount) {
         user.setBalance(user.getBalance() + amount);
     }
 
-    public boolean addTrackToFavorites(UserEntity user, Track track) {
+    public boolean addTrackToFavorites(User user, Track track) {
         if (user.getFavorites().contains(track)) {
             System.out.println(user.getLogin() + " already has this track in favorites");
             return false;
@@ -110,7 +121,7 @@ public class UserService {
         return true;
     }
 
-    public boolean removeTrackFromFavorites(UserEntity user, Track track) {
+    public boolean removeTrackFromFavorites(User user, Track track) {
         if (!user.getFavorites().contains(track)) {
             System.out.println(user.getLogin() + " already doesn't have this track in favorites");
             return false;
@@ -122,11 +133,11 @@ public class UserService {
 
     // Author side
 
-    public void addTrack(UserEntity user, Track track) {
+    public void addTrack(User user, Track track) {
         user.getReleases().add(track);
     }
 
-    public boolean removeTrack(UserEntity user, Track track) {
+    public boolean removeTrack(User user, Track track) {
         if (!user.getReleases().contains(track)) {
             System.out.println(user.getLogin() + " doesn't have such track");
             return false;
@@ -136,7 +147,7 @@ public class UserService {
         return true;
     }
 
-    public boolean withdrawFunds(UserEntity user, Long amount) {
+    public boolean withdrawFunds(User user, Long amount) {
         if (user.getBalance() < amount) {
             System.out.println(user.getLogin() + " doesn't have enough money to withdraw");
             return false;
@@ -147,7 +158,7 @@ public class UserService {
     }
 
     public boolean changeProfileInfo(
-            UserEntity user,
+            User user,
             String firstname,
             String middlename,
             String lastname,
@@ -171,18 +182,18 @@ public class UserService {
         return true;
     }
 
-    public boolean changeProfileAvatar(UserEntity user, Blob avatar) {
+    public boolean changeProfileAvatar(User user, Blob avatar) {
         user.setAvatar(avatar);
         return true;
     }
 
     // Status manipulations
 
-    public void updateStatus(UserEntity user, Status status) {
+    public void updateStatus(User user, Status status) {
         user.setStatus(status);
     }
 
-    public boolean ban(UserEntity user) {
+    public boolean ban(User user) {
         if (user.isBanned()) {
             System.out.println(user.getLogin() + " is already banned");
             return false;
@@ -192,7 +203,7 @@ public class UserService {
         return true;
     }
 
-    public boolean unban(UserEntity user) {
+    public boolean unban(User user) {
         if (!user.isBanned()) {
             System.out.println(user.getLogin() + " is already unbanned");
             return false;

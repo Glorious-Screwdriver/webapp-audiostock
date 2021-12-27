@@ -1,10 +1,10 @@
 package com.audiostock.repos;
 
-import com.audiostock.entities.UserEntity;
+import com.audiostock.entities.User;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.Optional;
 
-public interface UserRepo extends PagingAndSortingRepository<UserEntity, Long> {
-    Optional<UserEntity> findByLogin(String login);
+public interface UserRepo extends PagingAndSortingRepository<User, Long> {
+    Optional<User> findByLogin(String login);
 }
