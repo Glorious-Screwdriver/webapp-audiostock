@@ -6,11 +6,13 @@ import com.audiostock.service.UserService;
 import com.audiostock.service.exceptions.UserNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.security.Principal;
 import java.util.List;
 
-@Controller("/favorite")
+@Controller
+@RequestMapping("/favorite")
 public class FavoriteController {
 
     UserService userService;

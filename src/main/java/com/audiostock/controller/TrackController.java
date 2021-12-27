@@ -7,14 +7,12 @@ import com.audiostock.service.UserService;
 import com.audiostock.service.exceptions.TrackNotFoundException;
 import com.audiostock.service.exceptions.UserNotFoundException;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
-@Controller("/track")
+@Controller
+@RequestMapping("/track")
 public class TrackController {
 
     UserService userService;
