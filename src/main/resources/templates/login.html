@@ -91,7 +91,7 @@
 <form th:action="@{/login}" id="login-form" name="login-form" method="post">
     <a th:href="@{/}"><h3>WYM</h3></a>
 
-    <p th:if="${param.error}">
+    <p class="error" th:if="${param.error}">
         Invalid username and password.
     </p>
 

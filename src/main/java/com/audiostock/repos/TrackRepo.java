@@ -6,7 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 public interface TrackRepo extends PagingAndSortingRepository<Track, Long> {
-    Page<Track> findAll(Pageable pageable);
+    Iterable<Track> findAll();
 
-    Page<Track> findAllByGenreIsNearAndMoodIsNearAndBpmIsGreaterThanAndBpmIsLessThan(Pageable pageable, String genre, String mood, Long lbpm, Long hbpm);
+    Page<Track> findAllByGenreAndMoodAndBpmIsGreaterThanAndBpmIsLessThan(Pageable pageable, String genre, String mood, Long lbpm, Long hbpm);
 }
