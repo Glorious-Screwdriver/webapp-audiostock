@@ -41,13 +41,13 @@ public class User {
     @OneToMany
     private Set<Track> releases;
 
-    @OneToMany
+    @ManyToMany
     private Set<Track> cart;
 
-    @OneToMany
+    @ManyToMany
     private Set<Track> favorites;
 
-    @OneToMany
+    @ManyToMany
     private Set<Track> purchased;
 
     private boolean banned = false;

@@ -2,6 +2,7 @@ package com.audiostock.entities;
 
 import javax.persistence.*;
 import java.sql.Blob;
+import java.util.Set;
 
 @Entity
 public class Track {
@@ -10,8 +11,11 @@ public class Track {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(length = 30)
+    @Column(length = 30, nullable = false)
     private String name;
+
+    @ManyToOne(optional = false)
+    private User author;
 
     @Lob
     private Blob cover;
@@ -34,6 +38,15 @@ public class Track {
     @Column(nullable = false, length = 4)
     private Long price;
 
+    @ManyToMany
+    private Set<Track> inCart;
+
+    @ManyToMany
+    private Set<Track> inFavorites;
+
+    @ManyToMany
+    private Set<Track> inPurchased;
+
     public Track() {
     }
 
@@ -51,6 +64,14 @@ public class Track {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public User getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(User author) {
+        this.author = author;
     }
 
     public Blob getCover() {
