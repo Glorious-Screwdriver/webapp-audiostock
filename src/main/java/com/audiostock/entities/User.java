@@ -32,6 +32,9 @@ public class User {
     @Column(length = 7)
     private Long balance = 0L;
 
+    @OneToOne
+    private PaymentInfo paymentInfo;
+
     @Column(length = 100)
     private String biography;
 
@@ -123,6 +126,14 @@ public class User {
 
     public void setBalance(Long balance) {
         this.balance = balance;
+    }
+
+    public PaymentInfo getPaymentInfo() {
+        return paymentInfo;
+    }
+
+    public void setPaymentInfo(PaymentInfo paymentInfo) {
+        this.paymentInfo = paymentInfo;
     }
 
     public String getBiography() {
