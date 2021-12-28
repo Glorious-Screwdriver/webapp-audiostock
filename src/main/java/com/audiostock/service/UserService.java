@@ -102,6 +102,7 @@ public class UserService {
         }
 
         user.getCart().add(track);
+        userRepo.save(user);
         return true;
     }
 
@@ -112,6 +113,7 @@ public class UserService {
         }
 
         user.getCart().remove(track);
+        userRepo.save(user);
         return true;
     }
 
@@ -137,6 +139,7 @@ public class UserService {
         }
         user.setBalance(user.getBalance() - totalPrice);
 
+        userRepo.save(user);
         return true;
     }
 
@@ -148,6 +151,7 @@ public class UserService {
 
     public void makeDeposit(User user, Long amount) {
         user.setBalance(user.getBalance() + amount);
+        userRepo.save(user);
     }
 
     public boolean addTrackToFavorite(User user, Track track) {
@@ -157,6 +161,7 @@ public class UserService {
         }
 
         user.getFavorites().add(track);
+        userRepo.save(user);
         return true;
     }
 
@@ -167,6 +172,7 @@ public class UserService {
         }
 
         user.getFavorites().remove(track);
+        userRepo.save(user);
         return true;
     }
 
@@ -174,6 +180,7 @@ public class UserService {
 
     public void addTrack(User user, Track track) {
         user.getReleases().add(track);
+        userRepo.save(user);
     }
 
     public boolean removeTrack(User user, Track track) {
@@ -183,6 +190,7 @@ public class UserService {
         }
 
         user.getReleases().remove(track);
+        userRepo.save(user);
         return true;
     }
 
@@ -193,6 +201,7 @@ public class UserService {
         }
 
         user.setBalance(user.getBalance() - amount);
+        userRepo.save(user);
         return true;
     }
 
@@ -218,18 +227,20 @@ public class UserService {
         user.setLastname(lastname);
         user.setBiography(biography);
 
+        userRepo.save(user);
         return true;
     }
 
-    public boolean changeProfileAvatar(User user, Blob avatar) {
+    public void changeProfileAvatar(User user, Blob avatar) {
         user.setAvatar(avatar);
-        return true;
+        userRepo.save(user);
     }
 
     // Status manipulations
 
     public void updateStatus(User user, Status status) {
         user.setStatus(status);
+        userRepo.save(user);
     }
 
     public boolean ban(User user) {
@@ -239,6 +250,7 @@ public class UserService {
         }
 
         user.setBanned(true);
+        userRepo.save(user);
         return true;
     }
 
@@ -249,6 +261,7 @@ public class UserService {
         }
 
         user.setBanned(false);
+        userRepo.save(user);
         return true;
     }
 
