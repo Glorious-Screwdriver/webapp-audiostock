@@ -5,10 +5,8 @@ import com.audiostock.entities.User;
 import com.audiostock.service.TrackService;
 import com.audiostock.service.UserService;
 import com.audiostock.service.exceptions.TrackNotFoundException;
-import com.audiostock.service.exceptions.UserNotFoundException;
 import com.audiostock.service.exceptions.UserNotLoggedInException;
 import com.audiostock.service.util.Utils;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,8 +45,7 @@ public class TrackController {
     // Buttons
 
     @PostMapping("/{trackId}/addToFavorite")
-    @ResponseStatus(HttpStatus.OK)
-    public void addTrackToFavorite(@PathVariable Long trackId, Principal principal)
+    public String addTrackToFavorite(@PathVariable Long trackId, Principal principal, @RequestHeader String referer)
             throws TrackNotFoundException, UserNotLoggedInException {
         Track track = trackService.getTrackById(trackId);
         User user = Utils.getUserFromPrincipal(principal, userService);
@@ -56,33 +53,37 @@ public class TrackController {
 
         boolean added = userService.addTrackToFavorite(user, track);
         System.err.println(added);
+        return "redirect:" + referer;
     }
 
     @PostMapping("/{trackId}/removeFromFavorite")
-    public void removeTrackFromFavorite(@PathVariable Long trackId, Principal principal)
+    public String removeTrackFromFavorite(@PathVariable Long trackId, Principal principal, @RequestHeader String referer)
             throws TrackNotFoundException, UserNotLoggedInException {
         Track track = trackService.getTrackById(trackId);
         User user = Utils.getUserFromPrincipal(principal, userService);
 
         boolean removed = userService.removeTrackFromFavorites(user, track);
+        return "redirect:" + referer;
     }
 
     @PostMapping("/{trackId}/addToCart")
-    public void addTrackToCart(@PathVariable Long trackId, Principal principal)
+    public String addTrackToCart(@PathVariable Long trackId, Principal principal, @RequestHeader String referer)
             throws TrackNotFoundException, UserNotLoggedInException {
         Track track = trackService.getTrackById(trackId);
         User user = Utils.getUserFromPrincipal(principal, userService);
 
         boolean added = userService.addTrackToCart(user, track);
+        return "redirect:" + referer;
     }
 
     @PostMapping("/{trackId}/removeFromCart")
-    public void removeTrackFromCart(@PathVariable Long trackId, Principal principal)
+    public String removeTrackFromCart(@PathVariable Long trackId, Principal principal, @RequestHeader String referer)
             throws TrackNotFoundException, UserNotLoggedInException {
         Track track = trackService.getTrackById(trackId);
         User user = Utils.getUserFromPrincipal(principal, userService);
 
         boolean removed = userService.removeTrackFromCart(user, track);
+        return "redirect:" + referer;
     }
 
 }
