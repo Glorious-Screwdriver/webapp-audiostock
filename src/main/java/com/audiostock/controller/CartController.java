@@ -29,7 +29,8 @@ public class CartController {
         model.addAttribute("username", principal.getName());
         List<Track> cart = userService.getCartSortedByName(user);
         Long totalCost = userService.totalCartPrice(user);
-
+        model.addAttribute("tracks", cart);
+        model.addAttribute("total", totalCost);
         return "cart";
     }
 

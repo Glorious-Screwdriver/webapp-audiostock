@@ -11,30 +11,10 @@
     <header th:replace="fragments/header :: user-header"></header>
     <section class="catalogue">
         <ul>
-            <li>
-                <div class="track">
-                    <div>
-                        <a>
-                            <img src="#">
-                        </a>
-                    </div>
-                    <div class="info">
-                        <a>Название</a>
-                        <a>Автор</a>
-                    </div>
-                    <div class="audio">
-                        <audio controls src="#">audio is not supported</audio>
-                        <p>джаз/грусть</p>
-                    </div>
-                    <div class = "buttons">
-                        <button>star</button>
-						<button class="cost">-1$</button>
-                    </div>
-                </div>
-            </li>
+            <li th:replace="fragments/catalogue :: price-list" th:each="${tracks}"></li>
 			<li class="checkout">
 				<div>
-                	<p class="total">Всего 10р (1 трек)</p>
+                	<p class="total" th:text="'Всего '+${total}+' р. ('+${tracks.size()}+(${tracks.size()==1}?' трек)':(${tracks.size()<5&&tracks.size()>0}?'трека)':' треков)'))">Всего 10р (1 трек)</p>
 				</div>
 				<div>
                 	<button class="pay">Оплатить</button>

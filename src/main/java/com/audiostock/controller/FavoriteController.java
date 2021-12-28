@@ -27,7 +27,7 @@ public class FavoriteController {
         User user = getUserFromPrincipal(principal);
         List<Track> favorites = userService.getFavoriteSortedByName(user);
         model.addAttribute("username", principal.getName());
-
+        model.addAttribute("tracks", favorites);
         return "favorite";
     }
 

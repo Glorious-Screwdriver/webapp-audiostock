@@ -11,7 +11,7 @@ ul{
     list-style: none;
 }
 body {
-    background-image: url("../static/img/just-waves.png");
+    background-image: url("../../img/just-waves.png");
     background-repeat: repeat;
     padding-top:10px;
 }
@@ -169,6 +169,9 @@ header .nav div.dropdown-content{
 .track .buttons{
     top:-35px;
     margin-left: 30px;
+}
+.track .buttons form{
+	display: inline-block;
 }
 .track .buttons button {
     width: 40px;
