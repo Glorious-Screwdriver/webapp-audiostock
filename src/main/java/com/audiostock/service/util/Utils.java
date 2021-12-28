@@ -22,4 +22,14 @@ public class Utils {
         return user;
     }
 
+    public static User getUserFromPrincipalNoException(Principal principal, UserService userService) {
+        User user;
+        try {
+            user = userService.getUserByUsername(principal.getName());
+        } catch (UserNotFoundException e) {
+            return null;
+        }
+        return user;
+    }
+
 }
