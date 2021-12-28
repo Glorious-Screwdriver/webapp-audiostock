@@ -3,7 +3,8 @@ package com.audiostock.controller;
 import com.audiostock.entities.Track;
 import com.audiostock.entities.User;
 import com.audiostock.service.UserService;
-import com.audiostock.service.exceptions.UserNotFoundException;
+import com.audiostock.service.exceptions.UserNotLoggedInException;
+import com.audiostock.service.util.Utils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,22 +24,12 @@ public class FavoriteController {
     }
 
     @GetMapping
-    public String favorite(Principal principal, Model model) {
-        User user = getUserFromPrincipal(principal);
+    public String favorite(Principal principal, Model model) throws UserNotLoggedInException {
+        User user = Utils.getUserFromPrincipal(principal, userService);
         List<Track> favorites = userService.getFavoriteSortedByName(user);
         model.addAttribute("username", principal.getName());
         model.addAttribute("tracks", favorites);
         return "favorite";
-    }
-
-    private User getUserFromPrincipal(Principal principal) {
-        User user;
-        try {
-            user = userService.getUserByUsername(principal.getName());
-        } catch (UserNotFoundException e) {
-            throw new IllegalStateException(e);
-        }
-        return user;
     }
 
 }

@@ -3,7 +3,8 @@ package com.audiostock.controller;
 import com.audiostock.entities.Track;
 import com.audiostock.entities.User;
 import com.audiostock.service.UserService;
-import com.audiostock.service.exceptions.UserNotFoundException;
+import com.audiostock.service.exceptions.UserNotLoggedInException;
+import com.audiostock.service.util.Utils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,8 +25,8 @@ public class CartController {
     }
 
     @GetMapping
-    public String cart(Principal principal, Model model) {
-        User user = getUserFromPrincipal(principal);
+    public String cart(Principal principal, Model model) throws UserNotLoggedInException {
+        User user = Utils.getUserFromPrincipal(principal, userService);
         model.addAttribute("username", principal.getName());
         List<Track> cart = userService.getCartSortedByName(user);
         Long totalCost = userService.totalCartPrice(user);
@@ -35,8 +36,8 @@ public class CartController {
     }
 
     @GetMapping("/checkout")
-    public String getCheckout(Principal principal) {
-        User user = getUserFromPrincipal(principal);
+    public String getCheckout(Principal principal) throws UserNotLoggedInException {
+        User user = Utils.getUserFromPrincipal(principal, userService);
 
         long balance = user.getBalance();
         long totalCost = userService.totalCartPrice(user);
@@ -46,8 +47,8 @@ public class CartController {
     }
 
     @PostMapping("/checkout")
-    public String postCheckout(Principal principal) {
-        User user = getUserFromPrincipal(principal);
+    public String postCheckout(Principal principal) throws UserNotLoggedInException {
+        User user = Utils.getUserFromPrincipal(principal, userService);
 
         final boolean checkoutSucceeded = userService.checkout(user);
 
@@ -58,16 +59,6 @@ public class CartController {
             //TODO /deposit view
             throw new UnsupportedOperationException("/deposit view is not supported");
         }
-    }
-
-    private User getUserFromPrincipal(Principal principal) {
-        User user;
-        try {
-            user = userService.getUserByUsername(principal.getName());
-        } catch (UserNotFoundException e) {
-            throw new IllegalStateException(e);
-        }
-        return user;
     }
 
 }

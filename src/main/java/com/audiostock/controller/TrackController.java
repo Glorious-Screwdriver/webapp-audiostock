@@ -6,6 +6,8 @@ import com.audiostock.service.TrackService;
 import com.audiostock.service.UserService;
 import com.audiostock.service.exceptions.TrackNotFoundException;
 import com.audiostock.service.exceptions.UserNotFoundException;
+import com.audiostock.service.exceptions.UserNotLoggedInException;
+import com.audiostock.service.util.Utils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,58 +36,49 @@ public class TrackController {
     }
 
     @ExceptionHandler(TrackNotFoundException.class)
-    public String trackNotFound() {
+    public String trackNotFound(TrackNotFoundException e) {
+        e.printStackTrace();
+
         //TODO trackNotFound view
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(e);
     }
 
     // Buttons
 
     @PostMapping("/{trackId}/addToFavorite")
     public void addTrackToFavorite(@PathVariable Long trackId, Principal principal)
-            throws TrackNotFoundException {
+            throws TrackNotFoundException, UserNotLoggedInException {
         Track track = trackService.getTrackById(trackId);
-        User user = getUserFromPrincipal(principal);
+        User user = Utils.getUserFromPrincipal(principal, userService);
 
         boolean added = userService.addTrackToFavorite(user, track);
     }
 
     @PostMapping("/{trackId}/removeFromFavorite")
     public void removeTrackFromFavorite(@PathVariable Long trackId, Principal principal)
-            throws TrackNotFoundException {
+            throws TrackNotFoundException, UserNotLoggedInException {
         Track track = trackService.getTrackById(trackId);
-        User user = getUserFromPrincipal(principal);
+        User user = Utils.getUserFromPrincipal(principal, userService);
 
         boolean removed = userService.removeTrackFromFavorites(user, track);
     }
 
     @PostMapping("/{trackId}/addToCart")
     public void addTrackToCart(@PathVariable Long trackId, Principal principal)
-            throws TrackNotFoundException {
+            throws TrackNotFoundException, UserNotLoggedInException {
         Track track = trackService.getTrackById(trackId);
-        User user = getUserFromPrincipal(principal);
+        User user = Utils.getUserFromPrincipal(principal, userService);
 
         boolean added = userService.addTrackToCart(user, track);
     }
 
     @PostMapping("/{trackId}/removeFromCart")
     public void removeTrackFromCart(@PathVariable Long trackId, Principal principal)
-            throws TrackNotFoundException {
+            throws TrackNotFoundException, UserNotLoggedInException {
         Track track = trackService.getTrackById(trackId);
-        User user = getUserFromPrincipal(principal);
+        User user = Utils.getUserFromPrincipal(principal, userService);
 
         boolean removed = userService.removeTrackFromCart(user, track);
-    }
-
-    private User getUserFromPrincipal(Principal principal) {
-        User user;
-        try {
-            user = userService.getUserByUsername(principal.getName());
-        } catch (UserNotFoundException e) {
-            throw new IllegalStateException(e);
-        }
-
-        return user;
     }
 
 }
