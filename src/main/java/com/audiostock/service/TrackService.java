@@ -3,7 +3,6 @@ package com.audiostock.service;
 import com.audiostock.entities.Track;
 import com.audiostock.entities.User;
 import com.audiostock.repos.TrackRepo;
-import com.audiostock.repos.UserRepo;
 import com.audiostock.service.exceptions.TrackNotFoundException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -16,11 +15,9 @@ import java.util.stream.Collectors;
 public class TrackService {
 
     private final TrackRepo trackRepo;
-    private final UserRepo userRepo;
 
-    public TrackService(TrackRepo trackRepo, UserRepo userRepo) {
+    public TrackService(TrackRepo trackRepo) {
         this.trackRepo = trackRepo;
-        this.userRepo = userRepo;
     }
 
     // Representation
@@ -46,11 +43,11 @@ public class TrackService {
     // Properties
 
     public boolean isInCart(Track track, User user) {
-        return track.getInCart().contains(user);
+        return user.getCart().contains(track);
     }
 
     public boolean isInFavorite(Track track, User user) {
-        return track.getInFavorites().contains(user);
+        return user.getFavorites().contains(track);
     }
 
     // Persistence
