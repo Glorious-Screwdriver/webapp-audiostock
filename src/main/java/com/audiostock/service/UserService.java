@@ -1,13 +1,14 @@
 package com.audiostock.service;
 
+import com.audiostock.entities.PaymentInfo;
 import com.audiostock.entities.Status;
 import com.audiostock.entities.Track;
 import com.audiostock.entities.User;
 import com.audiostock.repos.StatusRepo;
 import com.audiostock.repos.UserRepo;
+import com.audiostock.service.exceptions.PasswordsDoNotMatchException;
 import com.audiostock.service.exceptions.UserNotFoundException;
 import com.audiostock.service.exceptions.UsernameIsAlreadyTakenException;
-import com.audiostock.service.exceptions.PasswordsDoNotMatchException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -147,6 +148,11 @@ public class UserService {
         return user.getCart().stream()
                 .mapToLong(Track::getPrice)
                 .sum();
+    }
+
+    public void savePaymentMethod(User user, PaymentInfo paymentInfo) {
+        user.setPaymentInfo(paymentInfo);
+        userRepo.save(user);
     }
 
     public void makeDeposit(User user, Long amount) {
