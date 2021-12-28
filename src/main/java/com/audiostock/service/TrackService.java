@@ -43,6 +43,16 @@ public class TrackService {
         return trackRepo.findAll();
     }
 
+    // Properties
+
+    public boolean isInCart(Track track, User user) {
+        return track.getInCart().contains(user);
+    }
+
+    public boolean isInFavorite(Track track, User user) {
+        return track.getInFavorites().contains(user);
+    }
+
     // Persistence
 
     public Long addTrack(Track track) {

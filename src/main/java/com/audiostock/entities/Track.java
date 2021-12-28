@@ -129,4 +129,28 @@ public class Track {
     public void setPrice(Long price) {
         this.price = price;
     }
+
+    public Set<Track> getInCart() {
+        return inCart;
+    }
+
+    public void setInCart(Set<Track> inCart) {
+        this.inCart = inCart;
+    }
+
+    public Set<Track> getInFavorites() {
+        return inFavorites;
+    }
+
+    public void setInFavorites(Set<Track> inFavorites) {
+        this.inFavorites = inFavorites;
+    }
+
+    public Set<Track> getInPurchased() {
+        return inPurchased;
+    }
+
+    public void setInPurchased(Set<Track> inPurchased) {
+        this.inPurchased = inPurchased;
+    }
 }
