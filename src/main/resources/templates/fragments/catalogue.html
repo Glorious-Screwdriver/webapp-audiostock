@@ -15,7 +15,7 @@
                 </a>
             </div>
             <div class="info">
-                <a th:text="${track.getName()}" th:href="@{/track/{u}(u=${username})}">Название</a>
+                <a th:text="${track.getName()}" th:href="@{/track/{u}(u=${track.getId()})}">Название</a>
                 <a th:text="${track.getAuthor().getLogin()}" th:href="@{/user/{u}(u=${track.getAuthor().getLogin()})}">Автор</a>
             </div>
             <div class="audio">
@@ -40,7 +40,7 @@
                 </a>
             </div>
             <div class="info">
-                <a th:text="${track.getName()}" th:href="@{/track/{u}(u=${username})}">Название</a>
+                <a th:text="${track.getName()}" th:href="@{/track/{u}(u=${track.getId()})}">Название</a>
                 <a th:text="${track.getAuthor().getLogin()}" th:href="@{/user/{u}(u=${track.getAuthor().getLogin()})}">Автор</a>
             </div>
             <div class="audio">

@@ -8,6 +8,7 @@ import com.audiostock.service.exceptions.TrackNotFoundException;
 import com.audiostock.service.exceptions.UserNotLoggedInException;
 import com.audiostock.service.util.Utils;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -27,11 +28,14 @@ public class TrackController {
     // Representation
 
     @GetMapping("/{trackId}")
-    public String getTrack(@PathVariable Long trackId) throws TrackNotFoundException {
+    public String getTrack(@PathVariable Long trackId, Model model, Principal principal) throws TrackNotFoundException {
         Track track = trackService.getTrackById(trackId);
-
-        //TODO /track/{trackId} view
-        throw new UnsupportedOperationException();
+        model.addAttribute("logged", principal != null);
+        if (principal != null) {
+            model.addAttribute("username", principal.getName());
+        }
+        model.addAttribute("track",track);
+        return "track";
     }
 
     @ExceptionHandler(TrackNotFoundException.class)

@@ -12,7 +12,7 @@
     <div class="profile">
         <img class="profile-maxi" src="#">
     </div>
-    <div th:replace="fragments/about :: ${tracks}? 'tracks':'info'" class="about"></div>
+    <div th:replace="fragments/about :: ${tracks!=null}? 'tracks':'info'" class="about"></div>
 </div>
 </body>
 </html>

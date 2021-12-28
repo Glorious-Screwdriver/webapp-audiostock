@@ -160,13 +160,20 @@ header .nav div.dropdown-content{
 .track .audio{
 	top:-8px;
 }
+.track .audio-less{
+	top:-8px;
+	margin-left: 80px;
+}
+.track .audio-less audio{
+	width:450px;
+}
 .track audio {
     margin-top: 10px;
     width: 350px;
     height: 40px;
     margin-bottom: 3px;
 }
-.track .audio p {
+.track p {
     color:#888;
     text-align: center;
 }
@@ -301,4 +308,43 @@ li.checkout {
     word-wrap: break-word;
 	overflow:hidden;
     min-height: 100px;
+}
+.track-details{
+	height: 150px;
+}
+.track-details img{
+	margin-top:9px;
+	margin-left:315px;
+	width:130px;
+	height:130px;
+}
+.track-details{
+	position: relative;
+}
+.track-details .info{
+	font-size: 22px;
+	position:relative;
+	display: inline-block;
+    top:-60px;
+    margin-left: 30px;
+    width: 200px;
+}
+.track-details .info a {
+    margin-top: 4px;
+    display: block;
+}
+.track-details .info a:nth-of-type(2) {
+    color: #AAA;
+}
+.track-description{
+	height:200px;
+}
+.track-description p{
+    padding: 20px;
+	display: block;
+	margin: 40px auto;
+	border:1px solid #AAA;
+	border-radius:4px;
+	width: 700px;
+	height:140px;
 }
