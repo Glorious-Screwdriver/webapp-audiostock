@@ -8,6 +8,7 @@ import com.audiostock.service.exceptions.TrackNotFoundException;
 import com.audiostock.service.exceptions.UserNotFoundException;
 import com.audiostock.service.exceptions.UserNotLoggedInException;
 import com.audiostock.service.util.Utils;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,12 +47,15 @@ public class TrackController {
     // Buttons
 
     @PostMapping("/{trackId}/addToFavorite")
+    @ResponseStatus(HttpStatus.OK)
     public void addTrackToFavorite(@PathVariable Long trackId, Principal principal)
             throws TrackNotFoundException, UserNotLoggedInException {
         Track track = trackService.getTrackById(trackId);
         User user = Utils.getUserFromPrincipal(principal, userService);
+        System.out.println(track.getName()+" to favorite-->"+user.getLogin());
 
         boolean added = userService.addTrackToFavorite(user, track);
+        System.err.println(added);
     }
 
     @PostMapping("/{trackId}/removeFromFavorite")

@@ -18,7 +18,7 @@
         <a th:href="@{/}" class="logo"><h1>WYM</h1></a>
         <div class="nav">
             <div class="profile-mini">
-                <a th:href="@{/users/{u}(u=${username})}">
+                <a th:href="@{/user/{u}(u=${username})}">
                     <img src="#" class="profile-mini">
                 </a>
             </div>
@@ -27,7 +27,7 @@
             <div class="dropdown">
                 <p th:text="${username}">имя пользователя</p>
                 <div class="dropdown-content">
-                    <a th:href="@{/users/{u}(u=${username})}">профиль</a>
+                    <a th:href="@{/user/{u}(u=${username})}">профиль</a>
                     <a href="#">баланс: 2р</a>
                     <a href="#">купленные треки</a>
                     <a th:href="@{/logout}" class="logout">выйти</a>

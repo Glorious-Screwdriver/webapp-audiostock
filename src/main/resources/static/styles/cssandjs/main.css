@@ -7,6 +7,9 @@
     letter-spacing: 0.5px;
     border-collapse: collapse;
 }
+p{
+	cursor: default;
+}
 ul{
     list-style: none;
 }
@@ -52,7 +55,7 @@ header .nav>div:last-of-type{
 header .nav>div.profile-mini{
 	position: absolute;
     top:0;
-	right: 0px;
+	right:0;
 }
 header nav .dropdown{
     display: inline-block;
@@ -77,7 +80,7 @@ header .nav div.dropdown-content{
     min-width: 200px;
     overflow: hidden;
     border-radius: 13px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
     z-index: 1;
 }
 .dropdown-content a {
@@ -122,6 +125,7 @@ header .nav div.dropdown-content{
 .catalogue{
     height: 40px;
     border: 1px solid #AAA;
+    border-top: none;
     position: relative;
     min-height: 430px;
 }
@@ -231,4 +235,70 @@ li.checkout {
 .checkout button:hover{
     background-color: #DDD;
     color: #999;
+}
+.profile{
+	height:160px;
+	position: relative;
+}
+.profile-maxi{
+	margin-left: 325px;
+	margin-top: 10px;
+	display: inline-block;
+	width: 150px;
+	height: 150px;
+	border-radius: 75px;
+	overflow: hidden;
+}
+.about{
+	min-height: 500px
+}
+.about .buttons{
+	border-bottom: 1px solid #AAA;
+}
+.about .buttons form{
+	display: inline-block;
+}
+.about .buttons button{
+	padding: 5px 10px;
+	position: relative;
+	border: 1px solid #AAA;
+    color: #AAA;
+	background-color: #EEE;
+	top:1px;
+    border-radius: 4px 4px 0 0;
+}
+.about .buttons .selected{
+	background-color: white;
+	color:black;
+	border-bottom: 1px solid white;
+}
+.about-container{
+	margin:auto;
+	width: 400px;
+}
+.about h2{
+	margin-top:40px;
+	text-align: center;
+}
+.description{
+	margin-top: 40px;
+}
+.about h3{
+	font-size: 15px;
+	color:#AAA;
+	display: inline-block;
+	padding: 5px 10px;
+	background-color: #EEE;
+	border: 1px solid #aaa;
+	margin:0;
+	border-top-right-radius: 4px;
+	border-top-left-radius: 4px;
+}
+.description>p{
+	padding:10px;
+	border: 1px solid #AAA;
+    border-radius: 0 4px 4px 4px;
+    word-wrap: break-word;
+	overflow:hidden;
+    min-height: 100px;
 }

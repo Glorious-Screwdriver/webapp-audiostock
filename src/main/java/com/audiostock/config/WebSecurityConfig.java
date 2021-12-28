@@ -10,9 +10,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.util.matcher.RequestMatcher;
-
-import javax.servlet.http.HttpServletRequest;
 
 @Configuration
 @EnableWebSecurity
@@ -27,13 +24,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/", "/register", "/track/*", "/user/*").permitAll()
+                .antMatchers("/", "/register", "/track/*", "/user/*","/user/*/tracks").permitAll()
                 .antMatchers("/styles/cssandjs/*", "/img/*").permitAll()
                 .anyRequest().authenticated()
             .and()
                 .formLogin()
                 .loginPage("/login")
-//                .successForwardUrl("/")
+                .successForwardUrl("/")
                 .permitAll()
             .and()
                 .logout()

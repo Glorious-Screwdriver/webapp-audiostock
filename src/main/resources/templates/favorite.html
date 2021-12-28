@@ -11,27 +11,7 @@
     <header th:replace="fragments/header :: user-header"></header>
     <section class="catalogue">
         <ul>
-            <li th:each="track:${tracks}">
-                <div class="track">
-                    <div>
-                        <a>
-                            <img src="#">
-                        </a>
-                    </div>
-                    <div class="info">
-                        <a th:text="${track.getName()}">Название</a>
-                        <a>Автор</a>
-                    </div>
-                    <div class="audio">
-                        <audio controls src="#">audio is not supported</audio>
-                        <p th:text="${track.getGenre()}+'/'+${track.getMood()}">джаз/грусть</p>
-                    </div>
-                    <div class = "buttons">
-                        <button>star</button>
-                        <button>cart</button>
-                    </div>
-                </div>
-            </li>
+            <li th:replace="fragments/catalogue :: star-list" th:each="track:${tracks}"></li>
         </ul>
     </section>
 </div>
