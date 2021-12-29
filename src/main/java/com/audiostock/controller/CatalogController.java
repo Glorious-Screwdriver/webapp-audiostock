@@ -4,14 +4,12 @@ import com.audiostock.entities.Track;
 import com.audiostock.entities.User;
 import com.audiostock.service.TrackService;
 import com.audiostock.service.UserService;
-import com.audiostock.service.exceptions.UserNotLoggedInException;
 import com.audiostock.service.util.Utils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.security.Principal;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
