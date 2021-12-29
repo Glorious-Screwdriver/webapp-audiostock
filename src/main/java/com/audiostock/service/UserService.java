@@ -14,8 +14,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.sql.Blob;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -273,9 +274,15 @@ public class UserService {
         return new ChangeProfileInfoReport(true);
     }
 
-    public void changeProfileAvatar(User user, Blob avatar) {
-        user.setAvatar(avatar);
-        userRepo.save(user);
+    public boolean changeProfileAvatar(User user, MultipartFile avatar) {
+        try {
+            user.setAvatar(avatar.getBytes());
+            userRepo.save(user);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
     // Status manipulations

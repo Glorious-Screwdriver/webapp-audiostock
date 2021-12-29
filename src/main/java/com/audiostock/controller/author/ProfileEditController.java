@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
 import java.util.ArrayList;
@@ -75,6 +76,19 @@ public class ProfileEditController {
 
         if (!report.isSuccessful()) {
             model.addAttribute("message", report.getFailureReason());
+        }
+
+        //TODO profile view
+        throw new UnsupportedOperationException("/profile view is not supported");
+    }
+
+    @PostMapping(params = "file")
+    public String changeAvatar(Principal principal, @RequestParam MultipartFile file, Model model) {
+        User user = Utils.getUserFromPrincipal(principal, userService);
+        final boolean successful = userService.changeProfileAvatar(user, file);
+
+        if (!successful) {
+            model.addAttribute("message", "Image upload error");
         }
 
         //TODO profile view

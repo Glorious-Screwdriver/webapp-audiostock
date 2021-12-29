@@ -19,10 +19,10 @@ public class Track {
     private boolean active = false;
 
     @Lob
-    private Blob cover;
+    private byte[] cover;
 
     @Lob
-    private Blob file;
+    private byte[] file;
 
     @Column(length = 300)
     private String description;
@@ -74,19 +74,19 @@ public class Track {
         this.active = active;
     }
 
-    public Blob getCover() {
+    public byte[] getCover() {
         return cover;
     }
 
-    public void setCover(Blob cover) {
+    public void setCover(byte[] cover) {
         this.cover = cover;
     }
 
-    public Blob getFile() {
+    public byte[] getFile() {
         return file;
     }
 
-    public void setFile(Blob file) {
+    public void setFile(byte[] file) {
         this.file = file;
     }
 

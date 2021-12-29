@@ -39,7 +39,7 @@ public class User {
     private String biography;
 
     @Lob
-    private Blob avatar;
+    private byte[] avatar;
 
     @OneToMany
     private Set<Track> releases;
@@ -144,11 +144,11 @@ public class User {
         this.biography = biography;
     }
 
-    public Blob getAvatar() {
+    public byte[] getAvatar() {
         return avatar;
     }
 
-    public void setAvatar(Blob avatar) {
+    public void setAvatar(byte[] avatar) {
         this.avatar = avatar;
     }
 
