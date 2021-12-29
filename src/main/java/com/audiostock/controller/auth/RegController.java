@@ -1,7 +1,7 @@
 package com.audiostock.controller.auth;
 
 import com.audiostock.service.UserService;
-import com.audiostock.service.util.RegisterInfo;
+import com.audiostock.service.util.RegisterReport;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,10 +23,10 @@ public class RegController {
 
     @PostMapping("/register")
     public String postReg(String username, String password, String repeat, Model model) {
-        RegisterInfo registerInfo = userService.register(username, password, repeat);
+        RegisterReport registerReport = userService.register(username, password, repeat);
 
-        if (!registerInfo.isSuccessful()) {
-            model.addAttribute("message", registerInfo.getFailureReason());
+        if (!registerReport.isSuccessful()) {
+            model.addAttribute("message", registerReport.getFailureReason());
             return "register";
         }
 

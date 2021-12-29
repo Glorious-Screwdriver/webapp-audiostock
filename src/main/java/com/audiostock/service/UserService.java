@@ -7,7 +7,8 @@ import com.audiostock.entities.User;
 import com.audiostock.repos.StatusRepo;
 import com.audiostock.repos.UserRepo;
 import com.audiostock.service.exceptions.UserNotFoundException;
-import com.audiostock.service.util.RegisterInfo;
+import com.audiostock.service.util.ChangeProfileInfoReport;
+import com.audiostock.service.util.RegisterReport;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -35,29 +36,29 @@ public class UserService {
 
     // Authorisation
 
-    public RegisterInfo register(String username, String password, String repeat) {
+    public RegisterReport register(String username, String password, String repeat) {
         if (username.length() < 4) {
-            return new RegisterInfo(false, "Username must have at least 4 symbols");
+            return new RegisterReport(false, "Username must have at least 4 symbols");
         }
 
         if (password.length() < 6) {
-            return new RegisterInfo(false, "Password must have at least 6 symbols");
+            return new RegisterReport(false, "Password must have at least 6 symbols");
         }
 
         if (!password.equals(repeat)) {
-            return new RegisterInfo(false, "Passwords don't match");
+            return new RegisterReport(false, "Passwords don't match");
         }
 
         Optional<User> userWithSameName = userRepo.findByLogin(username);
         if (userWithSameName.isPresent()) {
-            return new RegisterInfo(false, "Login is already taken");
+            return new RegisterReport(false, "Login is already taken");
         }
 
         final Status status = statusRepo.findById(1L)
                 .orElseThrow(() -> new IllegalStateException("There are no statuses in db"));
         userRepo.save(new User(username, encoder.encode(password), status));
 
-        return new RegisterInfo(true);
+        return new RegisterReport(true);
     }
 
     // Representation
@@ -219,21 +220,25 @@ public class UserService {
         return true;
     }
 
-    public boolean changeProfileInfo(
+    public ChangeProfileInfoReport changeProfileInfo(
             User user,
             String firstname,
-            String middlename,
             String lastname,
+            String middlename,
             String biography
     ) {
         if (firstname.length() > 30 || middlename.length() > 30 || lastname.length() > 30) {
-            System.out.println("Name must not have more than 30 characters");
-            return false;
+            return new ChangeProfileInfoReport(
+                    false,
+                    "Name must not have more than 30 characters"
+            );
         }
 
         if (biography.length() > 100) {
-            System.out.println("Biography must not have more than 100 characters");
-            return false;
+            return new ChangeProfileInfoReport(
+                    false,
+                    "Biography must not have more than 100 characters"
+            );
         }
 
         user.setFirstname(firstname);
@@ -242,7 +247,30 @@ public class UserService {
         user.setBiography(biography);
 
         userRepo.save(user);
-        return true;
+        return new ChangeProfileInfoReport(true);
+    }
+
+    public ChangeProfileInfoReport changePassword(
+            User user,
+            String oldPassword,
+            String newPassword,
+            String newPasswordAgain
+    ) {
+        if (!encoder.matches(oldPassword, user.getPassword())) {
+            return new ChangeProfileInfoReport(false, "Wrong old password");
+        }
+
+        if (newPassword.length() < 6) {
+            return new ChangeProfileInfoReport(false, "Password must have at least 6 symbols");
+        }
+
+        if (!newPassword.equals(newPasswordAgain)) {
+            return new ChangeProfileInfoReport(false, "Passwords don't match");
+        }
+
+        user.setPassword(encoder.encode(newPassword));
+        userRepo.save(user);
+        return new ChangeProfileInfoReport(true);
     }
 
     public void changeProfileAvatar(User user, Blob avatar) {
