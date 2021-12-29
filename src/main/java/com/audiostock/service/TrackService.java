@@ -50,6 +50,10 @@ public class TrackService {
         return user.getFavorites().contains(track);
     }
 
+    public boolean isPurchased(Track track, User user) {
+        return user.getPurchased().contains(track);
+    }
+
     // Persistence
 
     public Long addTrack(Track track) {
