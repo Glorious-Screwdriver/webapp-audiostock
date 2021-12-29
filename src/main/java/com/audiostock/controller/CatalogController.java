@@ -36,22 +36,8 @@ public class CatalogController {
         }
 
         // Track map
-        Map<Track, Boolean[]> map = new LinkedHashMap<>();
-
         final List<Track> tracks = trackService.getAll();
-        if (user != null) {
-            for (Track track : tracks) {
-                map.put(track, new Boolean[]{
-                        trackService.isInFavorite(track, user),
-                        trackService.isInCart(track, user)
-                });
-            }
-        } else {
-            for (Track track : tracks) {
-                map.put(track, new Boolean[]{false, false});
-            }
-        }
-
+        Map<Track, Boolean[]> map = Utils.getTrackMap(user, tracks, trackService);
         model.addAttribute("tracks", map);
 
         return "index";

@@ -32,17 +32,21 @@ public class TrackController {
             throws TrackNotFoundException, TrackIsNotActiveException {
         Track track = trackService.getTrackById(trackId);
 
-        model.addAttribute("logged", principal != null);
-        if (principal != null) {
-            User user = Utils.getUserFromPrincipal(principal, userService);
-
+        User user = Utils.getUserFromPrincipal(principal, userService);
+        if (user != null) {
+            // Checking if track is active
             if (!track.isActive() && !user.getStatus().getName().equals("MODERATOR")) {
                 throw new TrackIsNotActiveException(String.valueOf(trackId));
             }
 
-            model.addAttribute("username", principal.getName());
+            // Printing username in the header
+            model.addAttribute("logged", true);
+            model.addAttribute("username", user.getLogin());
+
+            // Printing track buttons
             model.addAttribute("carted", trackService.isInCart(track, user));
             model.addAttribute("stared", trackService.isInFavorite(track, user));
+
         } else {
             if (!track.isActive()) throw new TrackIsNotActiveException(String.valueOf(trackId));
         }
@@ -50,7 +54,6 @@ public class TrackController {
         model.addAttribute("track", track);
         return "track";
     }
-
 
     // Buttons
 

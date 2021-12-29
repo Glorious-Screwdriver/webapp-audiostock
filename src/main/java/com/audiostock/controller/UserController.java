@@ -33,45 +33,38 @@ public class UserController {
     // Representation
 
     @GetMapping("/{username}")
-    public String getUser(@PathVariable String username, Model model, Principal principal) throws UserNotFoundException {
-        User user = userService.getUserByUsername(username);
-        model.addAttribute("author", user);
-        model.addAttribute("logged", principal != null);
-        if (principal != null) {
-            model.addAttribute("username", principal.getName());
-        }
-        return "user";
-    }
-
-    @GetMapping("/{username}/tracks")
-    public String getAuthorTracks(@PathVariable String username, Model model, Principal principal) throws UserNotFoundException {
+    public String getAuthor(@PathVariable String username, Model model, Principal principal)
+            throws UserNotFoundException {
+        // Author info
         User author = userService.getUserByUsername(username);
         model.addAttribute("author", author);
 
         // Printing username in the header
         User user = Utils.getUserFromPrincipal(principal, userService);
+        model.addAttribute("logged", user != null);
+        if (user != null) {
+            model.addAttribute("username", user.getLogin());
+        }
 
-        model.addAttribute("logged", principal != null);
-        if (principal != null) {
+        return "user";
+    }
+
+    @GetMapping("/{username}/tracks")
+    public String getAuthorTracks(@PathVariable String username, Model model, Principal principal) throws UserNotFoundException {
+        // Author info
+        User author = userService.getUserByUsername(username);
+        model.addAttribute("author", author);
+
+        // Printing username in the header
+        User user = Utils.getUserFromPrincipal(principal, userService);
+        model.addAttribute("logged", user != null);
+        if (user != null) {
             model.addAttribute("username", user.getLogin());
         }
 
         // Track map
-        Map<Track, Boolean[]> map = new LinkedHashMap<>();
-
         List<Track> releases = userService.getReleasesSortedByName(author);
-        if (principal != null) {
-            for (Track track : releases) {
-                map.put(track, new Boolean[]{
-                        trackService.isInFavorite(track, user),
-                        trackService.isInCart(track, user)
-                });
-            }
-        } else {
-            for (Track track : releases) {
-                map.put(track, new Boolean[]{false, false});
-            }
-        }
+        Map<Track, Boolean[]> map = Utils.getTrackMap(user, releases, trackService);
         model.addAttribute("tracks", map);
 
         return "user";
