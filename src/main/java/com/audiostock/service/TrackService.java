@@ -37,7 +37,7 @@ public class TrackService {
     }
 
     public List<Track> getAll() {
-        return trackRepo.findAll();
+        return trackRepo.findAllByActiveTrue();
     }
 
     // Properties
