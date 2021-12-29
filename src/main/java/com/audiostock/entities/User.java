@@ -191,4 +191,11 @@ public class User {
     public void setBanned(boolean banned) {
         this.banned = banned;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj.getClass() == User.class) return false;
+        User user = (User) obj;
+        return id.equals(user.getId());
+    }
 }
