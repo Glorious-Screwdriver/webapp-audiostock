@@ -8,8 +8,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import java.util.List;
 
 public interface TrackRepo extends PagingAndSortingRepository<Track, Long> {
-    @Override
-    List<Track> findAll();
+    List<Track> findAllByActiveTrue();
 
     Page<Track> findAllByGenreAndMoodAndBpmIsGreaterThanAndBpmIsLessThan(Pageable pageable, String genre, String mood, Long lbpm, Long hbpm);
 }

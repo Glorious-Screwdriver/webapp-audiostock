@@ -16,6 +16,8 @@ public class Track {
     @ManyToOne(optional = false)
     private User author;
 
+    private boolean active = false;
+
     @Lob
     private Blob cover;
 
@@ -62,6 +64,14 @@ public class Track {
 
     public void setAuthor(User author) {
         this.author = author;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     public Blob getCover() {

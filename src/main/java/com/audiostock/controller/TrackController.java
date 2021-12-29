@@ -4,6 +4,7 @@ import com.audiostock.entities.Track;
 import com.audiostock.entities.User;
 import com.audiostock.service.TrackService;
 import com.audiostock.service.UserService;
+import com.audiostock.service.exceptions.TrackIsNotActiveException;
 import com.audiostock.service.exceptions.TrackNotFoundException;
 import com.audiostock.service.exceptions.UserNotLoggedInException;
 import com.audiostock.service.util.Utils;
@@ -28,22 +29,26 @@ public class TrackController {
     // Representation
 
     @GetMapping("/{trackId}")
-    public String getTrack(@PathVariable Long trackId, Model model, Principal principal) throws TrackNotFoundException {
+    public String getTrack(@PathVariable Long trackId, Model model, Principal principal)
+            throws TrackNotFoundException, TrackIsNotActiveException {
         Track track = trackService.getTrackById(trackId);
+
+        if (principal == null) {
+            if (!track.isActive()) throw new TrackIsNotActiveException(String.valueOf(trackId));
+        } else {
+            User user = Utils.getUserFromPrincipalNoException(principal, userService);
+            if (!track.isActive() && !user.getStatus().getName().equals("MODERATOR")) {
+                throw new TrackIsNotActiveException(String.valueOf(trackId));
+            }
+        }
+
         model.addAttribute("logged", principal != null);
         if (principal != null) {
             model.addAttribute("username", principal.getName());
         }
-        model.addAttribute("track",track);
+        model.addAttribute("track", track);
+
         return "track";
-    }
-
-    @ExceptionHandler(TrackNotFoundException.class)
-    public String trackNotFound(TrackNotFoundException e) {
-        e.printStackTrace();
-
-        //TODO trackNotFound view
-        throw new UnsupportedOperationException(e);
     }
 
     // Buttons
@@ -53,7 +58,7 @@ public class TrackController {
             throws TrackNotFoundException, UserNotLoggedInException {
         Track track = trackService.getTrackById(trackId);
         User user = Utils.getUserFromPrincipal(principal, userService);
-        System.out.println(track.getName()+" to favorite-->"+user.getLogin());
+        System.out.println(track.getName() + " to favorite-->" + user.getLogin());
 
         boolean added = userService.addTrackToFavorite(user, track);
         System.err.println(added);
@@ -88,6 +93,20 @@ public class TrackController {
 
         boolean removed = userService.removeTrackFromCart(user, track);
         return "redirect:" + referer;
+    }
+
+    // Exceptions
+
+    @ExceptionHandler(TrackNotFoundException.class)
+    public String trackNotFound(TrackNotFoundException e) {
+        //TODO trackNotFound view
+        throw new UnsupportedOperationException(e);
+    }
+
+    @ExceptionHandler(TrackIsNotActiveException.class)
+    public String trackIsNotActive(TrackIsNotActiveException e) {
+        //TODO trackIsNotActive view
+        throw new UnsupportedOperationException(e);
     }
 
 }
