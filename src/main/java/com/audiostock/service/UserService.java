@@ -6,9 +6,8 @@ import com.audiostock.entities.Track;
 import com.audiostock.entities.User;
 import com.audiostock.repos.StatusRepo;
 import com.audiostock.repos.UserRepo;
-import com.audiostock.service.exceptions.PasswordsDoNotMatchException;
 import com.audiostock.service.exceptions.UserNotFoundException;
-import com.audiostock.service.exceptions.UsernameIsAlreadyTakenException;
+import com.audiostock.service.util.RegisterInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -36,20 +35,29 @@ public class UserService {
 
     // Authorisation
 
-    public void register(String username, String password, String repeat)
-            throws UsernameIsAlreadyTakenException, PasswordsDoNotMatchException {
+    public RegisterInfo register(String username, String password, String repeat) {
+        if (username.length() < 4) {
+            return new RegisterInfo(false, "Username must have at least 4 symbols");
+        }
 
-        Optional<User> userWithSameName = userRepo.findByLogin(username);
-        if (userWithSameName.isPresent()) {
-            throw new UsernameIsAlreadyTakenException(username);
+        if (password.length() < 6) {
+            return new RegisterInfo(false, "Password must have at least 6 symbols");
         }
 
         if (!password.equals(repeat)) {
-            throw new PasswordsDoNotMatchException();
+            return new RegisterInfo(false, "Passwords don't match");
         }
 
-        final Status status = statusRepo.findById(1L).orElseThrow();
+        Optional<User> userWithSameName = userRepo.findByLogin(username);
+        if (userWithSameName.isPresent()) {
+            return new RegisterInfo(false, "Login is already taken");
+        }
+
+        final Status status = statusRepo.findById(1L)
+                .orElseThrow(() -> new IllegalStateException("There are no statuses in db"));
         userRepo.save(new User(username, encoder.encode(password), status));
+
+        return new RegisterInfo(true);
     }
 
     // Representation
