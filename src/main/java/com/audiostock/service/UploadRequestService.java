@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UploadRequestService {
@@ -62,5 +63,30 @@ public class UploadRequestService {
     public List<UploadRequest> getRequestsByModerator(User moderator) {
         return requestRepo.findAllByModeratorAndSolutionNullOrderByCreationDate(moderator);
     }
+
+    /**
+     * Возвращает все треки автора, у которых еще нет решения
+     * @param author Автор треков
+     * @return Список треков без решения
+     */
+    public List<Track> getRequestedTracksByAuthor(User author) {
+        return getTracksFromRequests(requestRepo.findAllByAuthorAndSolutionNull(author));
+    }
+
+    /**
+     * Возвращает все отклоненные треки автора
+     * @param author Автор треков
+     * @return Список отклоненных треков
+     */
+    public List<Track> getDeclinedTracksByAuthor(User author) {
+        return getTracksFromRequests(requestRepo.findAllByAuthorAndSolutionFalse(author));
+    }
+
+    private List<Track> getTracksFromRequests(List<UploadRequest> requests) {
+        return requests.stream()
+                .map(UploadRequest::getTrack)
+                .collect(Collectors.toList());
+    }
+
 
 }

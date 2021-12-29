@@ -13,4 +13,8 @@ public interface UploadRequestRepo extends PagingAndSortingRepository<UploadRequ
     List<UploadRequest> findAll();
 
     List<UploadRequest> findAllByModeratorAndSolutionNullOrderByCreationDate(User moderator);
+
+    List<UploadRequest> findAllByAuthorAndSolutionNull(User author);
+
+    List<UploadRequest> findAllByAuthorAndSolutionFalse(User author);
 }

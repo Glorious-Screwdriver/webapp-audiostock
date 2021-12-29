@@ -1,6 +1,8 @@
 package com.audiostock.controller.author;
 
+import com.audiostock.entities.Track;
 import com.audiostock.entities.User;
+import com.audiostock.service.UploadRequestService;
 import com.audiostock.service.UserService;
 import com.audiostock.service.util.ChangeProfileInfoReport;
 import com.audiostock.service.util.Utils;
@@ -12,16 +14,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping("/profile")
 public class ProfileEditController {
 
     UserService userService;
+    UploadRequestService uploadRequestService;
 
-    public ProfileEditController(UserService userService) {
+    public ProfileEditController(UserService userService, UploadRequestService uploadRequestService) {
         this.userService = userService;
+        this.uploadRequestService = uploadRequestService;
     }
+
+    // Info
 
     @GetMapping
     public String profile(Principal principal) {
@@ -71,6 +79,20 @@ public class ProfileEditController {
 
         //TODO profile view
         throw new UnsupportedOperationException("/profile view is not supported");
+    }
+
+    // Tracks
+
+    @GetMapping("/releases")
+    public String releases(Principal principal) {
+        User user = Utils.getUserFromPrincipal(principal, userService);
+
+        List<Track> releases = new ArrayList<>(user.getReleases());
+        List<Track> pending = new ArrayList<>(uploadRequestService.getRequestedTracksByAuthor(user));
+        List<Track> declined = new ArrayList<>(uploadRequestService.getDeclinedTracksByAuthor(user));
+
+        //TODO releases view
+        throw new UnsupportedOperationException("/releases view is not supported");
     }
 
 }
