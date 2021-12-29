@@ -6,6 +6,7 @@ import com.audiostock.service.TrackService;
 import com.audiostock.service.UserService;
 import com.audiostock.service.exceptions.TrackIsNotActiveException;
 import com.audiostock.service.exceptions.TrackNotFoundException;
+import com.audiostock.service.exceptions.UserNotLoggedInException;
 import com.audiostock.service.util.Utils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -53,7 +54,7 @@ public class TrackController {
 
     @PostMapping("/{trackId}/addToFavorite")
     public String addTrackToFavorite(@PathVariable Long trackId, Principal principal, @RequestHeader String referer)
-            throws TrackNotFoundException {
+            throws TrackNotFoundException, UserNotLoggedInException {
         Track track = trackService.getTrackById(trackId);
         User user = Utils.getUserFromPrincipal(principal, userService);
         System.out.println(track.getName() + " to favorite-->" + user.getLogin());
@@ -65,7 +66,7 @@ public class TrackController {
 
     @PostMapping("/{trackId}/removeFromFavorite")
     public String removeTrackFromFavorite(@PathVariable Long trackId, Principal principal, @RequestHeader String referer)
-            throws TrackNotFoundException {
+            throws TrackNotFoundException, UserNotLoggedInException {
         Track track = trackService.getTrackById(trackId);
         User user = Utils.getUserFromPrincipal(principal, userService);
 
@@ -75,7 +76,7 @@ public class TrackController {
 
     @PostMapping("/{trackId}/addToCart")
     public String addTrackToCart(@PathVariable Long trackId, Principal principal, @RequestHeader String referer)
-            throws TrackNotFoundException {
+            throws TrackNotFoundException, UserNotLoggedInException {
         Track track = trackService.getTrackById(trackId);
         User user = Utils.getUserFromPrincipal(principal, userService);
 
@@ -85,7 +86,7 @@ public class TrackController {
 
     @PostMapping("/{trackId}/removeFromCart")
     public String removeTrackFromCart(@PathVariable Long trackId, Principal principal, @RequestHeader String referer)
-            throws TrackNotFoundException {
+            throws TrackNotFoundException, UserNotLoggedInException {
         Track track = trackService.getTrackById(trackId);
         User user = Utils.getUserFromPrincipal(principal, userService);
 
