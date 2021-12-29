@@ -2,6 +2,7 @@ package com.audiostock.controller;
 
 import com.audiostock.entities.Track;
 import com.audiostock.entities.User;
+import com.audiostock.service.TrackService;
 import com.audiostock.service.UserService;
 import com.audiostock.service.exceptions.UserNotLoggedInException;
 import com.audiostock.service.util.Utils;
@@ -12,25 +13,41 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.security.Principal;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/cart")
 public class CartController {
 
     UserService userService;
+    TrackService trackService;
 
-    public CartController(UserService userService) {
+    public CartController(UserService userService, TrackService trackService) {
         this.userService = userService;
+        this.trackService = trackService;
     }
 
     @GetMapping
     public String cart(Principal principal, Model model) throws UserNotLoggedInException {
-        User user = Utils.getUserFromPrincipal(principal, userService);
-        model.addAttribute("username", principal.getName());
+        User user = Utils.getUserFromPrincipalNoException(principal, userService);
+
+        // Printing username in the header
+        model.addAttribute("username", user.getLogin());
+
+        // Track map
+        Map<Track, Boolean[]> map = new LinkedHashMap<>();
+
         List<Track> cart = userService.getCartSortedByName(user);
+        for (Track track : cart) {
+            map.put(track, new Boolean[]{
+                    trackService.isInFavorite(track, user),
+                    trackService.isInCart(track, user)
+            });
+        }
+        model.addAttribute("tracks", map);
         Long totalCost = userService.totalCartPrice(user);
-        model.addAttribute("tracks", cart);
         model.addAttribute("total", totalCost);
         return "cart";
     }

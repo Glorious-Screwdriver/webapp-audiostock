@@ -9,44 +9,54 @@ import com.audiostock.service.util.Utils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/favorite")
-public class FavoriteController {
+public class CatalogController {
 
     TrackService trackService;
     UserService userService;
 
-    public FavoriteController(UserService userService, TrackService trackService) {
+    public CatalogController(UserService userService, TrackService trackService) {
         this.userService = userService;
         this.trackService = trackService;
     }
 
-    @GetMapping
-    public String favorite(Principal principal, Model model) throws UserNotLoggedInException {
+    @GetMapping("/")
+    public String index(Principal principal, Model model) {
         User user = Utils.getUserFromPrincipalNoException(principal, userService);
 
         // Printing username in the header
-        model.addAttribute("username", user.getLogin());
+        model.addAttribute("logged", user != null);
+        if (user != null) {
+            model.addAttribute("username", user.getLogin());
+        }
 
         // Track map
         Map<Track, Boolean[]> map = new LinkedHashMap<>();
 
-        List<Track> favorites = userService.getFavoriteSortedByName(user);
-            for (Track track : favorites) {
+        final List<Track> tracks = trackService.getAll();
+        if (user != null) {
+            for (Track track : tracks) {
                 map.put(track, new Boolean[]{
                         trackService.isInFavorite(track, user),
                         trackService.isInCart(track, user)
                 });
             }
+        } else {
+            for (Track track : tracks) {
+                map.put(track, new Boolean[]{false, false});
+            }
+        }
+
         model.addAttribute("tracks", map);
-        return "favorite";
+
+        return "index";
     }
 
 }

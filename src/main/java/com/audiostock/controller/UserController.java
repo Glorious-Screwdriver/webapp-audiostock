@@ -2,9 +2,11 @@ package com.audiostock.controller;
 
 import com.audiostock.entities.Track;
 import com.audiostock.entities.User;
+import com.audiostock.service.TrackService;
 import com.audiostock.service.UserService;
 import com.audiostock.service.exceptions.UserNotFoundException;
 import com.audiostock.service.exceptions.UserNotLoggedInException;
+import com.audiostock.service.util.Utils;
 import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,7 +16,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.security.Principal;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Controller
@@ -22,9 +26,11 @@ import java.util.stream.Collectors;
 public class UserController {
 
     UserService userService;
+    TrackService trackService;
 
-    public UserController(UserService userService) {
-        this.userService = userService;
+    public UserController(UserService userService, TrackService trackService) {
+         this.userService = userService;
+         this.trackService = trackService;
     }
 
     // Representation
@@ -50,6 +56,32 @@ public class UserController {
             model.addAttribute("username", principal.getName());
         }
         model.addAttribute("tracks",releases);
+
+
+
+        // Printing username in the header
+        model.addAttribute("logged", principal != null);
+        if (principal != null) {
+            model.addAttribute("username", user.getLogin());
+        }
+
+        // Track map
+        Map<Track, Boolean[]> map = new LinkedHashMap<>();
+
+        if (principal != null) {
+            for (Track track : releases) {
+                map.put(track, new Boolean[]{
+                        trackService.isInFavorite(track, user),
+                        trackService.isInCart(track, user)
+                });
+            }
+        } else {
+            for (Track track : releases) {
+                map.put(track, new Boolean[]{false, false});
+            }
+        }
+
+        model.addAttribute("tracks", map);
         return "user";
     }
 

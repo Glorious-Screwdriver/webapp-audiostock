@@ -29,11 +29,15 @@ public class TrackController {
 
     @GetMapping("/{trackId}")
     public String getTrack(@PathVariable Long trackId, Model model, Principal principal) throws TrackNotFoundException {
+        User user = Utils.getUserFromPrincipalNoException(principal, userService);
         Track track = trackService.getTrackById(trackId);
         model.addAttribute("logged", principal != null);
         if (principal != null) {
             model.addAttribute("username", principal.getName());
+            model.addAttribute("carted",trackService.isInCart(track,user));
+            model.addAttribute("stared",trackService.isInFavorite(track,user));
         }
+
         model.addAttribute("track",track);
         return "track";
     }

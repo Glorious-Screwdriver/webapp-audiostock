@@ -259,22 +259,22 @@ li.checkout {
 .about{
 	min-height: 500px
 }
-.about .buttons{
+.about>.buttons{
 	border-bottom: 1px solid #AAA;
 }
-.about .buttons form{
+.about>.buttons form{
 	display: inline-block;
 }
-.about .buttons button{
+.about>.buttons button{
 	padding: 5px 10px;
 	position: relative;
-	border: 1px solid #AAA;
+	border:1px solid #AAA;
     color: #AAA;
 	background-color: #EEE;
 	top:1px;
     border-radius: 4px 4px 0 0;
 }
-.about .buttons .selected{
+.about>.buttons .selected{
 	background-color: white;
 	color:black;
 	border-bottom: 1px solid white;
@@ -340,11 +340,33 @@ li.checkout {
 	height:200px;
 }
 .track-description p{
-    padding: 20px;
+    color: #AAA;
+    padding: 15px;
 	display: block;
 	margin: 40px auto;
 	border:1px solid #AAA;
 	border-radius:4px;
 	width: 700px;
 	height:140px;
+}
+.buttons button.stared{
+	color: #A4A684;
+	background-color: #FCFFB6;
+	border: 1px solid #EEE;
+}
+.buttons button.stared:hover {
+    color: #9E9B7A;
+    background-color: #FAFF5A;
+}
+.buttons button.carted{
+    color: #DDD;
+    background-color: #FEFEFE;
+    border: 1px solid #DDD;
+}
+.buttons button.carted:hover{
+    color: #EEE;
+    background-color: #FFEFEF;
+}
+.about .track:first-of-type{
+	border-top:none;
 }

@@ -11,7 +11,7 @@
     <header th:replace="fragments/header :: user-header"></header>
     <section class="catalogue">
         <ul>
-            <li th:replace="fragments/catalogue :: price-list" th:each="${tracks}"></li>
+            <li th:replace="fragments/catalogue :: star-list" th:each="${tracks}"></li>
 			<li class="checkout">
 				<div>
                 	<p class="total" th:text="'Всего '+${total}+' р. ('+${tracks.size()}+(${tracks.size()==1}?' трек)':(${tracks.size()<5&&tracks.size()>0}?'трека)':' треков)'))">Всего 10р (1 трек)</p>
