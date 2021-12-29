@@ -30,7 +30,7 @@ public class ProfileEditController {
         this.uploadRequestService = uploadRequestService;
     }
 
-    // Info
+    // Representation
 
     @GetMapping
     public String profile(Principal principal) {
@@ -39,6 +39,20 @@ public class ProfileEditController {
         //TODO profile view
         throw new UnsupportedOperationException("/profile view is not supported");
     }
+
+    @GetMapping("/releases")
+    public String releases(Principal principal) {
+        User user = Utils.getUserFromPrincipal(principal, userService);
+
+        List<Track> releases = new ArrayList<>(user.getReleases());
+        List<Track> pending = new ArrayList<>(uploadRequestService.getRequestedTracksByAuthor(user));
+        List<Track> declined = new ArrayList<>(uploadRequestService.getDeclinedTracksByAuthor(user));
+
+        //TODO releases view
+        throw new UnsupportedOperationException("/profile/releases/releases view is not supported");
+    }
+
+    // Editing
 
     /* Мне кажется логично сделать следующим образом:
     * будет 2 формы - для смены публичных данных автора (полное имя и биография),
@@ -93,20 +107,6 @@ public class ProfileEditController {
 
         //TODO profile view
         throw new UnsupportedOperationException("/profile view is not supported");
-    }
-
-    // Tracks
-
-    @GetMapping("/releases")
-    public String releases(Principal principal) {
-        User user = Utils.getUserFromPrincipal(principal, userService);
-
-        List<Track> releases = new ArrayList<>(user.getReleases());
-        List<Track> pending = new ArrayList<>(uploadRequestService.getRequestedTracksByAuthor(user));
-        List<Track> declined = new ArrayList<>(uploadRequestService.getDeclinedTracksByAuthor(user));
-
-        //TODO releases view
-        throw new UnsupportedOperationException("/releases view is not supported");
     }
 
 }

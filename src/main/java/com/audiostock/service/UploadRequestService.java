@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 @Service
@@ -17,14 +18,27 @@ public class UploadRequestService {
 
     private final UploadRequestRepo requestRepo;
     private final TrackRepo trackRepo;
+    private final UserService userService;
 
-    public UploadRequestService(UploadRequestRepo requestRepo, TrackRepo trackRepo) {
+    public UploadRequestService(UploadRequestRepo requestRepo, TrackRepo trackRepo, UserService userService) {
         this.requestRepo = requestRepo;
         this.trackRepo = trackRepo;
+        this.userService = userService;
     }
 
-    public void addRequest(Track track){
-        requestRepo.save(new UploadRequest());
+    public UploadRequest addRequest(User author, Track track){
+        UploadRequest request = new UploadRequest(author, track);
+
+        // Назначение случайному модератору
+        List<User> moderators = userService.getAllModerators();
+        Random r = new Random();
+        request.setModerator(moderators.get(r.nextInt(moderators.size())));
+
+        request.setCreationDate(LocalDateTime.now());
+
+        requestRepo.save(request);
+
+        return request;
     }
 
     public void approveRequest(Long id) throws UploadRequestNotFoundException {

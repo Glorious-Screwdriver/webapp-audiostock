@@ -7,7 +7,9 @@ import com.audiostock.service.exceptions.TrackNotFoundException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -56,9 +58,24 @@ public class TrackService {
 
     // Persistence
 
-    public Long addTrack(Track track) {
-        trackRepo.save(track);
-        return track.getId();
+    public Track addTrack(User author,
+                         String name,
+                         String description,
+                         Long price,
+                         String genre,
+                         String mood,
+                         Long bpm,
+                         MultipartFile file,
+                         MultipartFile cover) {
+        try {
+            Track track = new Track(
+                    author, name, description, price, genre, mood, bpm, file.getBytes(), cover.getBytes()
+            );
+            trackRepo.save(track);
+            return track;
+        } catch (IOException e) {
+            return null;
+        }
     }
 
 }

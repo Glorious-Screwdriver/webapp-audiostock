@@ -42,6 +42,27 @@ public class Track {
     public Track() {
     }
 
+    public Track(User author,
+                 String name,
+                 String description,
+                 Long price,
+                 String genre,
+                 String mood,
+                 Long bpm,
+                 byte[] file,
+                 byte[] cover
+    ) {
+        this.name = name;
+        this.author = author;
+        this.cover = cover;
+        this.file = file;
+        this.description = description;
+        this.genre = genre;
+        this.mood = mood;
+        this.bpm = bpm;
+        this.price = price;
+    }
+
     public Long getId() {
         return id;
     }

@@ -33,6 +33,11 @@ public class UploadRequest {
     public UploadRequest() {
     }
 
+    public UploadRequest(User author, Track track) {
+        this.author = author;
+        this.track = track;
+    }
+
     public Long getId() {
         return id;
     }

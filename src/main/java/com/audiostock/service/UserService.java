@@ -25,9 +25,9 @@ import java.util.stream.Collectors;
 @Service
 public class UserService {
 
-    UserRepo userRepo;
-    StatusRepo statusRepo;
-    PasswordEncoder encoder;
+    private final UserRepo userRepo;
+    private final StatusRepo statusRepo;
+    private final PasswordEncoder encoder;
 
     public UserService(UserRepo userRepo, StatusRepo statusRepo, PasswordEncoder encoder) {
         this.userRepo = userRepo;
@@ -102,6 +102,10 @@ public class UserService {
         return set.stream()
                 .sorted((o1, o2) -> o1.getName().compareToIgnoreCase(o2.getName()))
                 .collect(Collectors.toList());
+    }
+
+    public List<User> getAllModerators() {
+        return userRepo.findAllByStatusName("MODERATOR");
     }
 
     // Consumer side
