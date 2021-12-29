@@ -1,10 +1,9 @@
-package com.audiostock.controller;
+package com.audiostock.controller.consumer;
 
 import com.audiostock.entities.Track;
 import com.audiostock.entities.User;
 import com.audiostock.service.TrackService;
 import com.audiostock.service.UserService;
-import com.audiostock.service.exceptions.UserNotLoggedInException;
 import com.audiostock.service.util.Utils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,8 +28,8 @@ public class FavoriteController {
     }
 
     @GetMapping
-    public String favorite(Principal principal, Model model) throws UserNotLoggedInException {
-        User user = Utils.getUserFromPrincipalNoException(principal, userService);
+    public String favorite(Principal principal, Model model){
+        User user = Utils.getUserFromPrincipal(principal, userService);
 
         // Printing username in the header
         model.addAttribute("username", user.getLogin());

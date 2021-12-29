@@ -27,7 +27,7 @@ public class CatalogController {
 
     @GetMapping("/")
     public String index(Principal principal, Model model) {
-        User user = Utils.getUserFromPrincipalNoException(principal, userService);
+        User user = Utils.getUserFromPrincipal(principal, userService);
 
         // Printing username in the header
         model.addAttribute("logged", user != null);
