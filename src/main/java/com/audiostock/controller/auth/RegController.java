@@ -1,4 +1,4 @@
-package com.audiostock.controller;
+package com.audiostock.controller.auth;
 
 import com.audiostock.service.UserService;
 import com.audiostock.service.util.RegisterInfo;

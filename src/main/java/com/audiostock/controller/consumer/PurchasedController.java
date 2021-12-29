@@ -1,34 +1,33 @@
-package com.audiostock.controller;
+package com.audiostock.controller.consumer;
 
 import com.audiostock.entities.Track;
 import com.audiostock.entities.User;
 import com.audiostock.service.UserService;
 import com.audiostock.service.util.Utils;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-@RequestMapping("/favorite")
-public class FavoriteController {
+@RequestMapping("/purchased")
+public class PurchasedController {
 
     UserService userService;
 
-    public FavoriteController(UserService userService) {
+    public PurchasedController(UserService userService) {
         this.userService = userService;
     }
 
     @GetMapping
-    public String favorite(Principal principal, Model model) {
+    public String purchased(Principal principal) {
         User user = Utils.getUserFromPrincipal(principal, userService);
-        List<Track> favorites = userService.getFavoriteSortedByName(user);
-        model.addAttribute("username", principal.getName());
-        model.addAttribute("tracks", favorites);
-        return "favorite";
-    }
+        List<Track> tracks = new ArrayList<>(user.getPurchased());
 
+        //TODO purchased view
+        throw new UnsupportedOperationException("/purchased view is not supported");
+    }
 }

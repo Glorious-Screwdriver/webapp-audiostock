@@ -1,4 +1,4 @@
-package com.audiostock.controller;
+package com.audiostock.controller.auth;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

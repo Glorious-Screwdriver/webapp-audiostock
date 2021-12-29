@@ -1,4 +1,4 @@
-package com.audiostock.controller;
+package com.audiostock.controller.consumer;
 
 import com.audiostock.entities.PaymentInfo;
 import com.audiostock.entities.User;

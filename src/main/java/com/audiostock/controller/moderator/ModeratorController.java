@@ -1,4 +1,4 @@
-package com.audiostock.controller;
+package com.audiostock.controller.moderator;
 
 import com.audiostock.entities.Track;
 import com.audiostock.entities.UploadRequest;

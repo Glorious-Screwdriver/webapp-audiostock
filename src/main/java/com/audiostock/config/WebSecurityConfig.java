@@ -29,7 +29,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // GUESTS
                 .antMatchers("/", "/register", "/track/*", "/user/*", "/user/*/tracks").permitAll()
                 // CONSUMERS
-                .antMatchers("/favorite", "/cart", "/balance").hasRole("CONSUMER")
+                .antMatchers("/favorite", "/cart", "/balance", "/purchased").hasRole("CONSUMER")
                 // MODERATORS
                 .antMatchers("/moderation").hasRole("MODERATOR")
                 .anyRequest().authenticated()
