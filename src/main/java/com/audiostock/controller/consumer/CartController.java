@@ -46,13 +46,16 @@ public class CartController {
             });
         }
         model.addAttribute("tracks", map);
+
+        // Total cost
         Long totalCost = userService.totalCartPrice(user);
         model.addAttribute("total", totalCost);
+
         return "cart";
     }
 
     @GetMapping("/checkout")
-    public String getCheckout(Principal principal){
+    public String getCheckout(Principal principal) {
         User user = Utils.getUserFromPrincipal(principal, userService);
 
         long balance = user.getBalance();

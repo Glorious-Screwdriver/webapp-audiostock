@@ -28,17 +28,26 @@ public class TrackController {
     // Representation
 
     @GetMapping("/{trackId}")
-    public String getTrack(@PathVariable Long trackId, Model model, Principal principal) throws TrackNotFoundException {
-        User user = Utils.getUserFromPrincipal(principal, userService);
+    public String getTrack(@PathVariable Long trackId, Model model, Principal principal)
+            throws TrackNotFoundException, TrackIsNotActiveException {
         Track track = trackService.getTrackById(trackId);
+
         model.addAttribute("logged", principal != null);
         if (principal != null) {
+            User user = Utils.getUserFromPrincipal(principal, userService);
+
+            if (!track.isActive() && !user.getStatus().getName().equals("MODERATOR")) {
+                throw new TrackIsNotActiveException(String.valueOf(trackId));
+            }
+
             model.addAttribute("username", principal.getName());
-            model.addAttribute("carted",trackService.isInCart(track,user));
-            model.addAttribute("stared",trackService.isInFavorite(track,user));
+            model.addAttribute("carted", trackService.isInCart(track, user));
+            model.addAttribute("stared", trackService.isInFavorite(track, user));
+        } else {
+            if (!track.isActive()) throw new TrackIsNotActiveException(String.valueOf(trackId));
         }
 
-        model.addAttribute("track",track);
+        model.addAttribute("track", track);
         return "track";
     }
 
@@ -47,7 +56,7 @@ public class TrackController {
 
     @PostMapping("/{trackId}/addToFavorite")
     public String addTrackToFavorite(@PathVariable Long trackId, Principal principal, @RequestHeader String referer)
-            throws TrackNotFoundException{
+            throws TrackNotFoundException {
         Track track = trackService.getTrackById(trackId);
         User user = Utils.getUserFromPrincipal(principal, userService);
         System.out.println(track.getName() + " to favorite-->" + user.getLogin());
@@ -69,7 +78,7 @@ public class TrackController {
 
     @PostMapping("/{trackId}/addToCart")
     public String addTrackToCart(@PathVariable Long trackId, Principal principal, @RequestHeader String referer)
-            throws TrackNotFoundException{
+            throws TrackNotFoundException {
         Track track = trackService.getTrackById(trackId);
         User user = Utils.getUserFromPrincipal(principal, userService);
 
@@ -79,7 +88,7 @@ public class TrackController {
 
     @PostMapping("/{trackId}/removeFromCart")
     public String removeTrackFromCart(@PathVariable Long trackId, Principal principal, @RequestHeader String referer)
-            throws TrackNotFoundException{
+            throws TrackNotFoundException {
         Track track = trackService.getTrackById(trackId);
         User user = Utils.getUserFromPrincipal(principal, userService);
 

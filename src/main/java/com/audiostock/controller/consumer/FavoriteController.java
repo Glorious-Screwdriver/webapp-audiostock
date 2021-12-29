@@ -28,7 +28,7 @@ public class FavoriteController {
     }
 
     @GetMapping
-    public String favorite(Principal principal, Model model){
+    public String favorite(Principal principal, Model model) {
         User user = Utils.getUserFromPrincipal(principal, userService);
 
         // Printing username in the header
@@ -38,13 +38,14 @@ public class FavoriteController {
         Map<Track, Boolean[]> map = new LinkedHashMap<>();
 
         List<Track> favorites = userService.getFavoriteSortedByName(user);
-            for (Track track : favorites) {
-                map.put(track, new Boolean[]{
-                        trackService.isInFavorite(track, user),
-                        trackService.isInCart(track, user)
-                });
-            }
+        for (Track track : favorites) {
+            map.put(track, new Boolean[]{
+                    trackService.isInFavorite(track, user),
+                    trackService.isInCart(track, user)
+            });
+        }
         model.addAttribute("tracks", map);
+
         return "favorite";
     }
 
