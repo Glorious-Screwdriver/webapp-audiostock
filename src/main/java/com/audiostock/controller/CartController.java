@@ -3,7 +3,6 @@ package com.audiostock.controller;
 import com.audiostock.entities.Track;
 import com.audiostock.entities.User;
 import com.audiostock.service.UserService;
-import com.audiostock.service.exceptions.UserNotLoggedInException;
 import com.audiostock.service.util.Utils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,7 +24,7 @@ public class CartController {
     }
 
     @GetMapping
-    public String cart(Principal principal, Model model) throws UserNotLoggedInException {
+    public String cart(Principal principal, Model model) {
         User user = Utils.getUserFromPrincipal(principal, userService);
         model.addAttribute("username", principal.getName());
         List<Track> cart = userService.getCartSortedByName(user);
@@ -36,7 +35,7 @@ public class CartController {
     }
 
     @GetMapping("/checkout")
-    public String getCheckout(Principal principal) throws UserNotLoggedInException {
+    public String getCheckout(Principal principal) {
         User user = Utils.getUserFromPrincipal(principal, userService);
 
         long balance = user.getBalance();
@@ -47,7 +46,7 @@ public class CartController {
     }
 
     @PostMapping("/checkout")
-    public String postCheckout(Principal principal) throws UserNotLoggedInException {
+    public String postCheckout(Principal principal) {
         User user = Utils.getUserFromPrincipal(principal, userService);
 
         final boolean checkoutSucceeded = userService.checkout(user);

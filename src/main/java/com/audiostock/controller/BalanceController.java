@@ -3,7 +3,6 @@ package com.audiostock.controller;
 import com.audiostock.entities.PaymentInfo;
 import com.audiostock.entities.User;
 import com.audiostock.service.UserService;
-import com.audiostock.service.exceptions.UserNotLoggedInException;
 import com.audiostock.service.util.Utils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,7 +21,7 @@ public class BalanceController {
     }
 
     @GetMapping
-    public String prepareDeposit(Principal principal, Model model) throws UserNotLoggedInException {
+    public String prepareDeposit(Principal principal, Model model) {
         User user = Utils.getUserFromPrincipal(principal, userService);
 
         final PaymentInfo paymentInfo = user.getPaymentInfo();
@@ -49,7 +48,7 @@ public class BalanceController {
             @RequestParam int cvv,
             @RequestParam int postalCode,
             @RequestParam String address,
-            @RequestHeader String referer) throws UserNotLoggedInException {
+            @RequestHeader String referer) {
         User user = Utils.getUserFromPrincipal(principal, userService);
         PaymentInfo paymentInfo = new PaymentInfo(cardOwner, cardNumber, expireDate, cvv, postalCode, address);
 

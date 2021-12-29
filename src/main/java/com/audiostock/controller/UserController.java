@@ -4,8 +4,6 @@ import com.audiostock.entities.Track;
 import com.audiostock.entities.User;
 import com.audiostock.service.UserService;
 import com.audiostock.service.exceptions.UserNotFoundException;
-import com.audiostock.service.exceptions.UserNotLoggedInException;
-import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -15,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.security.Principal;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/user")
@@ -60,14 +57,6 @@ public class UserController {
         e.printStackTrace();
 
         //TODO userNotFound view
-        throw new UnsupportedOperationException(e);
-    }
-
-    @ExceptionHandler(UserNotLoggedInException.class)
-    public String userNotLoggedIn(UserNotLoggedInException e) {
-        e.printStackTrace();
-
-        //TODO userNotLoggedIn view
         throw new UnsupportedOperationException(e);
     }
 

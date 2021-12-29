@@ -7,7 +7,6 @@ import com.audiostock.service.TrackService;
 import com.audiostock.service.UploadRequestService;
 import com.audiostock.service.UserService;
 import com.audiostock.service.exceptions.UploadRequestNotFoundException;
-import com.audiostock.service.exceptions.UserNotLoggedInException;
 import com.audiostock.service.util.Utils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -32,7 +31,7 @@ public class ModeratorController {
     }
 
     @GetMapping
-    public String moderation(Principal principal) throws UserNotLoggedInException {
+    public String moderation(Principal principal) {
         User moderator = Utils.getUserFromPrincipal(principal, userService);
 
         List<UploadRequest> requests = uploadRequestService.getRequestsByModerator(moderator);
@@ -52,7 +51,7 @@ public class ModeratorController {
                           @RequestParam boolean decision,
                           @RequestParam String rejectionReason,
                           @RequestHeader String referer) // тут скорее всего не @RequestParam - все зависит от того, как ты сделаешь меню ввода текста
-            throws UserNotLoggedInException, UploadRequestNotFoundException {
+            throws UploadRequestNotFoundException {
         User moderator = Utils.getUserFromPrincipal(principal, userService);
         UploadRequest uploadRequest = uploadRequestService.getRequest(uploadRequestId);
 
