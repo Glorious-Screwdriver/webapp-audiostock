@@ -26,7 +26,7 @@ public class RegController {
         RegisterReport registerReport = userService.register(username, password, repeat);
 
         if (!registerReport.isSuccessful()) {
-            model.addAttribute("message", registerReport.getFailureReason());
+            model.addAttribute("message", registerReport.getMessage());
             return "register";
         }
 

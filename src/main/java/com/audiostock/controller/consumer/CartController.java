@@ -4,6 +4,8 @@ import com.audiostock.entities.Track;
 import com.audiostock.entities.User;
 import com.audiostock.service.TrackService;
 import com.audiostock.service.UserService;
+import com.audiostock.service.util.CheckoutFailureReason;
+import com.audiostock.service.util.CheckoutReport;
 import com.audiostock.service.util.Utils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -55,7 +57,7 @@ public class CartController {
     }
 
     @GetMapping("/checkout")
-    public String getCheckout(Principal principal) {
+    public String checkoutPage(Principal principal) {
         User user = Utils.getUserFromPrincipal(principal, userService);
 
         long balance = user.getBalance();
@@ -66,17 +68,24 @@ public class CartController {
     }
 
     @PostMapping("/checkout")
-    public String postCheckout(Principal principal) {
+    public String checkout(Principal principal, Model model) {
         User user = Utils.getUserFromPrincipal(principal, userService);
 
-        final boolean checkoutSucceeded = userService.checkout(user);
+        final CheckoutReport report = userService.checkout(user);
 
-        if (checkoutSucceeded) {
+        if (report.isSuccessful()) {
             //TODO /purchased view
             throw new UnsupportedOperationException("/purchased view is not supported");
         } else {
-            //TODO /deposit view
-            throw new UnsupportedOperationException("/deposit view is not supported");
+            if (report.getCheckoutFailureReason() == CheckoutFailureReason.NOT_ENOUGH_MONEY) {
+                //TODO /deposit view
+                throw new UnsupportedOperationException("/deposit view is not supported");
+            } else if (report.getCheckoutFailureReason() == CheckoutFailureReason.TRACK_IS_ALREADY_PURCHASED) {
+                model.addAttribute("message", report.getMessage());
+
+                //TODO /cart/checkout view
+                throw new UnsupportedOperationException();
+            }
         }
     }
 

@@ -8,6 +8,8 @@ import com.audiostock.repos.StatusRepo;
 import com.audiostock.repos.UserRepo;
 import com.audiostock.service.exceptions.UserNotFoundException;
 import com.audiostock.service.util.ChangeProfileInfoReport;
+import com.audiostock.service.util.CheckoutFailureReason;
+import com.audiostock.service.util.CheckoutReport;
 import com.audiostock.service.util.RegisterReport;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -132,21 +134,27 @@ public class UserService {
         return true;
     }
 
-    public boolean checkout(User user) {
+    public CheckoutReport checkout(User user) {
         final Set<Track> cart = user.getCart();
         Long totalPrice = 0L;
 
         for (Track track : cart) {
             if (user.getPurchased().contains(track)) {
-                System.out.println(user.getLogin() + " already has this track purchased");
-                return false;
+                return new CheckoutReport(
+                        false,
+                        CheckoutFailureReason.TRACK_IS_ALREADY_PURCHASED,
+                        user.getLogin() + " already has track " + track.getName() + " purchased"
+                );
             }
             totalPrice += track.getPrice();
         }
 
         if (user.getBalance() < totalPrice) {
-            System.out.println(user.getLogin() + " doesn't have enough money");
-            return false;
+            return new CheckoutReport(
+                    false,
+                    CheckoutFailureReason.NOT_ENOUGH_MONEY,
+                    user.getLogin() + " doesn't have enough money"
+            );
         }
 
         for (Track track : cart) {
@@ -155,7 +163,7 @@ public class UserService {
         user.setBalance(user.getBalance() - totalPrice);
 
         userRepo.save(user);
-        return true;
+        return new CheckoutReport(true);
     }
 
     public Long totalCartPrice(User user) {

@@ -3,22 +3,22 @@ package com.audiostock.service.util;
 public class Report {
     private boolean successful;
 
-    private String failureReason;
+    private String message;
 
     public Report(boolean successful) {
         this.successful = successful;
     }
 
-    public Report(boolean successful, String failureReason) {
+    public Report(boolean successful, String message) {
         this.successful = successful;
-        this.failureReason = failureReason;
+        this.message = message;
     }
 
     public boolean isSuccessful() {
         return successful;
     }
 
-    public String getFailureReason() {
-        return failureReason;
+    public String getMessage() {
+        return message;
     }
 }

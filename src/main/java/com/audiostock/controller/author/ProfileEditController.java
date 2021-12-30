@@ -71,7 +71,7 @@ public class ProfileEditController {
         );
 
         if (!report.isSuccessful()) {
-            model.addAttribute("message", report.getFailureReason());
+            model.addAttribute("message", report.getMessage());
         }
 
         //TODO profile view
@@ -89,7 +89,7 @@ public class ProfileEditController {
         );
 
         if (!report.isSuccessful()) {
-            model.addAttribute("message", report.getFailureReason());
+            model.addAttribute("message", report.getMessage());
         }
 
         //TODO profile view
