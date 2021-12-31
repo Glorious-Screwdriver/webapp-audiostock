@@ -32,18 +32,11 @@ public class FavoriteController {
         User user = Utils.getUserFromPrincipal(principal, userService);
 
         // Printing username in the header
-        model.addAttribute("username", user.getLogin());
+        model.addAttribute("user", user);
 
         // Track map
-        Map<Track, Boolean[]> map = new LinkedHashMap<>();
-
         List<Track> favorites = userService.getFavoriteSortedByName(user);
-        for (Track track : favorites) {
-            map.put(track, new Boolean[]{
-                    trackService.isInFavorite(track, user),
-                    trackService.isInCart(track, user)
-            });
-        }
+        Map<Track, Boolean[]> map = Utils.getTrackMap(user, favorites, trackService);
         model.addAttribute("tracks", map);
 
         return "favorite";

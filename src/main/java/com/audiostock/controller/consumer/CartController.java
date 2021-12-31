@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.security.Principal;
@@ -31,22 +32,15 @@ public class CartController {
     }
 
     @GetMapping
-    public String cart(Principal principal, Model model){
+    public String cart(Principal principal, Model model) {
         User user = Utils.getUserFromPrincipal(principal, userService);
 
         // Printing username in the header
-        model.addAttribute("username", user.getLogin());
+        model.addAttribute("user", user);
 
         // Track map
-        Map<Track, Boolean[]> map = new LinkedHashMap<>();
-
         List<Track> cart = userService.getCartSortedByName(user);
-        for (Track track : cart) {
-            map.put(track, new Boolean[]{
-                    trackService.isInFavorite(track, user),
-                    trackService.isInCart(track, user)
-            });
-        }
+        Map<Track, Boolean[]> map = Utils.getTrackMap(user, cart, trackService);
         model.addAttribute("tracks", map);
 
         // Total cost
@@ -57,18 +51,21 @@ public class CartController {
     }
 
     @GetMapping("/checkout")
-    public String checkoutPage(Principal principal) {
+    public String getCheckout(Principal principal, Model model) {
         User user = Utils.getUserFromPrincipal(principal, userService);
 
         long balance = user.getBalance();
         long totalCost = userService.totalCartPrice(user);
 
-        //TODO /cart/checkout view
-        throw new UnsupportedOperationException();
+        model.addAttribute("balance", balance);
+        model.addAttribute("total", totalCost);
+        model.addAttribute("nem", totalCost > balance);
+
+        return "order";
     }
 
     @PostMapping("/checkout")
-    public String checkout(Principal principal, Model model) {
+    public String checkout(Principal principal, Model model, @RequestHeader String referer) {
         User user = Utils.getUserFromPrincipal(principal, userService);
 
         final CheckoutReport report = userService.checkout(user);
@@ -87,6 +84,7 @@ public class CartController {
                 throw new UnsupportedOperationException();
             }
         }
+        return "redirect:" + referer;
     }
 
 }

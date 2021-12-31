@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 @Service
@@ -40,7 +41,7 @@ public class UserService {
     // Authorisation
 
     public RegisterReport register(String username, String password, String repeat) {
-        if (username.length() < 4) {
+        if (username.length() <= 4) {
             return new RegisterReport(false, "Username must have at least 4 symbols");
         }
 
@@ -100,6 +101,10 @@ public class UserService {
         return makeASortedList(user.getFavorites());
     }
 
+    public List<Track> getPurchasedSortedByName(User user) {
+        return makeASortedList(user.getPurchased());
+    }
+
     private List<Track> makeASortedList(Set<Track> set) {
         return set.stream()
                 .sorted((o1, o2) -> o1.getName().compareToIgnoreCase(o2.getName()))
@@ -115,6 +120,10 @@ public class UserService {
     public boolean addTrackToCart(User user, Track track) {
         if (user.getCart().contains(track)) {
             System.out.println(user.getLogin() + " already has track " + track.getName() + " in the cart");
+            return false;
+        }
+        if (user.getPurchased().contains(track)) {
+            System.out.println(user.getLogin() + " already has this track purchased");
             return false;
         }
 
@@ -325,5 +334,4 @@ public class UserService {
         userRepo.save(user);
         return true;
     }
-
 }

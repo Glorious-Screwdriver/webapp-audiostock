@@ -32,12 +32,13 @@ public class Utils {
             for (Track track : tracks) {
                 map.put(track, new Boolean[]{
                         trackService.isInFavorite(track, user),
-                        trackService.isInCart(track, user)
+                        trackService.isInCart(track, user),
+                        trackService.isPurchased(track, user)
                 });
             }
         } else {
             for (Track track : tracks) {
-                map.put(track, new Boolean[]{false, false});
+                map.put(track, new Boolean[]{false, false, false});
             }
         }
 

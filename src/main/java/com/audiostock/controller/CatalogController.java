@@ -32,7 +32,7 @@ public class CatalogController {
         // Printing username in the header
         model.addAttribute("logged", user != null);
         if (user != null) {
-            model.addAttribute("username", user.getLogin());
+            model.addAttribute("user", user);
         }
 
         // Track map

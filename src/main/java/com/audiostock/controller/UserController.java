@@ -43,7 +43,7 @@ public class UserController {
         User user = Utils.getUserFromPrincipal(principal, userService);
         model.addAttribute("logged", user != null);
         if (user != null) {
-            model.addAttribute("username", user.getLogin());
+            model.addAttribute("user", user);
         }
 
         return "user";
@@ -59,7 +59,7 @@ public class UserController {
         User user = Utils.getUserFromPrincipal(principal, userService);
         model.addAttribute("logged", user != null);
         if (user != null) {
-            model.addAttribute("username", user.getLogin());
+            model.addAttribute("user", user);
         }
 
         // Track map

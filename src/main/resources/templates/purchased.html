@@ -13,10 +13,10 @@
         <ul>
             <li th:if="${tracks.size()==0}" class="checkout">
                 <div>
-                    <p class="error">В избранном еще ничего нет...</p>
+                    <p class="error">Вы еще не покупали треков...</p>
                 </div>
             </li>
-            <li th:replace="fragments/catalogue :: star-list" th:each="track:${tracks}"></li>
+            <li th:replace="fragments/catalogue :: bought-list" th:each="track:${tracks}"></li>
         </ul>
     </section>
 </div>

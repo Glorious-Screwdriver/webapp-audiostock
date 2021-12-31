@@ -41,7 +41,7 @@ public class TrackController {
 
             // Printing username in the header
             model.addAttribute("logged", true);
-            model.addAttribute("username", user.getLogin());
+            model.addAttribute("user", user);
 
             // Printing track buttons
             model.addAttribute("carted", trackService.isInCart(track, user));

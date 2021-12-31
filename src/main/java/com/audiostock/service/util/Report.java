@@ -1,7 +1,7 @@
 package com.audiostock.service.util;
 
 public class Report {
-    private boolean successful;
+    private final boolean successful;
 
     private String message;
 

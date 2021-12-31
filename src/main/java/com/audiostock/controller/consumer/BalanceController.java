@@ -4,6 +4,7 @@ import com.audiostock.entities.PaymentInfo;
 import com.audiostock.entities.User;
 import com.audiostock.service.UserService;
 import com.audiostock.service.util.Utils;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -45,25 +46,16 @@ public class BalanceController {
             model.addAttribute("postalCode", paymentInfo.getPostalCode());
         }
 
-        //TODO prepareDeposit view
-        throw new UnsupportedOperationException();
+       return "balance";
     }
 
-    @PostMapping
-    public String makeDeposit(
-            Principal principal,
-            @RequestParam Long amount,
-            @RequestParam String cardOwner,
-            @RequestParam int cardNumber,
-            @RequestParam String expireDate,
-            @RequestParam int cvv,
-            @RequestParam int postalCode,
-            @RequestParam String address) {
+    @PostMapping(consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    public String makeDeposit(Principal principal, @RequestParam Map<String, String> body ) {
         User user = Utils.getUserFromPrincipal(principal, userService);
-        PaymentInfo paymentInfo = new PaymentInfo(cardOwner, cardNumber, expireDate, cvv, postalCode, address);
-
-        userService.savePaymentMethod(user, paymentInfo);
-        userService.makeDeposit(user, amount);
+        //TODO body.get() и так для каждого сори мне лень;
+//        PaymentInfo paymentInfo = new PaymentInfo(body.get("cardOwner"), cardNumber, ""+year+month, cvv, postalCode, address);
+//        userService.savePaymentMethod(user, paymentInfo);
+        userService.makeDeposit(user, Long.parseLong(body.get("amount")));
 
         String referer = referers.get(principal);
         referers.remove(principal);
