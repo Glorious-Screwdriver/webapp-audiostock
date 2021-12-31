@@ -12,7 +12,7 @@
 	<div>
 		<div><p>цена</p><p th:text="${total}">-1 р.</p></div>
 		<div><p>баланс</p><p th:text="${balance}">-1 р.</p></div>
-		<form th:action="@{{addr}(addr = ${nem}?'/balance':'/cart/checkout')}" method="post">
+		<form th:action="@{{addr}(addr = ${nem}?'/balance':'/cart/checkout')}" th:method="${nem}?'get':'post'">
 			<input type="submit" th:value="${nem}?'Пополнить баланс':'Оплатить'" th:class="${nem}?'nem'">
 		</form>
 	</div>
