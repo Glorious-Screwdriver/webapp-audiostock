@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>cart</title>
+    <link rel="stylesheet" th:href="@{/styles/cssandjs/main.css}" href="../static/styles/cssandjs/main.css">
+
+</head>
+<body>
+<div class="container">
+    <header th:replace="fragments/header :: user-header"></header>
+    <section class="catalogue">
+        <ul>
+            <li th:if="${tracks.size()==0}" class="checkout">
+                <div>
+                    <p class="error">Вы еще не покупали треков...</p>
+                </div>
+            </li>
+            <li th:replace="fragments/catalogue :: bought-list" th:each="track:${tracks}"></li>
+        </ul>
+    </section>
+</div>
+</body>
+</html>

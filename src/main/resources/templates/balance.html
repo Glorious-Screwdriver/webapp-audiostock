@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>main</title>
+    <link rel="stylesheet" th:href="@{/styles/cssandjs/main.css}" href="../static/styles/cssandjs/main.css">
+
+</head>
+<body>
+<div class="balance">
+    <h2>Пополнение баланса</h2>
+	<form th:action="@{/balance}" method="post">
+		<div>
+			<label for="amount">Сумма</label>
+			<input type="text" id="amount" name="amount" value = "">
+		</div>
+		<div>
+			<label for="owner">Владелец</label>
+			<input type="text" id="owner" name="owner">
+		</div>
+		<div>
+			<label for="cvv">CVV</label>
+			<input type="text" id="cvv" name="ccv">
+		</div>
+		<div>
+			<label for="cardNumber">Номер</label>
+			<input type="text" id="cardNumber" name="cardNumber">
+		</div>
+		<div>
+			<label>Срок годности<br>
+			</label>
+			<select name="month" id="month">
+			  <option value="01">Январь</option>
+				<option value="02">Февраль </option>
+				<option value="03">Март</option>
+				<option value="04">Апрель</option>
+				<option value="05">Май</option>
+				<option value="06">Июнь</option>
+				<option value="07">Июль</option>
+				<option value="08">Август</option>
+				<option value="09">Сентябрь</option>
+				<option value="10">Октябрь</option>
+				<option value="11">Ноябрь</option>
+				<option value="12">Декабрь</option>
+			</select>
+			<select name = "year" id="year">
+				<option value="21"> 2021</option>
+				<option value="22"> 2022</option>
+				<option value="23"> 2023</option>
+				<option value="24"> 2024</option>
+				<option value="25"> 2025</option>
+				<option value="26"> 2026</option>
+			</select>
+		</div>
+		<div>
+			<input type="submit" id="confirm-purchase" value = "Оплатить">
+		</div>
+	</form>
+</div>
+</body>
+</html>

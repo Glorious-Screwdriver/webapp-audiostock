@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>main</title>
+    <link rel="stylesheet" href="../../static/styles/cssandjs/main.css">
+</head>
+<body>
+<div class="container">
+    <ul>
+        <li th:fragment="star-list" th:each="t:${tracks}"
+            th:with="track=${t.getKey()},stared=${t.getValue()[0]},carted=${t.getValue()[1]},purchaced=${t.getValue()[2]}">
+            <div class="track">
+                <div>
+                    <a th:href="@{/track/{u}(u=${track.getId()})}">
+                        <img src="#">
+                    </a>
+                </div>
+                <div class="info">
+                    <a th:text="${track.getName()}" th:href="@{/track/{u}(u=${track.getId()})}">Название</a>
+                    <a th:text="${track.getAuthor().getLogin()}"
+                       th:href="@{/user/{u}(u=${track.getAuthor().getLogin()})}">Автор</a>
+                </div>
+                <div class="audio">
+                    <audio controls src="#">audio is not supported</audio>
+                    <p th:text="${track.getGenre()}+' / '+${track.getMood()}">джаз/грусть</p>
+                </div>
+                <div class="buttons">
+                    <form th:action="@{/track/{i}/{j}(j=(${stared}?'removeFromFavorite':'addToFavorite'),i=${track.getId()})}"
+                          method="post">
+                        <button name="add-to-fav" th:value="star" th:class="${stared}?'stared'">лайк</button>
+                    </form>
+                    <form th:action="@{/track/{i}/{j}(i=${track.getId()},j=(${carted}?'removeFromCart':'addToCart'))}"
+                          method="post">
+                        <button name="add-to-cart" th:value="cart" class="cost" th:class="(${carted||purchaced})?'carted cost':'cost'" th:text="${purchaced}?'куплено':(${track.getPrice()})" th:disabled="${purchaced}">-1 р.</button>
+                    </form>
+                </div>
+            </div>
+        </li>
+		 <li th:fragment="bought-list" th:each="t:${tracks}"
+            th:with="track=${t.getKey()}, stared=${t.getValue()[0]}, carted=${t.getValue()[1]}">
+            <div class="track">
+                <div>
+                    <a th:href="@{/track/{u}(u=${track.getId()})}">
+                        <img src="#">
+                    </a>
+                </div>
+                <div class="info">
+                    <a th:text="${track.getName()}" th:href="@{/track/{u}(u=${track.getId()})}">Название</a>
+                    <a th:text="${track.getAuthor().getLogin()}"
+                       th:href="@{/user/{u}(u=${track.getAuthor().getLogin()})}">Автор</a>
+                </div>
+                <div class="audio">
+                    <audio controls src="#">audio is not supported</audio>
+                    <p th:text="${track.getGenre()}+' / '+${track.getMood()}">джаз/грусть</p>
+                </div>
+                <div class="buttons">
+                    <form th:action="@{/track/{i}/{j}(j=(${stared}?'removeFromFavorite':'addToFavorite'),i=${track.getId()})}"
+                          method="post">
+                        <button name="add-to-fav" th:value="star" th:class="${stared}?'stared'">лайк</button>
+                    </form>
+                    <form th:action="@{/track/{i}/{j}(i=${track.getId()},j=(${carted}?'removeFromCart':'addToCart'))}"
+                          method="post">
+                        <button name="download" th:value="download" class="download" >скачать</button>
+                    </form>
+                </div>
+            </div>
+        </li>
+    </ul>
+</div>
+</body>
+</html>

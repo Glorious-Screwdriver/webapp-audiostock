@@ -1,0 +1,105 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      lang="java">
+<head>
+    <title>register</title>
+    <style>
+        body{
+            font-family: Cambria, "Hoefler Text", "Liberation Serif", Times, "Times New Roman", "serif";
+            background-image: url([[@{/img/ripples.png}]]);
+            background-repeat: repeat;
+        }
+        *,
+        *:before,
+        *:after{
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+		.error{
+			color: red;
+		}
+        body{
+            background-color: #FFF;
+            color:#000000
+        }
+        a{
+            text-decoration: none;
+        }
+        form{
+            height: 520px;
+            width: 400px;
+            background-color: rgba(255,255,255,0.13);
+            position: absolute;
+            transform: translate(-50%,-50%);
+            top: 50%;
+            left: 50%;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(0,0,0,0.1);
+            box-shadow: 0 0 40px rgba(8,7,16,0.6);
+            padding: 50px 35px;
+        }
+        form *{
+            font-family: 'Poppins',sans-serif;
+            color: #000;
+            letter-spacing: 0.5px;
+            outline: none;
+            border: none;
+        }
+        input[type="submit"]{
+            margin-top: 50px;
+            width: 100%;
+            background-color: #E1E1E1;
+            color: #464646;
+            padding: 15px 0;
+            font-size: 18px;
+            font-weight: 600;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        form h3{
+            font-size: 32px;
+            font-weight: 500;
+            line-height: 42px;
+            text-align: center;
+        }
+        label{
+            display: block;
+            margin-top: 20px;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        input{
+            display: block;
+            height: 50px;
+            width: 100%;
+            background-color: rgba(0,0,0,0.07);
+            border-radius: 3px;
+            padding: 0 10px;
+            margin-top: 8px;
+            font-size: 14px;
+            font-weight: 300;
+        }
+        ::placeholder{
+            color: #B1B1B1;
+        }
+    </style>
+</head>
+
+<body>
+<form th:action="@{/register}" id="register-form" name="register-form" method="post">
+    <a th:href="@{/}"><h3>WYM</h3></a>
+    <p th:if="${message!=null}" class="error" th:text="${message}">aghh...</p>
+    <label for="username">логин:</label>
+    <input type="text" placeholder="abobus" name="username" id="username">
+    <label for="password">пароль:</label>
+    <input type="password" placeholder="*****" name="password" id="password">
+	<label for="repeat">пароль:</label>
+    <input type="password" placeholder="*****" name="repeat" id="repeat">
+    <input type="submit" value="Отправить">
+</form>
+</body>
+</html>
+

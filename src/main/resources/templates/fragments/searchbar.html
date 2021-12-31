@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>main</title>
+    <link rel="stylesheet" href="../../static/styles/cssandjs/main.css">
+</head>
+<body>
+<div class="container">
+    <section th:fragment="searchbar" class="searchbar">
+        <form>
+            <div class="bar">
+                <input type="text" id="search" placeholder="поиск">
+            </div>
+            <div class="mood">
+                <input type="text" id="mood" placeholder="Настроение">
+            </div>
+            <div class="genre">
+                <input type="text" id="genre" placeholder="жанр">
+            </div>
+        </form>
+    </section>
+</div>
+</body>
+</html>

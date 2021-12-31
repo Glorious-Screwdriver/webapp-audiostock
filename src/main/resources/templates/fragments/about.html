@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>main</title>
+    <link rel="stylesheet" href="../../static/styles/cssandjs/main.css">
+</head>
+<body>
+<div class="container">
+    <div th:fragment="info" class="about">
+        <div class="buttons">
+            <form>
+                <button class="selected">Об исполнителе</button>
+            </form>
+            <form th:action="@{/user/{u}/tracks(u=${author.getLogin()})}">
+                <button>Треки</button>
+            </form>
+        </div>
+        <div class="about-container">
+            <h2 th:text="${author.getLogin()}">Имя исполнителя</h2>
+            <div class="description">
+                <h3>Описание</h3>
+                <p th:text="${author.getBiography()}">2021-12-28 20:25:39.757 WARN 17896 —- [nio-8080-exec-2]
+                    .w.s.m.s.DefaultHandlerExceptionResolver : Resolved
+                    [org.springframework.web.method.annotation.MethodArgumentTypeMismatchException: Failed to convert
+                    value of type 'java.lang.String' to required type 'java.lang.Long'; nested exception is
+                    java.lang.NumberFormatException: For input string: "${track.getId()}"]</p>
+            </div>
+        </div>
+    </div>
+    <div th:fragment="tracks" class="about">
+        <div class="buttons">
+            <form th:action="@{/user/{u}(u=${author.getLogin()})}">
+                <button>Об исполнителе</button>
+            </form>
+            <form>
+                <button class="selected">Треки</button>
+            </form>
+        </div>
+        <section class="catalogue">
+            <ul>
+                <li th:replace="fragments/catalogue :: star-list" th:each="tracks"></li>
+            </ul>
+        </section>
+    </div>
+</div>
+</body>
+</html>

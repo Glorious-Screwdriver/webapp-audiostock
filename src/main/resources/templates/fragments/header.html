@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>main</title>
+    <link rel="stylesheet" href="../../static/styles/cssandjs/main.css">
+</head>
+<body>
+<div class="container">
+    <header th:fragment="guest-header">
+        <a th:href="@{/}" class="logo"><h1>WYM</h1></a>
+        <div class="nav">
+            <div><a th:href="@{/register}">Регистрация</a></div>
+            <div><a th:href="@{/login}">Вход</a></div>
+        </div>
+    </header>
+    <header th:fragment="user-header">
+        <a th:href="@{/}" class="logo"><h1>WYM</h1></a>
+        <div class="nav">
+            <div class="profile-mini">
+                <a th:href="@{/user/{u}(u=${user.getLogin()})}">
+                    <img src="#" class="profile-mini">
+                </a>
+            </div>
+            <div><a th:href="@{/favorite}">избранное</a></div>
+            <div><a th:href="@{/cart}">корзина</a></div>
+            <div class="dropdown">
+                <p th:text="${user.getLogin()}">имя пользователя</p>
+                <div class="dropdown-content">
+                    <a th:href="@{/user/{u}(u=${user.getLogin()})}">профиль</a>
+                    <a th:href="@{/balance}" th:text="'баланс: '+${user.getBalance()}">баланс: 2р</a>
+                    <a th:href="@{/purchased}">купленные треки</a>
+                    <a th:href="@{/logout}" class="logout">выйти</a>
+                </div>
+            </div>
+        </div>
+    </header>
+</div>
+</body>
+</html>

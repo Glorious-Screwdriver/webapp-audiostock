@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>main</title>
+    <link rel="stylesheet" th:href="@{/styles/cssandjs/main.css}" href="../static/styles/cssandjs/main.css">
+
+</head>
+<body>
+<div class="order">
+	<h2>Подтверждение покупки</h2>
+	<div>
+		<div><p>цена</p><p th:text="${total}">-1 р.</p></div>
+		<div><p>баланс</p><p th:text="${balance}">-1 р.</p></div>
+		<form th:action="@{{addr}(addr = ${nem}?'/balance':'/cart/checkout')}" th:method="${nem}?'get':'post'">
+			<input type="submit" th:value="${nem}?'Пополнить баланс':'Оплатить'" th:class="${nem}?'nem'">
+		</form>
+	</div>
+</div>
+</body>
+</html>
