@@ -42,20 +42,20 @@ public class UserService {
 
     public RegisterReport register(String username, String password, String repeat) {
         if (username.length() <= 4) {
-            return new RegisterReport(false, "Username must have at least 4 symbols");
+            return new RegisterReport(false, "Имя пользователя должно содержать минимум 4 символа");
         }
 
         if (password.length() < 6) {
-            return new RegisterReport(false, "Password must have at least 6 symbols");
+            return new RegisterReport(false, "Пароль должен содержать минимум 6 символов");
         }
 
         if (!password.equals(repeat)) {
-            return new RegisterReport(false, "Passwords don't match");
+            return new RegisterReport(false, "Пароли не совпадают");
         }
 
         Optional<User> userWithSameName = userRepo.findByLogin(username);
         if (userWithSameName.isPresent()) {
-            return new RegisterReport(false, "Login is already taken");
+            return new RegisterReport(false, "Имя пользователя занято");
         }
 
         final Status status = statusRepo.findById(1L)
@@ -152,7 +152,7 @@ public class UserService {
                 return new CheckoutReport(
                         false,
                         CheckoutFailureReason.TRACK_IS_ALREADY_PURCHASED,
-                        user.getLogin() + " already has track " + track.getName() + " purchased"
+                        "Вы уже приобрели данный трек: " + track.getName()
                 );
             }
             totalPrice += track.getPrice();
@@ -162,7 +162,7 @@ public class UserService {
             return new CheckoutReport(
                     false,
                     CheckoutFailureReason.NOT_ENOUGH_MONEY,
-                    user.getLogin() + " doesn't have enough money"
+                    "У вас недостаточно средств для совершения покупки."
             );
         }
 

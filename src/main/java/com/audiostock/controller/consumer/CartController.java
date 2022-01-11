@@ -74,12 +74,11 @@ public class CartController {
             //TODO /purchased view
             throw new UnsupportedOperationException("/purchased view is not supported");
         } else {
+            model.addAttribute("message", report.getMessage());
             if (report.getCheckoutFailureReason() == CheckoutFailureReason.NOT_ENOUGH_MONEY) {
                 //TODO /deposit view
                 throw new UnsupportedOperationException("/deposit view is not supported");
             } else if (report.getCheckoutFailureReason() == CheckoutFailureReason.TRACK_IS_ALREADY_PURCHASED) {
-                model.addAttribute("message", report.getMessage());
-
                 //TODO /cart/checkout view
                 throw new UnsupportedOperationException();
             }
