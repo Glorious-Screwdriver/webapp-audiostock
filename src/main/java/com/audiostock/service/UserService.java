@@ -165,6 +165,7 @@ public class UserService {
 
         for (Track track : cart) {
             user.getPurchased().add(track);
+            user.getCart().remove(track);
         }
         user.setBalance(user.getBalance() - totalPrice);
 
