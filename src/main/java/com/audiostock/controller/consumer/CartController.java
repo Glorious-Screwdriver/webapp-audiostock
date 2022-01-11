@@ -65,25 +65,21 @@ public class CartController {
     }
 
     @PostMapping("/checkout")
-    public String checkout(Principal principal, Model model, @RequestHeader String referer) {
+    public String checkout(Principal principal, Model model) {
         User user = Utils.getUserFromPrincipal(principal, userService);
 
         final CheckoutReport report = userService.checkout(user);
 
         if (report.isSuccessful()) {
-            //TODO /purchased view
-            throw new UnsupportedOperationException("/purchased view is not supported");
+            return "redirect:/purchased";
         } else {
             model.addAttribute("message", report.getMessage());
             if (report.getCheckoutFailureReason() == CheckoutFailureReason.NOT_ENOUGH_MONEY) {
-                //TODO /deposit view
-                throw new UnsupportedOperationException("/deposit view is not supported");
-            } else if (report.getCheckoutFailureReason() == CheckoutFailureReason.TRACK_IS_ALREADY_PURCHASED) {
-                //TODO /cart/checkout view
-                throw new UnsupportedOperationException();
+                return "forward:/balance";
+            } else { // CheckoutFailureReason.TRACK_IS_ALREADY_PURCHASED
+                return "forward:/checkout";
             }
         }
-        return "redirect:" + referer;
     }
 
 }
