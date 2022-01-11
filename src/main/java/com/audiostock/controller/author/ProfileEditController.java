@@ -33,11 +33,11 @@ public class ProfileEditController {
     // Representation
 
     @GetMapping
-    public String profile(Principal principal) {
+    public String profile(Principal principal, Model model) {
         User user = Utils.getUserFromPrincipal(principal, userService);
 
-        //TODO profile view
-        throw new UnsupportedOperationException("/profile view is not supported");
+        model.addAttribute("user",user);
+        return "profile-edit";
     }
 
     @GetMapping("/releases")
@@ -51,7 +51,6 @@ public class ProfileEditController {
         //TODO releases view
         throw new UnsupportedOperationException("/profile/releases/releases view is not supported");
     }
-
     // Editing
 
     /* Мне кажется логично сделать следующим образом:

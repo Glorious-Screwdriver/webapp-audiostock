@@ -19,15 +19,15 @@
         <div class="nav">
             <div class="profile-mini">
                 <a th:href="@{/user/{u}(u=${user.getLogin()})}">
-                    <img src="#" class="profile-mini">
+                    <img th:src="@{/img/guest-icon.jpg}" src="../../static/img/guest-icon.jpg" class="profile-mini">
                 </a>
             </div>
             <div><a th:href="@{/favorite}">избранное</a></div>
             <div><a th:href="@{/cart}">корзина</a></div>
             <div class="dropdown">
-                <p th:text="${user.getLogin()}">имя пользователя</p>
+                <a th:href="@{/user/{u}(u=${user.getLogin()})}" th:text="${user.getLogin()}">имя пользователя</a>
                 <div class="dropdown-content">
-                    <a th:href="@{/user/{u}(u=${user.getLogin()})}">профиль</a>
+                    <a th:href="@{/user/{u}(u=${user.getLogin()})}">редактировать профиль</a>
                     <a th:href="@{/balance}" th:text="'баланс: '+${user.getBalance()}">баланс: 2р</a>
                     <a th:href="@{/purchased}">купленные треки</a>
                     <a th:href="@{/logout}" class="logout">выйти</a>

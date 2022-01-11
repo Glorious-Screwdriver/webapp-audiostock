@@ -58,7 +58,7 @@ header .nav>div:last-of-type{
 header .nav>div.profile-mini{
 	position: absolute;
     top:0;
-	right:0;
+	right:10px;
 }
 header nav .dropdown{
     display: inline-block;
@@ -80,7 +80,8 @@ header .nav .profile-mini img{
 header .nav div.dropdown-content{
     display: none;
     position: absolute;
-    min-width: 200px;
+    left:calc(-90px + 50%);
+    min-width: 220px;
     overflow: hidden;
     border-radius: 13px;
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
@@ -99,9 +100,7 @@ header .nav div.dropdown-content{
 .dropdown:hover .dropdown-content {
     display: block;
 }
-.dropdown:hover .dropbtn {
-    background-color: grey;
-}
+
 .nav a.logout{
     color:#A00;
 }
@@ -154,11 +153,16 @@ header .nav div.dropdown-content{
     width: 150px;
 }
 .track .info a {
+    color:black;
+    font-size: 18px;
+    text-decoration: none;
     margin-top: 10px;
     display: block;
 }
 .track .info a:nth-of-type(2) {
     color: #AAA;
+    font-size: 15px;
+    text-decoration: underline;
 }
 .track .audio{
 	top:-8px;
@@ -316,6 +320,19 @@ li.checkout {
     word-wrap: break-word;
 	overflow:hidden;
     min-height: 100px;
+    color:999;
+}
+.description>textarea{
+  color:999;
+  box-sizing: border-box;
+  resize:vertical;
+	padding:10px;
+	border: 1px solid #AAA;
+    border-radius: 0 4px 4px 4px;
+    width:100%;
+    min-height: 100px;
+    overflow: auto;
+    font-size:15px;
 }
 .track-details{
 	height: 150px;
@@ -440,6 +457,7 @@ li.checkout {
 	color: #AAA;
 }
 .balance{
+    box-shadow: 0 0 40px rgba(8, 7, 16, 0.6);
 	margin:auto;
 	margin-top:10px;
 	background-color:white;
@@ -505,4 +523,42 @@ select {
 }
 .balance input[type="submit"]:hover{
 	opacity: 70%;
+}
+.balance input[type="text"]:invalid{
+	color:red;
+}
+.balance input[type="text"]:valid{
+	color:#AAA;
+}
+.about-container label{
+  display: inline-block;
+  width:50%;
+  box-sizing: border;
+}
+.about-container input{
+  margin-top: 10px;
+  width:45%;
+  box-sizing: border;
+  padding:2px 4px;
+  border:1px solid #AAA;
+  border-radius:4px;
+  color: #444;
+}
+.about-container input[type="submit"]{
+  display: inline-block;
+  margin:auto;
+  margin-top: 15px;
+  margin-bottom: 5px;
+}
+.underbox{
+  padding:10px;
+  border: 1px solid #AAA;
+  border-radius: 0 4px 4px 4px;
+}
+.about-container>div:first-of-type{
+  margin-top:40px;
+  margin-bottom: 20px;
+}
+.about-container>div:first-of-type h3{
+  border-radius: 4px;
 }
