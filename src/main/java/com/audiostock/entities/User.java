@@ -35,7 +35,7 @@ public class User {
     @OneToOne
     private PaymentInfo paymentInfo;
 
-    @Column(length = 100)
+    @Column(length = 500)
     private String biography;
 
     @Lob
