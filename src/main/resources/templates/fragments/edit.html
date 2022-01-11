@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>main</title>
+    <link rel="stylesheet" href="../../static/styles/cssandjs/main.css">
+</head>
+<body>
+<div class="container">
+    <div th:fragment="info" class="about">
+        <div class="buttons">
+            <form>
+                <button class="selected">Об исполнителе</button>
+            </form>
+            <form th:action="@{/user/{u}/tracks(u=${author.getLogin()})}">
+                <button>Треки</button>
+            </form>
+        </div>
+        <div class="about-container">
+          <div>
+            <form>
+              <label for="login"><h3>Имя пользователя</h3></label>
+              <input type="text" name="username" id="login" th:value="${author.getLogin()}" value="login">
+            </form>
+          </div>
+          <h3 th:text="${author.getLogin()}">Сменить пароль</h3>
+          <div class="underbox">
+          <form>
+            <label for="login">Старый пароль</label>
+            <input type="password" name="old-password" id="old-password">
+            <label for="login">Новый пароль</label>
+            <input type="password" name="new-password" id="new-password">
+            <label for="login">Повтор</label>
+            <input type="password" name="repeat" id="repeat">
+            <input type="submit" value="Изменить">
+          </form>
+          </div>
+          <form>
+            <div class="description">
+                <h3>Описание</h3>
+                <textarea name="bio" th:text="${author.getBiography()}">2021-12-28 20:25:39.757 WARN 17896 —- [nio-8080-exec-2].w.s.m.s.DefaultHandlerExceptionResolver : Resolved[org.springframework.web.method.annotation.MethodArgumentTypeMismatchException: Failed to convert value of type 'java.lang.String' to required type 'java.lang.Long'; nested exception is java.lang.NumberFormatException: For input string: "${track.getId()}"]</textarea>
+            </div>
+            <input type="submit" value="Подтвердить">
+          </form>
+        </div>
+    </div>
+    <div th:fragment="tracks" class="about">
+        <div class="buttons">
+            <form th:action="@{/user/{u}(u=${author.getLogin()})}">
+                <button>Об исполнителе</button>
+            </form>
+            <form>
+                <button class="selected">Треки</button>
+            </form>
+        </div>
+        <section class="catalogue">
+            <ul>
+                <li th:replace="fragments/catalogue :: edit-list" th:each="tracks"></li>
+            </ul>
+        </section>
+    </div>
+</div>
+</body>
+</html>
