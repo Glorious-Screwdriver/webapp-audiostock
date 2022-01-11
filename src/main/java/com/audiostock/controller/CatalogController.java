@@ -2,6 +2,8 @@ package com.audiostock.controller;
 
 import com.audiostock.entities.Track;
 import com.audiostock.entities.User;
+import com.audiostock.repos.StatusRepo;
+import com.audiostock.service.StatusService;
 import com.audiostock.service.TrackService;
 import com.audiostock.service.UserService;
 import com.audiostock.service.util.Utils;
@@ -17,17 +19,24 @@ import java.util.Map;
 @Controller
 public class CatalogController {
 
-    TrackService trackService;
     UserService userService;
+    TrackService trackService;
+    StatusService statusService;
 
-    public CatalogController(UserService userService, TrackService trackService) {
+    public CatalogController(UserService userService, TrackService trackService, StatusService statusService) {
         this.userService = userService;
         this.trackService = trackService;
+        this.statusService = statusService;
     }
 
     @GetMapping("/")
     public String index(Principal principal, Model model) {
         User user = Utils.getUserFromPrincipal(principal, userService);
+
+        if (user != null && user.getStatus() == statusService.getModerator()) {
+            //TODO moderation view
+            throw new UnsupportedOperationException("/moderation view is not supported");
+        }
 
         // Printing username in the header
         model.addAttribute("logged", user != null);

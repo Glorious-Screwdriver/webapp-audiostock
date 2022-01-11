@@ -29,12 +29,12 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final UserRepo userRepo;
-    private final StatusRepo statusRepo;
+    private StatusService statusService;
     private final PasswordEncoder encoder;
 
-    public UserService(UserRepo userRepo, StatusRepo statusRepo, PasswordEncoder encoder) {
+    public UserService(UserRepo userRepo, StatusService statusService, PasswordEncoder encoder) {
         this.userRepo = userRepo;
-        this.statusRepo = statusRepo;
+        this.statusService = statusService;
         this.encoder = encoder;
     }
 
@@ -58,9 +58,7 @@ public class UserService {
             return new RegisterReport(false, "Имя пользователя занято");
         }
 
-        final Status status = statusRepo.findById(1L)
-                .orElseThrow(() -> new IllegalStateException("There are no statuses in db"));
-        userRepo.save(new User(username, encoder.encode(password), status));
+        userRepo.save(new User(username, encoder.encode(password), statusService.getConsumer()));
 
         return new RegisterReport(true);
     }

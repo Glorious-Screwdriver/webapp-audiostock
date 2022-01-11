@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @Service
 public class TrackService {
 
-    private final TrackRepo trackRepo;
+    final private TrackRepo trackRepo;
 
     public TrackService(TrackRepo trackRepo) {
         this.trackRepo = trackRepo;
