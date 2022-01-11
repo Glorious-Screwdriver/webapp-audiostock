@@ -3,6 +3,7 @@ package com.audiostock.entities;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.time.LocalDate;
 
 @Entity
 public class PaymentInfo {
@@ -16,7 +17,7 @@ public class PaymentInfo {
     private int cardNumber;
 
     @Column(length = 5, nullable = false)
-    private String expireDate; // формат: 04/22
+    private LocalDate expireDate;
 
     @Column(nullable = false)
     private int cvv;
@@ -30,7 +31,7 @@ public class PaymentInfo {
     public PaymentInfo() {
     }
 
-    public PaymentInfo(String cardOwner, int cardNumber, String expireDate, int cvv, int postalCode, String address) {
+    public PaymentInfo(String cardOwner, int cardNumber, LocalDate expireDate, int cvv, int postalCode, String address) {
         this.cardOwner = cardOwner;
         this.cardNumber = cardNumber;
         this.expireDate = expireDate;
@@ -63,11 +64,11 @@ public class PaymentInfo {
         this.cardNumber = cardNumber;
     }
 
-    public String getExpireDate() {
+    public LocalDate getExpireDate() {
         return expireDate;
     }
 
-    public void setExpireDate(String expireDate) {
+    public void setExpireDate(LocalDate expireDate) {
         this.expireDate = expireDate;
     }
 
