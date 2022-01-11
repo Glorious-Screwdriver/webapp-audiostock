@@ -4,7 +4,6 @@ import com.audiostock.entities.PaymentInfo;
 import com.audiostock.entities.Status;
 import com.audiostock.entities.Track;
 import com.audiostock.entities.User;
-import com.audiostock.repos.StatusRepo;
 import com.audiostock.repos.UserRepo;
 import com.audiostock.service.exceptions.UserNotFoundException;
 import com.audiostock.service.util.ChangeProfileInfoReport;
@@ -22,7 +21,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 @Service
@@ -105,6 +103,7 @@ public class UserService {
 
     private List<Track> makeASortedList(Set<Track> set) {
         return set.stream()
+                .filter(Track::isActive)
                 .sorted((o1, o2) -> o1.getName().compareToIgnoreCase(o2.getName()))
                 .collect(Collectors.toList());
     }
