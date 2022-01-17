@@ -281,7 +281,7 @@ public class UserService {
         if (firstname.length() > 30 || middlename.length() > 30 || lastname.length() > 30) {
             return new ChangeProfileInfoReport(
                     false,
-                    "Name must not have more than 30 characters"
+                    "Имя не должно содержать более 30 символов"
             );
         }
 
@@ -300,15 +300,15 @@ public class UserService {
             String newPasswordAgain
     ) {
         if (!encoder.matches(oldPassword, user.getPassword())) {
-            return new ChangeProfileInfoReport(false, "Wrong old password");
+            return new ChangeProfileInfoReport(false, "Старый пароль введен неверно");
         }
 
         if (newPassword.length() < 6) {
-            return new ChangeProfileInfoReport(false, "Password must have at least 6 symbols");
+            return new ChangeProfileInfoReport(false, "Пароль должен содержать минимум 6 символов");
         }
 
         if (!newPassword.equals(newPasswordAgain)) {
-            return new ChangeProfileInfoReport(false, "Passwords don't match");
+            return new ChangeProfileInfoReport(false, "Пароли не совпадают");
         }
 
         user.setPassword(encoder.encode(newPassword));
@@ -317,10 +317,10 @@ public class UserService {
     }
 
     public ChangeProfileInfoReport changeBiography(User user, String biography) {
-        if (biography.length() > 100) {
+        if (biography.length() > 500) {
             return new ChangeProfileInfoReport(
                     false,
-                    "Biography must not have more than 100 characters"
+                    "Биография не должна содержать более 500 символов"
             );
         }
 
