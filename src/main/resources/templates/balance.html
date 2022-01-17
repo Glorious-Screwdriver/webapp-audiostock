@@ -12,11 +12,11 @@
 	<form th:action="@{/balance}" method="post">
 		<div>
 			<label for="amount">Сумма</label>
-			<input type="text" id="amount" name="amount" value = "" pattern="[0-9]{5}" maxlength="5">
+			<input type="text" id="amount" name="amount" th:value="${total}" pattern="[0-9]{1,5}" maxlength="5">
 		</div>
 		<div>
 			<label for="owner">Владелец</label>
-			<input type="text" id="owner" name="owner">
+			<input type="text" id="owner" name="owner" pattern="[!0-9]{1,30}" maxlength="30">
 		</div>
 		<div>
 			<label for="cvv">CVV</label>

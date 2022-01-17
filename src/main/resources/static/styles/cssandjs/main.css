@@ -134,6 +134,11 @@ header .nav div.dropdown-content{
 .track{
     height: 84px;
     border: 1px solid #AAA;
+    border-left: none;
+    border-right: none;
+}
+.track:last-of-type{
+    border-bottom: 2px solid #AAA;
 }
 .track img{
     margin-left: 7px;
@@ -269,7 +274,11 @@ li.checkout {
 	overflow: hidden;
 }
 .about{
-	min-height: 500px
+	min-height: 500px;
+    padding: 0;
+}
+.about>.catalogue{
+    min-height: 500px;
 }
 .about>.buttons{
 	border-bottom: 1px solid #AAA;
@@ -294,6 +303,7 @@ li.checkout {
 .about-container{
 	margin:auto;
 	width: 400px;
+    margin-bottom: 50px;
 }
 .about h2{
 	margin-top:40px;
@@ -320,10 +330,10 @@ li.checkout {
     word-wrap: break-word;
 	overflow:hidden;
     min-height: 100px;
-    color:999;
+    color:#999;
 }
 .description>textarea{
-  color:999;
+  color:#999;
   box-sizing: border-box;
   resize:vertical;
 	padding:10px;

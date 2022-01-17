@@ -27,7 +27,7 @@
             <div class="dropdown">
                 <a th:href="@{/user/{u}(u=${user.getLogin()})}" th:text="${user.getLogin()}">имя пользователя</a>
                 <div class="dropdown-content">
-                    <a th:href="@{/user/{u}(u=${user.getLogin()})}">редактировать профиль</a>
+                    <a th:href="@{/profile}">редактировать профиль</a>
                     <a th:href="@{/balance}" th:text="'баланс: '+${user.getBalance()}">баланс: 2р</a>
                     <a th:href="@{/purchased}">купленные треки</a>
                     <a th:href="@{/logout}" class="logout">выйти</a>

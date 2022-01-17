@@ -36,6 +36,8 @@ public class BalanceController {
 
         User user = Utils.getUserFromPrincipal(principal, userService);
 
+        model.addAttribute("total", userService.totalCartPrice(user));
+
         final PaymentInfo paymentInfo = user.getPaymentInfo();
         if (paymentInfo != null) {
             model.addAttribute("cardOwner", paymentInfo.getCardOwner());
