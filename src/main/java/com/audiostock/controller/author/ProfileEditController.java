@@ -35,8 +35,7 @@ public class ProfileEditController {
     @GetMapping
     public String profile(Principal principal, Model model) {
         User user = Utils.getUserFromPrincipal(principal, userService);
-
-        model.addAttribute("user",user);
+        model.addAttribute("user", user);
         return "profile-edit";
     }
 
@@ -56,49 +55,8 @@ public class ProfileEditController {
 
         return "profile-edit";
     }
-    // Editing
 
-    /* Мне кажется логично сделать следующим образом:
-    * будет 2 формы - для смены публичных данных автора (полное имя и биография),
-    * и для смены пароля. Каждый метод принимает определенное количество параметров,
-    * которые приходят из одной из форм */
-
-    @PostMapping(params = {"firstname", "lastname", "middlename", "biography"})
-    public String changeAuthorInfo(Principal principal, Model model,
-                              @RequestParam String firstname,
-                              @RequestParam String lastname,
-                              @RequestParam String middlename,
-                              @RequestParam String biography) {
-        User user = Utils.getUserFromPrincipal(principal, userService);
-        final ChangeProfileInfoReport report = userService.changeProfileInfo(
-                user, firstname, lastname, middlename, biography
-        );
-
-        if (!report.isSuccessful()) {
-            model.addAttribute("message", report.getMessage());
-        }
-
-        //TODO profile view
-        throw new UnsupportedOperationException("/profile view is not supported");
-    }
-
-    @PostMapping(params = {"oldPassword", "newPassword", "newPasswordAgain"})
-    public String changePassword(Principal principal, Model model,
-                                 @RequestParam String oldPassword,
-                                 @RequestParam String newPassword,
-                                 @RequestParam String newPasswordAgain) {
-        User user = Utils.getUserFromPrincipal(principal, userService);
-        final ChangeProfileInfoReport report = userService.changePassword(
-                user, oldPassword, newPassword, newPasswordAgain
-        );
-
-        if (!report.isSuccessful()) {
-            model.addAttribute("message", report.getMessage());
-        }
-
-        //TODO profile view
-        throw new UnsupportedOperationException("/profile view is not supported");
-    }
+    // Editing profile info
 
     @PostMapping(params = "file")
     public String changeAvatar(Principal principal, @RequestParam MultipartFile file, Model model) {
@@ -111,6 +69,72 @@ public class ProfileEditController {
 
         //TODO profile view
         throw new UnsupportedOperationException("/profile view is not supported");
+    }
+
+    @PostMapping(params = "username")
+    public String changeUsername(Principal principal, @RequestParam String username, Model model) {
+        User user = Utils.getUserFromPrincipal(principal, userService);
+
+        // Смена имени пользователя
+        final ChangeProfileInfoReport report = userService.changeUsername(user, username);
+        if (!report.isSuccessful()) {
+            model.addAttribute("message", report.getMessage());
+        }
+
+        model.addAttribute("user", user);
+        return "profile-edit";
+    }
+
+    @PostMapping(params = {"firstname", "lastname", "middlename"})
+    public String changeFullName(Principal principal, Model model,
+                                   @RequestParam String firstname,
+                                   @RequestParam String lastname,
+                                   @RequestParam String middlename) {
+        User user = Utils.getUserFromPrincipal(principal, userService);
+
+        // Изменение полного имени пользователя
+        final ChangeProfileInfoReport report = userService.changeFullName(
+                user, firstname, lastname, middlename
+        );
+        if (!report.isSuccessful()) {
+            model.addAttribute("message", report.getMessage());
+        }
+
+        model.addAttribute("user", user);
+        return "profile-edit";
+    }
+
+    @PostMapping(params = {"old-password", "new-password", "repeat"})
+    public String changePassword(Principal principal, Model model,
+                                 @RequestParam("old-password") String oldPassword,
+                                 @RequestParam("new-password") String newPassword,
+                                 @RequestParam("repeat") String newPasswordAgain) {
+        User user = Utils.getUserFromPrincipal(principal, userService);
+
+        // Изменение пароля пользователя
+        final ChangeProfileInfoReport report = userService.changePassword(
+                user, oldPassword, newPassword, newPasswordAgain
+        );
+        if (!report.isSuccessful()) {
+            model.addAttribute("message", report.getMessage());
+        }
+
+        model.addAttribute("user", user);
+        return "profile-edit";
+    }
+
+    @PostMapping(params = "bio")
+    public String changePassword(Principal principal, Model model, @RequestParam("bio") String biography) {
+        User user = Utils.getUserFromPrincipal(principal, userService);
+
+        // Изменение биографии пользователя
+        final ChangeProfileInfoReport report = userService.changeBiography(user, biography);
+        if (!report.isSuccessful()) {
+            model.addAttribute("message", report.getMessage());
+        }
+
+        model.addAttribute("user", user);
+        return "profile-edit";
     }
 
 }

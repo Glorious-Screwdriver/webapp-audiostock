@@ -42,7 +42,7 @@ public class UserService {
     // Authorisation
 
     public RegisterReport register(String username, String password, String repeat) {
-        if (username.length() <= 4) {
+        if (username.length() < 4) {
             return new RegisterReport(false, "Имя пользователя должно содержать минимум 4 символа");
         }
 
@@ -244,12 +244,39 @@ public class UserService {
         return true;
     }
 
-    public ChangeProfileInfoReport changeProfileInfo(
+    public boolean changeProfileAvatar(User user, MultipartFile avatar) {
+        try {
+            user.setAvatar(avatar.getBytes());
+            userRepo.save(user);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    public ChangeProfileInfoReport changeUsername(User user, String username) {
+        // Проверка имени пользователя
+        if (username.length() < 4) {
+            return new ChangeProfileInfoReport(false, "Имя пользователя должно содержать минимум 4 символа");
+        }
+
+        Optional<User> userWithSameName = userRepo.findByLogin(username);
+        if (userWithSameName.isPresent()) {
+            return new ChangeProfileInfoReport(false, "Имя пользователя занято");
+        }
+
+        // Сохранение изменений
+        user.setLogin(username);
+        userRepo.save(user);
+        return new ChangeProfileInfoReport(true);
+    }
+
+    public ChangeProfileInfoReport changeFullName(
             User user,
             String firstname,
             String lastname,
-            String middlename,
-            String biography
+            String middlename
     ) {
         if (firstname.length() > 30 || middlename.length() > 30 || lastname.length() > 30) {
             return new ChangeProfileInfoReport(
@@ -258,17 +285,9 @@ public class UserService {
             );
         }
 
-        if (biography.length() > 100) {
-            return new ChangeProfileInfoReport(
-                    false,
-                    "Biography must not have more than 100 characters"
-            );
-        }
-
         user.setFirstname(firstname);
         user.setMiddlename(middlename);
         user.setLastname(lastname);
-        user.setBiography(biography);
 
         userRepo.save(user);
         return new ChangeProfileInfoReport(true);
@@ -297,15 +316,17 @@ public class UserService {
         return new ChangeProfileInfoReport(true);
     }
 
-    public boolean changeProfileAvatar(User user, MultipartFile avatar) {
-        try {
-            user.setAvatar(avatar.getBytes());
-            userRepo.save(user);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
+    public ChangeProfileInfoReport changeBiography(User user, String biography) {
+        if (biography.length() > 100) {
+            return new ChangeProfileInfoReport(
+                    false,
+                    "Biography must not have more than 100 characters"
+            );
         }
-        return true;
+
+        user.setBiography(biography);
+        userRepo.save(user);
+        return new ChangeProfileInfoReport(true);
     }
 
     // Status manipulations
