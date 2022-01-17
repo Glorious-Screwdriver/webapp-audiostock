@@ -75,14 +75,14 @@ public class ProfileEditController {
     public String changeUsername(Principal principal, @RequestParam String username, Model model) {
         User user = Utils.getUserFromPrincipal(principal, userService);
 
-        // Смена имени пользователя
         final ChangeProfileInfoReport report = userService.changeUsername(user, username);
-        if (!report.isSuccessful()) {
+        if (report.isSuccessful()) {
+            return "redirect:/logout";
+        } else {
+            model.addAttribute("user", user);
             model.addAttribute("message", report.getMessage());
+            return "profile-edit";
         }
-
-        model.addAttribute("user", user);
-        return "profile-edit";
     }
 
     @PostMapping(params = {"firstname", "lastname", "middlename"})
@@ -96,11 +96,12 @@ public class ProfileEditController {
         final ChangeProfileInfoReport report = userService.changeFullName(
                 user, firstname, lastname, middlename
         );
+
         if (!report.isSuccessful()) {
             model.addAttribute("message", report.getMessage());
         }
-
         model.addAttribute("user", user);
+
         return "profile-edit";
     }
 
@@ -115,11 +116,12 @@ public class ProfileEditController {
         final ChangeProfileInfoReport report = userService.changePassword(
                 user, oldPassword, newPassword, newPasswordAgain
         );
+
         if (!report.isSuccessful()) {
             model.addAttribute("message", report.getMessage());
         }
-
         model.addAttribute("user", user);
+
         return "profile-edit";
     }
 
@@ -129,11 +131,12 @@ public class ProfileEditController {
 
         // Изменение биографии пользователя
         final ChangeProfileInfoReport report = userService.changeBiography(user, biography);
+
         if (!report.isSuccessful()) {
             model.addAttribute("message", report.getMessage());
         }
-
         model.addAttribute("user", user);
+
         return "profile-edit";
     }
 

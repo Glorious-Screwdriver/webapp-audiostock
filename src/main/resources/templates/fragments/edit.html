@@ -8,7 +8,6 @@
 <body>
 <div class="container">
     <div th:fragment="info" class="about" style="padding-bottom: 10px">
-        <p class="error" th:if="${message}!=null" th:text="${message}">error</p>
         <div class="buttons">
             <form>
                 <button class="selected">Об исполнителе</button>
@@ -19,14 +18,15 @@
         </div>
         <div class="about-container">
             <div class="marginBottom">
-                <form method="post">
-                    <label for="login"><h3>Поменять никнейм</h3></label>
+                <p class="error" th:if="${message}!=null" th:text="${message}">error</p>
+                <form th:action="@{/profile}" method="post">
+                    <label for="login"><h3>Изменить никнейм</h3></label>
                     <input type="text" name="username" id="login" th:value="${user.getLogin()}" value="login" maxlength="16">
                 </form>
             </div>
             <h3>Сменить пароль</h3>
             <div class="underbox marginBottom">
-                <form method="post">
+                <form th:action="@{/profile}" method="post">
                     <label for="firstname">Имя</label>
                     <input type="text" name="firstname" id="firstname" th:value="${user.getFirstname()}" maxlength="20">
                     <label for="login">Фамилия</label>
@@ -38,7 +38,7 @@
             </div>
             <h3>Сменить пароль</h3>
             <div class="underbox">
-                <form method="post">
+                <form th:action="@{/profile}" method="post">
                     <label for="login">Старый пароль</label>
                     <input type="password" name="old-password" id="old-password" maxlength="20">
                     <label for="login">Новый пароль</label>
@@ -48,7 +48,7 @@
                     <input type="submit" value="Изменить">
                 </form>
             </div>
-            <form method="post">
+            <form th:action="@{/profile}" method="post">
                 <div class="description">
                     <h3>Описание</h3>
                     <textarea name="bio" maxlength="500" th:text="${user.getBiography()}"></textarea>
