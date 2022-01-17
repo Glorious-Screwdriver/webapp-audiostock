@@ -7,7 +7,7 @@
 </head>
 <body>
 <div class="container">
-    <div th:fragment="info" class="about">
+    <div th:fragment="info" class="about" style="padding-bottom: 10px">
         <div class="buttons">
             <form>
                 <button class="selected">Об исполнителе</button>
@@ -17,15 +17,15 @@
             </form>
         </div>
         <div class="about-container">
-            <div>
-                <form>
+            <div class="marginBottom">
+                <form method="post">
                     <label for="login"><h3>Поменять никнейм</h3></label>
                     <input type="text" name="username" id="login" th:value="${user.getLogin()}" value="login" maxlength="16">
                 </form>
             </div>
-            <h3 th:text="${user.getLogin()}">Сменить пароль</h3>
-            <div class="underbox">
-                <form>
+            <h3>Сменить пароль</h3>
+            <div class="underbox marginBottom">
+                <form method="post">
                     <label for="firstname">Имя</label>
                     <input type="text" name="firstname" id="firstname" maxlength="20">
                     <label for="login">Фамилия</label>
@@ -35,9 +35,9 @@
                     <input type="submit" value="Изменить">
                 </form>
             </div>
-            <h3 th:text="${user.getLogin()}">Сменить пароль</h3>
+            <h3>Сменить пароль</h3>
             <div class="underbox">
-                <form>
+                <form method="post">
                     <label for="login">Старый пароль</label>
                     <input type="password" name="old-password" id="old-password" maxlength="20">
                     <label for="login">Новый пароль</label>
@@ -47,7 +47,7 @@
                     <input type="submit" value="Изменить">
                 </form>
             </div>
-            <form>
+            <form method="post">
                 <div class="description">
                     <h3>Описание</h3>
                     <textarea name="bio" maxlength="500" th:text="${user.getBiography()}">2021-12-28 20:25:39.757 WARN 17896 —- [nio-8080-exec-2].w.s.m.s.DefaultHandlerExceptionResolver : Resolved[org.springframework.web.method.annotation.MethodArgumentTypeMismatchException: Failed to convert value of type 'java.lang.String' to required type 'java.lang.Long'; nested exception is java.lang.NumberFormatException: For input string: "${track.getId()}"]</textarea>
@@ -67,7 +67,13 @@
         </div>
         <section class="catalogue">
             <ul>
-                <li th:replace="fragments/catalogue :: edit-list" th:each="tracks"></li>
+                <li th:replace="fragments/catalogue :: edit-list(${releases})"></li>
+            </ul>
+            <ul>
+                <li th:replace="fragments/catalogue :: edit-list(${pending})"></li>
+            </ul>
+            <ul>
+                <li th:replace="fragments/catalogue :: edit-list(${declined})"></li>
             </ul>
         </section>
     </div>

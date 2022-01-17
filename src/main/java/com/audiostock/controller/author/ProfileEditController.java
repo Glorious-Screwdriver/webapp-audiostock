@@ -41,15 +41,20 @@ public class ProfileEditController {
     }
 
     @GetMapping("/releases")
-    public String releases(Principal principal) {
+    public String releases(Principal principal, Model model) {
         User user = Utils.getUserFromPrincipal(principal, userService);
 
         List<Track> releases = new ArrayList<>(user.getReleases());
         List<Track> pending = new ArrayList<>(uploadRequestService.getRequestedTracksByAuthor(user));
         List<Track> declined = new ArrayList<>(uploadRequestService.getDeclinedTracksByAuthor(user));
 
-        //TODO releases view
-        throw new UnsupportedOperationException("/profile/releases/releases view is not supported");
+        model.addAttribute("user", user);
+        model.addAttribute("rel",true);
+        model.addAttribute("releases", releases);
+        model.addAttribute("pending", pending);
+        model.addAttribute("declined", declined);
+
+        return "profile-edit";
     }
     // Editing
 

@@ -572,3 +572,6 @@ select {
 .about-container>div:first-of-type h3{
   border-radius: 4px;
 }
+.marginBottom{
+    margin-bottom: 30px;
+}
