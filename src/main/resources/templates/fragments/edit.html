@@ -8,6 +8,7 @@
 <body>
 <div class="container">
     <div th:fragment="info" class="about" style="padding-bottom: 10px">
+        <p class="error" th:if="${message}!=null" th:text="${message}">error</p>
         <div class="buttons">
             <form>
                 <button class="selected">Об исполнителе</button>
