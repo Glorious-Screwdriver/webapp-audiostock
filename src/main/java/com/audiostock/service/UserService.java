@@ -4,6 +4,7 @@ import com.audiostock.entities.PaymentInfo;
 import com.audiostock.entities.Status;
 import com.audiostock.entities.Track;
 import com.audiostock.entities.User;
+import com.audiostock.repos.PaymentInfoRepo;
 import com.audiostock.repos.UserRepo;
 import com.audiostock.service.exceptions.UserNotFoundException;
 import com.audiostock.service.util.ChangeProfileInfoReport;
@@ -27,12 +28,14 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final UserRepo userRepo;
-    private StatusService statusService;
+    private final StatusService statusService;
+    private final PaymentInfoRepo paymentInfoRepo;
     private final PasswordEncoder encoder;
 
-    public UserService(UserRepo userRepo, StatusService statusService, PasswordEncoder encoder) {
+    public UserService(UserRepo userRepo, StatusService statusService, PaymentInfoRepo paymentInfoRepo, PasswordEncoder encoder) {
         this.userRepo = userRepo;
         this.statusService = statusService;
+        this.paymentInfoRepo = paymentInfoRepo;
         this.encoder = encoder;
     }
 
@@ -180,6 +183,7 @@ public class UserService {
     }
 
     public void savePaymentMethod(User user, PaymentInfo paymentInfo) {
+        paymentInfoRepo.save(paymentInfo);
         user.setPaymentInfo(paymentInfo);
         userRepo.save(user);
     }

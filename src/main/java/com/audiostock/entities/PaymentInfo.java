@@ -1,20 +1,19 @@
 package com.audiostock.entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
 public class PaymentInfo {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column(length = 30, nullable = false)
     private String cardOwner;
 
     @Column(nullable = false)
-    private int cardNumber;
+    private long cardNumber;
 
     @Column(length = 5, nullable = false)
     private LocalDate expireDate;
@@ -31,7 +30,7 @@ public class PaymentInfo {
     public PaymentInfo() {
     }
 
-    public PaymentInfo(String cardOwner, int cardNumber, LocalDate expireDate, int cvv, int postalCode, String address) {
+    public PaymentInfo(String cardOwner, long cardNumber, LocalDate expireDate, int cvv, int postalCode, String address) {
         this.cardOwner = cardOwner;
         this.cardNumber = cardNumber;
         this.expireDate = expireDate;
@@ -56,11 +55,11 @@ public class PaymentInfo {
         this.cardOwner = cardOwner;
     }
 
-    public int getCardNumber() {
+    public long getCardNumber() {
         return cardNumber;
     }
 
-    public void setCardNumber(int cardNumber) {
+    public void setCardNumber(long cardNumber) {
         this.cardNumber = cardNumber;
     }
 

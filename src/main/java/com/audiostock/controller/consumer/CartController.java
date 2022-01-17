@@ -11,11 +11,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.security.Principal;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -61,7 +59,7 @@ public class CartController {
         model.addAttribute("total", totalCost);
         model.addAttribute("nem", totalCost > balance);
 
-        return "order";
+        return "checkout";
     }
 
     @PostMapping("/checkout")
