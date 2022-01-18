@@ -65,11 +65,10 @@ public class TrackService {
                          String genre,
                          String mood,
                          Long bpm,
-                         MultipartFile file,
-                         MultipartFile cover) {
+                         MultipartFile file) {
         try {
             Track track = new Track(
-                    author, name, description, price, genre, mood, bpm, file.getBytes(), cover.getBytes()
+                    author, name, description, price, genre, mood, bpm, file.getBytes()
             );
             trackRepo.save(track);
             return track;

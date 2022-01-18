@@ -19,9 +19,6 @@ public class Track {
     private boolean active = false;
 
     @Lob
-    private byte[] cover;
-
-    @Lob
     private byte[] file;
 
     @Column(length = 300)
@@ -49,12 +46,10 @@ public class Track {
                  String genre,
                  String mood,
                  Long bpm,
-                 byte[] file,
-                 byte[] cover
+                 byte[] file
     ) {
         this.name = name;
         this.author = author;
-        this.cover = cover;
         this.file = file;
         this.description = description;
         this.genre = genre;
@@ -93,14 +88,6 @@ public class Track {
 
     public void setActive(boolean active) {
         this.active = active;
-    }
-
-    public byte[] getCover() {
-        return cover;
-    }
-
-    public void setCover(byte[] cover) {
-        this.cover = cover;
     }
 
     public byte[] getFile() {

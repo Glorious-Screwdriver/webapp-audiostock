@@ -44,11 +44,10 @@ public class UploadController {
                          @RequestParam String genre,
                          @RequestParam String mood,
                          @RequestParam long bpm,
-                         @RequestParam MultipartFile file,
-                         @RequestParam MultipartFile cover) {
+                         @RequestParam MultipartFile file) {
         User user = Utils.getUserFromPrincipal(principal, userService);
 
-        final Track track = trackService.addTrack(user, name, description, price, genre, mood, bpm, file, cover);
+        final Track track = trackService.addTrack(user, name, description, price, genre, mood, bpm, file);
         if (track != null) {
             uploadRequestService.addRequest(user, track);
         } else {

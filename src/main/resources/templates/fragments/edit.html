@@ -19,9 +19,19 @@
         <div class="about-container">
             <div class="marginBottom">
                 <p class="error" th:if="${message}!=null" th:text="${message}">error</p>
+                <!-- НОВЫЙ КОД -->
+                <h3>Сменить аватар</h3>
+                <div class="underbox marginBottom">
+                    <form th:action="@{/profile}" method="post" enctype="multipart/form-data">
+                        <input type="file" name="image" accept="image/png, image/jpeg"/>
+                        <input type="submit" value="Загрузить изображение" />
+                    </form>
+                </div>
+                <!-- НОВЫЙ КОД -->
                 <form th:action="@{/profile}" method="post">
-                    <label for="login"><h3>Изменить никнейм</h3></label>
-                    <input type="text" name="username" id="login" th:value="${user.getLogin()}" value="login" maxlength="16">
+                    <label for="login"><h3>Сменить никнейм</h3></label>
+                    <input type="text" name="username" id="login" th:value="${user.getLogin()}" value="login"
+                           maxlength="16">
                 </form>
             </div>
             <h3>Сменить пароль</h3>
@@ -32,7 +42,8 @@
                     <label for="login">Фамилия</label>
                     <input type="text" name="lastname" id="lastname" th:value="${user.getLastname()}" maxlength="20">
                     <label for="login">Отчество</label>
-                    <input type="text" name="middlename" id="middlename" th:value="${user.getMiddlename()}" maxlength="20">
+                    <input type="text" name="middlename" id="middlename" th:value="${user.getMiddlename()}"
+                           maxlength="20">
                     <input type="submit" value="Изменить">
                 </form>
             </div>

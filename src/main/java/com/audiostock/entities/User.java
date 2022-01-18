@@ -38,9 +38,6 @@ public class User {
     @Column(length = 500)
     private String biography;
 
-    @Lob
-    private byte[] avatar;
-
     @OneToMany
     private Set<Track> releases;
 
@@ -142,14 +139,6 @@ public class User {
 
     public void setBiography(String biography) {
         this.biography = biography;
-    }
-
-    public byte[] getAvatar() {
-        return avatar;
-    }
-
-    public void setAvatar(byte[] avatar) {
-        this.avatar = avatar;
     }
 
     public Set<Track> getReleases() {

@@ -58,17 +58,19 @@ public class ProfileEditController {
 
     // Editing profile info
 
-    @PostMapping(params = "file")
-    public String changeAvatar(Principal principal, @RequestParam MultipartFile file, Model model) {
+    @PostMapping(consumes = "multipart/form-data")
+    public String changeAvatar(Principal principal, @RequestParam("image") MultipartFile file, Model model) {
         User user = Utils.getUserFromPrincipal(principal, userService);
+
+        // Смена аватара
         final boolean successful = userService.changeProfileAvatar(user, file);
 
         if (!successful) {
-            model.addAttribute("message", "Image upload error");
+            model.addAttribute("message", "Во время загрузки файла произошла ошибка");
         }
+        model.addAttribute("user", user);
 
-        //TODO profile view
-        throw new UnsupportedOperationException("/profile view is not supported");
+        return "profile-edit";
     }
 
     @PostMapping(params = "username")

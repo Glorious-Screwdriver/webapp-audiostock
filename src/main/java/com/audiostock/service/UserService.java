@@ -7,10 +7,7 @@ import com.audiostock.entities.User;
 import com.audiostock.repos.PaymentInfoRepo;
 import com.audiostock.repos.UserRepo;
 import com.audiostock.service.exceptions.UserNotFoundException;
-import com.audiostock.service.util.ChangeProfileInfoReport;
-import com.audiostock.service.util.CheckoutFailureReason;
-import com.audiostock.service.util.CheckoutReport;
-import com.audiostock.service.util.RegisterReport;
+import com.audiostock.service.util.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -79,6 +76,7 @@ public class UserService {
 
     /**
      * Поиск авторов по имени пользователя (логину). Проверяет, содержится ли строка в имени автора
+     *
      * @param username Никнейм автора
      */
     public List<User> findAuthorsByUsername(String username, int page, int size) {
@@ -244,12 +242,13 @@ public class UserService {
         return true;
     }
 
-    public boolean changeProfileAvatar(User user, MultipartFile avatar) {
+    public boolean changeProfileAvatar(User user, MultipartFile file) {
         try {
-            user.setAvatar(avatar.getBytes());
-            userRepo.save(user);
+            FileUploadUtil.saveFile("data/avatars",
+                    user.getId()
+                            + FileUploadUtil.getExtensionByStringHandling(file.getOriginalFilename()).orElseThrow(),
+                    file);
         } catch (IOException e) {
-            e.printStackTrace();
             return false;
         }
         return true;
@@ -329,8 +328,8 @@ public class UserService {
         return new ChangeProfileInfoReport(true);
     }
 
-    // Status manipulations
 
+    // Status manipulations
     public void updateStatus(User user, Status status) {
         user.setStatus(status);
         userRepo.save(user);
@@ -357,4 +356,5 @@ public class UserService {
         userRepo.save(user);
         return true;
     }
+
 }
