@@ -36,7 +36,7 @@ public class BalanceController {
         User user = Utils.getUserFromPrincipal(principal, userService);
 
         model.addAttribute("total", Math.max(0, userService.totalCartPrice(user) - user.getBalance()));
-        extractPaymentInfo(model, user.getPaymentInfo());
+        model.addAttribute("paymentInfo", user.getPaymentInfo());
 
         return "balance";
     }
@@ -50,7 +50,7 @@ public class BalanceController {
         for (String value : params.values()) {
             if (value == null) {
                 model.addAttribute("message", "Необходимо заполнить все поля!");
-                extractPaymentInfo(model, user.getPaymentInfo());
+                model.addAttribute("paymentInfo", user.getPaymentInfo());
                 return "balance";
             }
         }
@@ -82,22 +82,6 @@ public class BalanceController {
         String referer = referers.get(principal);
         referers.remove(principal);
         return "redirect:" + referer;
-    }
-
-    /**
-     * Добавляет в модель данных (поля страницы) платежную информацию пользователя
-     * @param model Модель данных страницы
-     * @param paymentInfo Платежная информация пользователя
-     */
-    private void extractPaymentInfo(Model model, PaymentInfo paymentInfo) {
-        if (paymentInfo != null) {
-            model.addAttribute("cardOwner", paymentInfo.getCardOwner());
-            model.addAttribute("cardNumber", paymentInfo.getCardNumber());
-            model.addAttribute("expireDate", paymentInfo.getExpireDate());
-            model.addAttribute("cvv", paymentInfo.getCvv());
-            model.addAttribute("address", paymentInfo.getAddress());
-            model.addAttribute("postalCode", paymentInfo.getPostalCode());
-        }
     }
 
 }

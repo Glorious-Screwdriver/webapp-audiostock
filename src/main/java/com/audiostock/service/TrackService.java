@@ -79,7 +79,10 @@ public class TrackService {
 
         trackRepo.save(track);
         return track;
+    }
 
+    public void editTrack(Track track) {
+        trackRepo.save(track);
     }
 
 }
