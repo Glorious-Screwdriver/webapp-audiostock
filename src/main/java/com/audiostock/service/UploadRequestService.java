@@ -26,7 +26,7 @@ private final UploadRequestRepo requestRepo;
         this.userService = userService;
     }
 
-    public UploadRequest addRequest(User author, Track track){
+    public UploadRequest createRequest(User author, Track track){
         UploadRequest request = new UploadRequest(author, track);
 
         // Назначение случайному модератору

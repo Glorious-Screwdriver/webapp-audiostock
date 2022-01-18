@@ -1,7 +1,6 @@
 package com.audiostock.entities;
 
 import javax.persistence.*;
-import java.sql.Blob;
 
 @Entity
 public class Track {
@@ -17,9 +16,6 @@ public class Track {
     private User author;
 
     private boolean active = false;
-
-    @Lob
-    private byte[] file;
 
     @Column(length = 300)
     private String description;
@@ -45,12 +41,10 @@ public class Track {
                  Long price,
                  String genre,
                  String mood,
-                 Long bpm,
-                 byte[] file
+                 Long bpm
     ) {
         this.name = name;
         this.author = author;
-        this.file = file;
         this.description = description;
         this.genre = genre;
         this.mood = mood;
@@ -88,14 +82,6 @@ public class Track {
 
     public void setActive(boolean active) {
         this.active = active;
-    }
-
-    public byte[] getFile() {
-        return file;
-    }
-
-    public void setFile(byte[] file) {
-        this.file = file;
     }
 
     public String getDescription() {

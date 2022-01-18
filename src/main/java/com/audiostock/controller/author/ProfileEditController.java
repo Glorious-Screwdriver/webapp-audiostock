@@ -66,7 +66,7 @@ public class ProfileEditController {
         final boolean successful = userService.changeProfileAvatar(user, file);
 
         if (!successful) {
-            model.addAttribute("message", "Во время загрузки файла произошла ошибка");
+            model.addAttribute("message", "Во время загрузки файла произошла ошибка!");
         }
         model.addAttribute("user", user);
 
