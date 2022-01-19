@@ -19,8 +19,6 @@ public class UserEntityDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         try {
-            System.err.println("Login attempt: " + username);
-
             User candidate = userRepo.findByLogin(username).orElseThrow();
             return org.springframework.security.core.userdetails.User
                     .withUsername(candidate.getLogin())
