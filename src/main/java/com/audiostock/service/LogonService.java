@@ -21,12 +21,12 @@ public class LogonService {
         this.logonRepo = logonRepo;
     }
 
-    public void logon(User user, Byte[] ip) {
-        logonRepo.save(new Logon(user, ip, LocalDateTime.now()));
+    public void logon(User user, Byte[] ipv4) {
+        logonRepo.save(new Logon(user, ipv4, LocalDateTime.now()));
     }
 
-    public void logon(User user) {
-        logonRepo.save(new Logon(user, LocalDateTime.now()));
+    public void logon(User user, String ipv6) {
+        logonRepo.save(new Logon(user, ipv6, LocalDateTime.now()));
     }
 
     public List<Logon> getLogonsByUser(User user) {

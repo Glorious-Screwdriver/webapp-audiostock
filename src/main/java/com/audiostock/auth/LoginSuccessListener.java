@@ -36,14 +36,13 @@ class LoginSuccessListener implements ApplicationListener<AuthenticationSuccessE
         final String remoteAddress = details.getRemoteAddress();
 
         if (remoteAddress.contains(":")) {
-            // Заглушка для адресов IPV6 - записывается только время входа
-            logonService.logon(user);
+            logonService.logon(user, remoteAddress);
         } else {
             final String[] split = remoteAddress.split("\\.");
 
             Byte[] ip = new Byte[split.length];
             for (int i = 0; i < split.length; i++) {
-                ip[i] = Byte.parseByte(split[i]);
+                ip[i] = (byte) Integer.parseInt(split[i]);
             }
 
             logonService.logon(user, ip);

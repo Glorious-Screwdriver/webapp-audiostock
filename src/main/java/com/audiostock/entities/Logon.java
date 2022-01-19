@@ -13,7 +13,10 @@ public class Logon {
     private User user;
 
     @Column(length = 4)
-    private Byte[] ip;
+    private Byte[] ipv4;
+
+    @Column(length = 39)
+    private String ipv6;
 
     @Column(name = "date_and_time")
     private LocalDateTime dateTime;
@@ -21,14 +24,15 @@ public class Logon {
     public Logon() {
     }
 
-    public Logon(User user, LocalDateTime dateTime) {
+    public Logon(User user, Byte[] ipv4, LocalDateTime dateTime) {
         this.user = user;
+        this.ipv4 = ipv4;
         this.dateTime = dateTime;
     }
 
-    public Logon(User user, Byte[] ip, LocalDateTime dateTime) {
+    public Logon(User user, String ipv6, LocalDateTime dateTime) {
         this.user = user;
-        this.ip = ip;
+        this.ipv6 = ipv6;
         this.dateTime = dateTime;
     }
 
@@ -40,12 +44,20 @@ public class Logon {
         this.id = id;
     }
 
-    public Byte[] getIp() {
-        return ip;
+    public Byte[] getIpv4() {
+        return ipv4;
     }
 
-    public void setIp(Byte[] ip) {
-        this.ip = ip;
+    public void setIpv4(Byte[] ipv4) {
+        this.ipv4 = ipv4;
+    }
+
+    public String getIpv6() {
+        return ipv6;
+    }
+
+    public void setIpv6(String ipv6) {
+        this.ipv6 = ipv6;
     }
 
     public User getUser() {
