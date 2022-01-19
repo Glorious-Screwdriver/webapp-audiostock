@@ -10,8 +10,6 @@ import java.util.Optional;
 public interface UploadRequestRepo extends PagingAndSortingRepository<UploadRequest, Long> {
     Optional<UploadRequest> findById(Long id);
 
-    List<UploadRequest> findAll();
-
     List<UploadRequest> findAllByModeratorAndSolutionNullOrderByCreationDate(User moderator);
 
     List<UploadRequest> findAllByAuthorAndSolutionNull(User author);

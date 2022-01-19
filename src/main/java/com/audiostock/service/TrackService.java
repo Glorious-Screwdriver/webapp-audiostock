@@ -19,33 +19,39 @@ import java.util.stream.Collectors;
 @Service
 public class TrackService {
 
+    final private UserService userService;
+
     final private TrackRepo trackRepo;
 
-    public TrackService(TrackRepo trackRepo) {
+    public TrackService(UserService userService, TrackRepo trackRepo) {
+        this.userService = userService;
         this.trackRepo = trackRepo;
     }
 
-    // Representation
+    // Getters
 
     public Track getTrackById(Long id) throws TrackNotFoundException {
         return trackRepo.findById(id).orElseThrow(() -> new TrackNotFoundException(String.valueOf(id)));
     }
 
-    public List<Track> getCatalog(int page, int size, String sorting, String mood, String genre, Long lbpm, Long hbpm) {
-        return trackRepo.findAllByGenreAndMoodAndBpmIsGreaterThanAndBpmIsLessThan(
-                PageRequest.of(page, size).withSort(Sort.by(sorting)), genre, mood, lbpm, hbpm
-        ).stream().collect(Collectors.toList());
+    // Representation
+
+    public List<Track> getAll() {
+        return trackRepo.findAllByActiveTrue();
     }
 
     public List<Track> getCatalog(int page, int size) {
         return getCatalog(page, size, "name", "", "", 0L, 999L);
     }
 
-    public List<Track> getAll() {
-        return trackRepo.findAllByActiveTrue();
+    public List<Track> getCatalog(int page, int size, String sorting,
+                                  String mood, String genre, Long lbpm, Long hbpm) {
+        return trackRepo.findAllByGenreAndMoodAndBpmIsGreaterThanAndBpmIsLessThan(
+                PageRequest.of(page, size).withSort(Sort.by(sorting)), genre, mood, lbpm, hbpm
+        ).stream().collect(Collectors.toList());
     }
 
-    // Properties
+    // Presence in user lists
 
     public boolean isInCart(Track track, User user) {
         return user.getCart().contains(track);
@@ -61,15 +67,9 @@ public class TrackService {
 
     // Persistence
 
-    public TrackUploadReport uploadTrack(User author,
-                                         String name,
-                                         String description,
-                                         Long price,
-                                         String genre,
-                                         String mood,
-                                         Long bpm,
-                                         MultipartFile audio,
-                                         MultipartFile cover) {
+    public TrackUploadReport uploadTrack(User author, String name, String description,
+                                         Long price, String genre, String mood, Long bpm,
+                                         MultipartFile audio, MultipartFile cover) {
         Track track = new Track(author, name, description, price, genre, mood, bpm);
 
         // Загрузка файла трека
@@ -98,6 +98,10 @@ public class TrackService {
         return new TrackUploadReport(true, track);
     }
 
+    public void editTrack(Track track) {
+        trackRepo.save(track);
+    }
+
     public boolean changeCover(Track track, MultipartFile cover) {
         try {
             FileUploadUtil.saveFile(
@@ -111,11 +115,8 @@ public class TrackService {
         return true;
     }
 
-    public void editTrack(Track track) {
-        trackRepo.save(track);
-    }
-
     public void deleteTrack(Track track) {
+        userService.removeTrack(track.getAuthor(), track);
         trackRepo.delete(track);
     }
 

@@ -13,6 +13,8 @@ public class StatusService {
         this.statusRepo = statusRepo;
     }
 
+    // Getters
+
     public Status getConsumer() {
         return getStatus(1L);
     }

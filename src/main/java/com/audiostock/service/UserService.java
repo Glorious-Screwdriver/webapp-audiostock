@@ -28,14 +28,19 @@ import java.util.stream.Collectors;
 @Service
 public class UserService {
 
-    private final UserRepo userRepo;
     private final StatusService statusService;
+
+    private final UserRepo userRepo;
     private final PaymentInfoRepo paymentInfoRepo;
+
     private final PasswordEncoder encoder;
 
-    public UserService(UserRepo userRepo, StatusService statusService, PaymentInfoRepo paymentInfoRepo, PasswordEncoder encoder) {
-        this.userRepo = userRepo;
+    public UserService(StatusService statusService,
+                       UserRepo userRepo,
+                       PaymentInfoRepo paymentInfoRepo,
+                       PasswordEncoder encoder) {
         this.statusService = statusService;
+        this.userRepo = userRepo;
         this.paymentInfoRepo = paymentInfoRepo;
         this.encoder = encoder;
     }
@@ -65,11 +70,17 @@ public class UserService {
         return new RegisterReport(true);
     }
 
-    // Representation
+    // Getters
 
     public User getUserByUsername(String username) throws UserNotFoundException {
         return userRepo.findByLogin(username).orElseThrow(() -> new UserNotFoundException(username));
     }
+
+    public List<User> getAllModerators() {
+        return userRepo.findAllByStatusName("MODERATOR");
+    }
+
+    // Representation
 
     /**
      * Вывод всех авторов, сортируя по имени пользователя (логину)
@@ -90,20 +101,22 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    public List<Track> getReleasesSortedByName(User user) {
-        return makeASortedList(user.getReleases());
+    // Users' track lists
+
+    public List<Track> getFavoriteSortedByName(User user) {
+        return makeASortedList(user.getFavorites());
     }
 
     public List<Track> getCartSortedByName(User user) {
         return makeASortedList(user.getCart());
     }
 
-    public List<Track> getFavoriteSortedByName(User user) {
-        return makeASortedList(user.getFavorites());
-    }
-
     public List<Track> getPurchasedSortedByName(User user) {
         return makeASortedList(user.getPurchased());
+    }
+
+    public List<Track> getReleasesSortedByName(User user) {
+        return makeASortedList(user.getReleases());
     }
 
     private List<Track> makeASortedList(Set<Track> set) {
@@ -113,11 +126,29 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    public List<User> getAllModerators() {
-        return userRepo.findAllByStatusName("MODERATOR");
+    // Consumer actions
+
+    public boolean addTrackToFavorite(User user, Track track) {
+        if (user.getFavorites().contains(track)) {
+            System.out.println(user.getLogin() + " already has track " + track.getName() + " in favorites");
+            return false;
+        }
+
+        user.getFavorites().add(track);
+        userRepo.save(user);
+        return true;
     }
 
-    // Consumer side
+    public boolean removeTrackFromFavorites(User user, Track track) {
+        if (!user.getFavorites().contains(track)) {
+            System.out.println(user.getLogin() + " already doesn't have this track in favorites");
+            return false;
+        }
+
+        user.getFavorites().remove(track);
+        userRepo.save(user);
+        return true;
+    }
 
     public boolean addTrackToCart(User user, Track track) {
         if (user.getCart().contains(track)) {
@@ -145,10 +176,16 @@ public class UserService {
         return true;
     }
 
+    public Long totalCartPrice(User user) {
+        return user.getCart().stream()
+                .mapToLong(Track::getPrice)
+                .sum();
+    }
+
     public CheckoutReport checkout(User user) {
         final Set<Track> cart = user.getCart();
-        Long totalPrice = 0L;
 
+        // Проверяем, есть ли в корзине уже купленные треки
         for (Track track : cart) {
             if (user.getPurchased().contains(track)) {
                 return new CheckoutReport(
@@ -157,9 +194,10 @@ public class UserService {
                         "Вы уже приобрели данный трек: " + track.getName()
                 );
             }
-            totalPrice += track.getPrice();
         }
 
+        // Проверяем, хватает ли пользователю средств
+        Long totalPrice = totalCartPrice(user);
         if (user.getBalance() < totalPrice) {
             return new CheckoutReport(
                     false,
@@ -168,6 +206,7 @@ public class UserService {
             );
         }
 
+        // Вычитаем средства, добавляем треки в купленное, убираем из корзины
         for (Track track : cart) {
             user.getPurchased().add(track);
             user.getCart().remove(track);
@@ -176,12 +215,6 @@ public class UserService {
 
         userRepo.save(user);
         return new CheckoutReport(true);
-    }
-
-    public Long totalCartPrice(User user) {
-        return user.getCart().stream()
-                .mapToLong(Track::getPrice)
-                .sum();
     }
 
     public void savePaymentMethod(User user, PaymentInfo paymentInfo) {
@@ -195,44 +228,16 @@ public class UserService {
         userRepo.save(user);
     }
 
-    public boolean addTrackToFavorite(User user, Track track) {
-        if (user.getFavorites().contains(track)) {
-            System.out.println(user.getLogin() + " already has track " + track.getName() + " in favorites");
-            return false;
-        }
+    // Author actions
 
-        user.getFavorites().add(track);
-        userRepo.save(user);
-        return true;
-    }
-
-    public boolean removeTrackFromFavorites(User user, Track track) {
-        if (!user.getFavorites().contains(track)) {
-            System.out.println(user.getLogin() + " already doesn't have this track in favorites");
-            return false;
-        }
-
-        user.getFavorites().remove(track);
-        userRepo.save(user);
-        return true;
-    }
-
-    // Author side
-
-    public void addTrack(User user, Track track) {
+    public void addRelease(User user, Track track) {
         user.getReleases().add(track);
         userRepo.save(user);
     }
 
-    public boolean removeTrack(User user, Track track) {
-        if (!user.getReleases().contains(track)) {
-            System.out.println(user.getLogin() + " doesn't have such track");
-            return false;
-        }
-
+    public void removeTrack(User user, Track track) {
         user.getReleases().remove(track);
         userRepo.save(user);
-        return true;
     }
 
     public boolean withdrawFunds(User user, Long amount) {
@@ -245,6 +250,8 @@ public class UserService {
         userRepo.save(user);
         return true;
     }
+
+    // Profile editing
 
     public boolean changeProfileAvatar(User user, MultipartFile file) {
         try {
@@ -332,8 +339,8 @@ public class UserService {
         return new ChangeProfileInfoReport(true);
     }
 
-
     // Status manipulations
+
     public void updateStatus(User user, Status status) {
         user.setStatus(status);
         userRepo.save(user);

@@ -26,59 +26,18 @@ private final UploadRequestRepo requestRepo;
         this.userService = userService;
     }
 
-    public UploadRequest createRequest(User author, Track track){
-        UploadRequest request = new UploadRequest(author, track);
-
-        request.setCreationDate(LocalDateTime.now());
-
-        // Назначение случайному модератору
-        List<User> moderators = userService.getAllModerators();
-        if (moderators.isEmpty()) throw new IllegalStateException("No moderators exist");
-
-        Random r = new Random();
-        final User moderator = moderators.get(r.nextInt(moderators.size()));
-        request.setModerator(moderator);
-
-        requestRepo.save(request);
-        return request;
-    }
-
-    public void approveRequest(Long id) throws UploadRequestNotFoundException {
-        final UploadRequest uploadRequest = getRequest(id);
-
-        uploadRequest.setSolution(true);
-        uploadRequest.setReviewDate(LocalDateTime.now());
-
-        final Track track = uploadRequest.getTrack();
-        track.setActive(true);
-
-        trackRepo.save(track);
-        requestRepo.save(uploadRequest);
-    }
-
-    public void declineRequest(Long id, String rejectionReason) throws UploadRequestNotFoundException {
-        final UploadRequest uploadRequest = getRequest(id);
-
-        uploadRequest.setSolution(false);
-        uploadRequest.setRejectionReason(rejectionReason);
-        uploadRequest.setReviewDate(LocalDateTime.now());
-
-        trackRepo.delete(uploadRequest.getTrack());
-        requestRepo.save(uploadRequest);
-    }
+    // Getters
 
     public UploadRequest getRequest(Long id) throws UploadRequestNotFoundException {
         return requestRepo.findById(id)
                 .orElseThrow(() -> new UploadRequestNotFoundException(String.valueOf(id)));
     }
 
-    public List<UploadRequest> getRequests(){
-        return requestRepo.findAll();
-    }
-
     public List<UploadRequest> getRequestsByModerator(User moderator) {
         return requestRepo.findAllByModeratorAndSolutionNullOrderByCreationDate(moderator);
     }
+
+    // Representation
 
     /**
      * Возвращает все треки автора, у которых еще нет решения
@@ -104,5 +63,47 @@ private final UploadRequestRepo requestRepo;
                 .collect(Collectors.toList());
     }
 
+    // Processing
+
+    public void createRequest(User author, Track track){
+        UploadRequest request = new UploadRequest(author, track);
+
+        request.setCreationDate(LocalDateTime.now());
+
+        // Назначение случайному модератору
+        List<User> moderators = userService.getAllModerators();
+        if (moderators.isEmpty()) throw new IllegalStateException("No moderators exist");
+
+        Random r = new Random();
+        final User moderator = moderators.get(r.nextInt(moderators.size()));
+        request.setModerator(moderator);
+
+        requestRepo.save(request);
+    }
+
+    public void approveRequest(Long id) throws UploadRequestNotFoundException {
+        final UploadRequest uploadRequest = getRequest(id);
+
+        uploadRequest.setSolution(true);
+        uploadRequest.setReviewDate(LocalDateTime.now());
+
+        final Track track = uploadRequest.getTrack();
+        track.setActive(true);
+
+        trackRepo.save(track);
+        requestRepo.save(uploadRequest);
+        userService.addRelease(uploadRequest.getAuthor(), track);
+    }
+
+    public void declineRequest(Long id, String rejectionReason) throws UploadRequestNotFoundException {
+        final UploadRequest uploadRequest = getRequest(id);
+
+        uploadRequest.setSolution(false);
+        uploadRequest.setRejectionReason(rejectionReason);
+        uploadRequest.setReviewDate(LocalDateTime.now());
+
+        trackRepo.delete(uploadRequest.getTrack());
+        requestRepo.save(uploadRequest);
+    }
 
 }
