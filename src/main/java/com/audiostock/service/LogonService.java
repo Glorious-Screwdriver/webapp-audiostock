@@ -21,11 +21,15 @@ public class LogonService {
         this.logonRepo = logonRepo;
     }
 
-    void logon(User user, Byte[] ip) {
+    public void logon(User user, Byte[] ip) {
         logonRepo.save(new Logon(user, ip, LocalDateTime.now()));
     }
 
-    List<Logon> getLogonsByUser(User user) {
+    public void logon(User user) {
+        logonRepo.save(new Logon(user, LocalDateTime.now()));
+    }
+
+    public List<Logon> getLogonsByUser(User user) {
         return logonRepo.findAllByUser(user, Sort.by("date_and_time"));
     }
 

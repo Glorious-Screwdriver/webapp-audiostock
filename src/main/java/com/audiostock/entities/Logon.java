@@ -21,6 +21,11 @@ public class Logon {
     public Logon() {
     }
 
+    public Logon(User user, LocalDateTime dateTime) {
+        this.user = user;
+        this.dateTime = dateTime;
+    }
+
     public Logon(User user, Byte[] ip, LocalDateTime dateTime) {
         this.user = user;
         this.ip = ip;
@@ -49,5 +54,13 @@ public class Logon {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public LocalDateTime getDateTime() {
+        return dateTime;
+    }
+
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
     }
 }
