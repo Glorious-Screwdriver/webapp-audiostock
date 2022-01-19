@@ -41,7 +41,7 @@ public class TrackUploadController {
         throw new UnsupportedOperationException("/profile/releases/upload view is not supported");
     }
 
-    @PostMapping
+    @PostMapping(consumes = "multipart/form-data")
     public String upload(Principal principal, Model model, @RequestParam Map<String, String> params,
                          @RequestParam("audio") MultipartFile audio,
                          @RequestParam("cover") MultipartFile cover) {
