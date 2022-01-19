@@ -4,6 +4,7 @@ import com.audiostock.entities.Track;
 import com.audiostock.entities.User;
 import com.audiostock.repos.TrackRepo;
 import com.audiostock.service.exceptions.TrackNotFoundException;
+import com.audiostock.service.reports.TrackUploadReport;
 import com.audiostock.service.util.FileUploadUtil;
 import com.audiostock.service.util.Utils;
 import org.springframework.data.domain.PageRequest;
@@ -60,26 +61,41 @@ public class TrackService {
 
     // Persistence
 
-    public Track uploadTrack(User author,
-                             String name,
-                             String description,
-                             Long price,
-                             String genre,
-                             String mood,
-                             Long bpm,
-                             MultipartFile file) {
+    public TrackUploadReport uploadTrack(User author,
+                                         String name,
+                                         String description,
+                                         Long price,
+                                         String genre,
+                                         String mood,
+                                         Long bpm,
+                                         MultipartFile audio,
+                                         MultipartFile cover) {
         Track track = new Track(author, name, description, price, genre, mood, bpm);
+
+        // Загрузка файла трека
         try {
-            FileUploadUtil.saveFile("tracks/" + author.getId(),
-                    String.valueOf(track.getId())
-                            + Utils.getFileExtension(file.getOriginalFilename()),
-                    file);
+            FileUploadUtil.saveFile(
+                    "tracks/" + author.getId(),
+                    String.valueOf(track.getId()) + Utils.getFileExtension(audio.getOriginalFilename()),
+                    audio
+            );
         } catch (IOException e) {
-            return null;
+            return new TrackUploadReport(false, "Ошибка при загрузке трека!");
+        }
+
+        // Загрузка файла обложки
+        try {
+            FileUploadUtil.saveFile(
+                    "covers/" + author.getId(),
+                    String.valueOf(track.getId()) + Utils.getFileExtension(cover.getOriginalFilename()),
+                    cover
+            );
+        } catch (IOException e) {
+            return new TrackUploadReport(false, "Ошибка при загрузке обложки!");
         }
 
         trackRepo.save(track);
-        return track;
+        return new TrackUploadReport(true, track);
     }
 
     public void editTrack(Track track) {

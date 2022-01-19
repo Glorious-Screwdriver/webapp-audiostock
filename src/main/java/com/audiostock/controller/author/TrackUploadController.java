@@ -5,6 +5,7 @@ import com.audiostock.entities.User;
 import com.audiostock.service.TrackService;
 import com.audiostock.service.UploadRequestService;
 import com.audiostock.service.UserService;
+import com.audiostock.service.reports.TrackUploadReport;
 import com.audiostock.service.util.Utils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,14 +33,18 @@ public class TrackUploadController {
     }
 
     @GetMapping
-    public String uploadPage(Principal principal) {
+    public String uploadPage(Principal principal, Model model) {
+        User user = Utils.getUserFromPrincipal(principal, userService);
+        model.addAttribute("user", user);
+
         //TODO upload view
         throw new UnsupportedOperationException("/profile/releases/upload view is not supported");
     }
 
     @PostMapping
     public String upload(Principal principal, Model model, @RequestParam Map<String, String> params,
-                         @RequestParam("file") MultipartFile file) {
+                         @RequestParam("audio") MultipartFile audio,
+                         @RequestParam("cover") MultipartFile cover) {
         User user = Utils.getUserFromPrincipal(principal, userService);
 
         // Проверка на пустые значения
@@ -54,7 +59,7 @@ public class TrackUploadController {
         }
 
         // Сохранение трека и запись в бд
-        final Track track = trackService.uploadTrack(
+        final TrackUploadReport report = trackService.uploadTrack(
                 user,
                 params.get("username"),
                 params.get("description"),
@@ -62,21 +67,23 @@ public class TrackUploadController {
                 params.get("genre"),
                 params.get("mood"),
                 Long.parseLong(params.get("genre")),
-                file);
+                audio,
+                cover
+        );
 
-        // Создание UploadRequest-а
-        if (track != null) {
+        if (report.isSuccessful()) {
+            Track track = report.getTrack();
             uploadRequestService.createRequest(user, track);
+
+            //TODO releases view
+            throw new UnsupportedOperationException("/profile/releases view is not supported");
         } else {
-            model.addAttribute("message", "Во время загрузки файла произошла ошибка!");
+            model.addAttribute("message", report.getMessage());
             model.addAttribute("user", user);
 
             //TODO upload view
             throw new UnsupportedOperationException("/profile/releases/upload view is not supported");
         }
-
-        //TODO releases view
-        throw new UnsupportedOperationException("/profile/releases view is not supported");
     }
 
 }

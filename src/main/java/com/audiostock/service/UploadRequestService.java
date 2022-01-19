@@ -29,15 +29,17 @@ private final UploadRequestRepo requestRepo;
     public UploadRequest createRequest(User author, Track track){
         UploadRequest request = new UploadRequest(author, track);
 
-        // Назначение случайному модератору
-        List<User> moderators = userService.getAllModerators();
-        Random r = new Random();
-        request.setModerator(moderators.get(r.nextInt(moderators.size())));
-
         request.setCreationDate(LocalDateTime.now());
 
-        requestRepo.save(request);
+        // Назначение случайному модератору
+        List<User> moderators = userService.getAllModerators();
+        if (moderators.isEmpty()) throw new IllegalStateException("No moderators exist");
 
+        Random r = new Random();
+        final User moderator = moderators.get(r.nextInt(moderators.size()));
+        request.setModerator(moderator);
+
+        requestRepo.save(request);
         return request;
     }
 
