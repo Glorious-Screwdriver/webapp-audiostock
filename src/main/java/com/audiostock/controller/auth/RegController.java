@@ -30,6 +30,6 @@ public class RegController {
             return "register";
         }
 
-        return "redirect:/";
+        return "redirect:/login";
     }
 }
