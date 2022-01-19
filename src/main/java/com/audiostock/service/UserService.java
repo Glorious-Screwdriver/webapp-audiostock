@@ -255,7 +255,7 @@ public class UserService {
 
     public boolean changeProfileAvatar(User user, MultipartFile file) {
         try {
-            FileUploadUtil.saveFile("data/avatars",
+            FileUploadUtil.saveFile("avatars",
                     user.getId()
                             + Utils.getFileExtension(file.getOriginalFilename()).orElseThrow(),
                     file);

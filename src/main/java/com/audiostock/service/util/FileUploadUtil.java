@@ -13,7 +13,7 @@ public class FileUploadUtil {
 
     public static void saveFile(String uploadDir, String fileName,
                                 MultipartFile multipartFile) throws IOException {
-        Path uploadPath = Paths.get(uploadDir);
+        Path uploadPath = Paths.get("src/main/resources/static/data/" + uploadDir);
 
         if (!Files.exists(uploadPath)) {
             Files.createDirectories(uploadPath);
