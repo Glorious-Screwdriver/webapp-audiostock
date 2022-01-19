@@ -1,4 +1,4 @@
-package com.audiostock.service.util;
+package com.audiostock.service.reports;
 
 public class ChangeProfileInfoReport extends Report {
     public ChangeProfileInfoReport(boolean successful) {

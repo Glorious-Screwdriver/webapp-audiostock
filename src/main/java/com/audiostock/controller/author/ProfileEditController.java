@@ -4,7 +4,7 @@ import com.audiostock.entities.Track;
 import com.audiostock.entities.User;
 import com.audiostock.service.UploadRequestService;
 import com.audiostock.service.UserService;
-import com.audiostock.service.util.ChangeProfileInfoReport;
+import com.audiostock.service.reports.ChangeProfileInfoReport;
 import com.audiostock.service.util.Utils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

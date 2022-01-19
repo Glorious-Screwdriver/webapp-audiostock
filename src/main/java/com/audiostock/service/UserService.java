@@ -7,6 +7,10 @@ import com.audiostock.entities.User;
 import com.audiostock.repos.PaymentInfoRepo;
 import com.audiostock.repos.UserRepo;
 import com.audiostock.service.exceptions.UserNotFoundException;
+import com.audiostock.service.reports.ChangeProfileInfoReport;
+import com.audiostock.service.reports.CheckoutFailureReason;
+import com.audiostock.service.reports.CheckoutReport;
+import com.audiostock.service.reports.RegisterReport;
 import com.audiostock.service.util.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -246,7 +250,7 @@ public class UserService {
         try {
             FileUploadUtil.saveFile("data/avatars",
                     user.getId()
-                            + FileUploadUtil.getExtensionByStringHandling(file.getOriginalFilename()).orElseThrow(),
+                            + Utils.getFileExtension(file.getOriginalFilename()).orElseThrow(),
                     file);
         } catch (IOException e) {
             return false;

@@ -5,6 +5,7 @@ import com.audiostock.entities.User;
 import com.audiostock.repos.TrackRepo;
 import com.audiostock.service.exceptions.TrackNotFoundException;
 import com.audiostock.service.util.FileUploadUtil;
+import com.audiostock.service.util.Utils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -71,7 +72,7 @@ public class TrackService {
         try {
             FileUploadUtil.saveFile("tracks/" + author.getId(),
                     String.valueOf(track.getId())
-                            + FileUploadUtil.getExtensionByStringHandling(file.getOriginalFilename()),
+                            + Utils.getFileExtension(file.getOriginalFilename()),
                     file);
         } catch (IOException e) {
             return null;
