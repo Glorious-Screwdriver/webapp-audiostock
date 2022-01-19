@@ -98,8 +98,25 @@ public class TrackService {
         return new TrackUploadReport(true, track);
     }
 
+    public boolean changeCover(Track track, MultipartFile cover) {
+        try {
+            FileUploadUtil.saveFile(
+                    "covers/" + track.getAuthor().getId(),
+                    String.valueOf(track.getId()) + Utils.getFileExtension(cover.getOriginalFilename()),
+                    cover
+            );
+        } catch (IOException e) {
+            return false;
+        }
+        return true;
+    }
+
     public void editTrack(Track track) {
         trackRepo.save(track);
+    }
+
+    public void deleteTrack(Track track) {
+        trackRepo.delete(track);
     }
 
 }

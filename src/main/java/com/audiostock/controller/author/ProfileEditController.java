@@ -48,7 +48,7 @@ public class ProfileEditController {
         List<Track> declined = new ArrayList<>(uploadRequestService.getDeclinedTracksByAuthor(user));
 
         model.addAttribute("user", user);
-        model.addAttribute("rel",true);
+        model.addAttribute("rel", true);
         model.addAttribute("releases", releases);
         model.addAttribute("pending", pending);
         model.addAttribute("declined", declined);
@@ -59,11 +59,11 @@ public class ProfileEditController {
     // Editing profile info
 
     @PostMapping(consumes = "multipart/form-data")
-    public String changeAvatar(Principal principal, @RequestParam("image") MultipartFile file, Model model) {
+    public String changeAvatar(Principal principal, @RequestParam("avatar") MultipartFile avatar, Model model) {
         User user = Utils.getUserFromPrincipal(principal, userService);
 
         // Смена аватара
-        final boolean successful = userService.changeProfileAvatar(user, file);
+        final boolean successful = userService.changeProfileAvatar(user, avatar);
 
         if (!successful) {
             model.addAttribute("message", "Во время загрузки файла произошла ошибка!");
@@ -89,9 +89,9 @@ public class ProfileEditController {
 
     @PostMapping(params = {"firstname", "lastname", "middlename"})
     public String changeFullName(Principal principal, Model model,
-                                   @RequestParam String firstname,
-                                   @RequestParam String lastname,
-                                   @RequestParam String middlename) {
+                                 @RequestParam String firstname,
+                                 @RequestParam String lastname,
+                                 @RequestParam String middlename) {
         User user = Utils.getUserFromPrincipal(principal, userService);
 
         // Изменение полного имени пользователя

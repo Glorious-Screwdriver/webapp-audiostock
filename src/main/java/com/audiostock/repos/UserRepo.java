@@ -1,6 +1,5 @@
 package com.audiostock.repos;
 
-import com.audiostock.entities.Status;
 import com.audiostock.entities.User;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
