@@ -25,18 +25,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 // Styles and images
-                .antMatchers("/styles/cssandjs/*", "/img/*", "/data/*").permitAll()
+                .antMatchers("/styles/cssandjs/*", "/img/*", "/data/*/*").permitAll()
                 // GUESTS
                 .antMatchers("/", "/register", "/track/*", "/user/*", "/user/*/tracks").permitAll()
                 // CONSUMERS
-                .antMatchers("/favorite", "/cart", "/balance", "/purchased", "/profile").hasRole("CONSUMER")
+                .antMatchers("/favorite", "/cart", "/balance", "/purchased", "/profile",
+                        "/profile/releases", "/profile/releases/*").hasRole("CONSUMER")
                 // MODERATORS
                 .antMatchers("/moderation").hasRole("MODERATOR")
-                .anyRequest().authenticated()
+                .anyRequest().denyAll()
             .and()
                 .formLogin()
                 .loginPage("/login")
-//                .successForwardUrl("/")
                 .permitAll()
             .and()
                 .logout()
