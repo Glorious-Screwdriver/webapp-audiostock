@@ -93,7 +93,7 @@ public class TrackEditController {
         return "redirect:/track/" + trackId;
     }
 
-    @DeleteMapping("/{trackId}")
+    @PostMapping("/{trackId}/delete")
     public String deleteTrack(Principal principal, @PathVariable long trackId) throws TrackNotFoundException {
         User author = Utils.getUserFromPrincipal(principal, userService);
         Track track = trackService.getTrackById(trackId);

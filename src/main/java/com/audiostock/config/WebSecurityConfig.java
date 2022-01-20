@@ -30,7 +30,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/", "/register", "/track/*", "/user/*", "/user/*/tracks").permitAll()
                 // CONSUMERS
                 .antMatchers("/favorite", "/cart", "/balance", "/purchased", "/profile",
-                        "/profile/releases", "/profile/releases/*").hasRole("CONSUMER")
+                        "/profile/releases", "/profile/releases/*", "/profile/releases/*/delete").hasRole("CONSUMER")
                 // MODERATORS
                 .antMatchers("/moderation").hasRole("MODERATOR")
                 .anyRequest().denyAll()
