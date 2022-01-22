@@ -104,11 +104,11 @@ public class UserService {
     // Users' track lists
 
     public List<Track> getFavoriteSortedByName(User user) {
-        return makeASortedList(user.getFavorites());
+        return makeASortedActiveList(user.getFavorites());
     }
 
     public List<Track> getCartSortedByName(User user) {
-        return makeASortedList(user.getCart());
+        return makeASortedActiveList(user.getCart());
     }
 
     public List<Track> getPurchasedSortedByName(User user) {
@@ -116,12 +116,18 @@ public class UserService {
     }
 
     public List<Track> getReleasesSortedByName(User user) {
-        return makeASortedList(user.getReleases());
+        return makeASortedActiveList(user.getReleases());
+    }
+
+    private List<Track> makeASortedActiveList(Set<Track> set) {
+        return set.stream()
+                .filter(Track::isActive)
+                .sorted((o1, o2) -> o1.getName().compareToIgnoreCase(o2.getName()))
+                .collect(Collectors.toList());
     }
 
     private List<Track> makeASortedList(Set<Track> set) {
         return set.stream()
-                .filter(Track::isActive)
                 .sorted((o1, o2) -> o1.getName().compareToIgnoreCase(o2.getName()))
                 .collect(Collectors.toList());
     }
@@ -232,11 +238,6 @@ public class UserService {
 
     public void addRelease(User user, Track track) {
         user.getReleases().add(track);
-        userRepo.save(user);
-    }
-
-    public void removeTrack(User user, Track track) {
-        user.getReleases().remove(track);
         userRepo.save(user);
     }
 

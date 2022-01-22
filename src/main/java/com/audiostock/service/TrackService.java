@@ -36,7 +36,7 @@ public class TrackService {
 
     // Representation
 
-    public List<Track> getAll() {
+    public List<Track> getAllActive() {
         return trackRepo.findAllByActiveTrue();
     }
 
@@ -115,9 +115,22 @@ public class TrackService {
         return true;
     }
 
-    public void deleteTrack(Track track) {
-        userService.removeTrack(track.getAuthor(), track);
-        trackRepo.delete(track);
+    public boolean activateTrack(Track track) {
+        if (!track.isActive()) {
+            track.setActive(true);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean deactivateTrack(Track track) {
+        if (track.isActive()) {
+            track.setActive(false);
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }

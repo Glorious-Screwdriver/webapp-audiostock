@@ -2,7 +2,6 @@ package com.audiostock.controller;
 
 import com.audiostock.entities.Track;
 import com.audiostock.entities.User;
-import com.audiostock.repos.StatusRepo;
 import com.audiostock.service.StatusService;
 import com.audiostock.service.TrackService;
 import com.audiostock.service.UserService;
@@ -12,28 +11,27 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.security.Principal;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 @Controller
 public class CatalogController {
 
-    UserService userService;
-    TrackService trackService;
-    StatusService statusService;
+    private final UserService userService;
+    private final StatusService statusService;
+    private final TrackService trackService;
 
-    public CatalogController(UserService userService, TrackService trackService, StatusService statusService) {
+    public CatalogController(UserService userService, StatusService statusService, TrackService trackService) {
         this.userService = userService;
-        this.trackService = trackService;
         this.statusService = statusService;
+        this.trackService = trackService;
     }
 
     @GetMapping("/")
     public String index(Principal principal, Model model) {
         User user = Utils.getUserFromPrincipal(principal, userService);
 
-        if (user != null && user.getStatus() == statusService.getModerator()) {
+        if (user != null && statusService.isModerator(user)) {
             //TODO moderation view
             throw new UnsupportedOperationException("/moderation view is not supported");
         }
@@ -45,7 +43,7 @@ public class CatalogController {
         }
 
         // Track map
-        final List<Track> tracks = trackService.getAll();
+        final List<Track> tracks = trackService.getAllActive();
         Map<Track, Boolean[]> map = Utils.getTrackMap(user, tracks, trackService);
         model.addAttribute("tracks", map);
 

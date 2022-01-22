@@ -93,19 +93,40 @@ public class TrackEditController {
         return "redirect:/track/" + trackId;
     }
 
-    @PostMapping("/{trackId}/delete")
-    public String deleteTrack(Principal principal, @PathVariable long trackId) throws TrackNotFoundException {
+    @PostMapping("/{trackId}/deactivate")
+    public String deactivateTrack(Principal principal, @PathVariable long trackId, Model model)
+            throws TrackNotFoundException {
         User author = Utils.getUserFromPrincipal(principal, userService);
         Track track = trackService.getTrackById(trackId);
 
         checkEditingPermission(author, track);
 
-        trackService.deleteTrack(track);
+        final boolean successful = trackService.deactivateTrack(track);
+        if (!successful) {
+            model.addAttribute("message", "Трек уже скрыт!");
+        }
+
+        return "redirect:/profile/releases";
+    }
+
+    @PostMapping("/{trackId}/activate")
+    public String activateTrack(Principal principal, @PathVariable long trackId, Model model)
+            throws TrackNotFoundException {
+        User author = Utils.getUserFromPrincipal(principal, userService);
+        Track track = trackService.getTrackById(trackId);
+
+        checkEditingPermission(author, track);
+
+        final boolean successful = trackService.activateTrack(track);
+        if (!successful) {
+            model.addAttribute("message", "Трек уже опубликован!");
+        }
+
         return "redirect:/profile/releases";
     }
 
     private void checkEditingPermission(User author, Track track) throws TrackNotFoundException {
-        if (!track.getAuthor().equals(author)) throw new TrackNotFoundException("Illegal access to track");
+        if (!track.getAuthor().equals(author)) throw new TrackNotFoundException(track, "Illegal access to track");
     }
 
 }
