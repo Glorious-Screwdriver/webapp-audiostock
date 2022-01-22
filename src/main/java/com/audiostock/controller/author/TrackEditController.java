@@ -41,7 +41,7 @@ public class TrackEditController {
         throw new UnsupportedOperationException("/profile/releases/{trackId} view is not supported");
     }
 
-    @PostMapping("/{trackId}")
+    @PostMapping(value = "/{trackId}", params = {"bpm", "description", "genre", "mood", "name", "price"})
     public String editTrack(Principal principal, @PathVariable long trackId, Model model,
                             @RequestParam Map<String, String> params) throws TrackNotFoundException {
         User author = Utils.getUserFromPrincipal(principal, userService);
@@ -73,7 +73,7 @@ public class TrackEditController {
         return "redirect:/track/" + trackId;
     }
 
-    @PostMapping(value = "/{trackId}", consumes = "multipart/form-data")
+    @PostMapping(value = "/{trackId}", params = "cover", consumes = "multipart/form-data")
     public String changeCover(Principal principal, @PathVariable long trackId, Model model,
                               @RequestParam("cover") MultipartFile cover) throws TrackNotFoundException {
         User author = Utils.getUserFromPrincipal(principal, userService);
