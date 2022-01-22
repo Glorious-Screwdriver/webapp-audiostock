@@ -6,7 +6,6 @@ import com.audiostock.repos.TrackRepo;
 import com.audiostock.service.exceptions.TrackNotFoundException;
 import com.audiostock.service.reports.TrackUploadReport;
 import com.audiostock.service.util.FileUploadUtil;
-import com.audiostock.service.util.Utils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -74,22 +73,14 @@ public class TrackService {
 
         // Загрузка файла трека
         try {
-            FileUploadUtil.saveFile(
-                    "tracks/" + author.getId(),
-                    String.valueOf(track.getId()) + Utils.getFileExtension(audio.getOriginalFilename()),
-                    audio
-            );
+            FileUploadUtil.saveFile("tracks", track.getId() + ".mp3", audio);
         } catch (IOException e) {
             return new TrackUploadReport(false, "Ошибка при загрузке трека!");
         }
 
         // Загрузка файла обложки
         try {
-            FileUploadUtil.saveFile(
-                    "covers/" + author.getId(),
-                    String.valueOf(track.getId()) + Utils.getFileExtension(cover.getOriginalFilename()),
-                    cover
-            );
+            FileUploadUtil.saveFile("covers", track.getId() + ".jpg", cover);
         } catch (IOException e) {
             return new TrackUploadReport(false, "Ошибка при загрузке обложки!");
         }
@@ -104,11 +95,7 @@ public class TrackService {
 
     public boolean changeCover(Track track, MultipartFile cover) {
         try {
-            FileUploadUtil.saveFile(
-                    "covers/" + track.getAuthor().getId(),
-                    String.valueOf(track.getId()) + Utils.getFileExtension(cover.getOriginalFilename()),
-                    cover
-            );
+            FileUploadUtil.saveFile("covers", track.getId() + ".jpg", cover);
         } catch (IOException e) {
             return false;
         }

@@ -46,17 +46,4 @@ public class Utils {
         return map;
     }
 
-    /**
-     * Парсит строку с именем файла, достает весь текст после последней точки<br>
-     * {@code Пример: file.txt -> .txt}
-     *
-     * @param filename полное имя файла
-     * @return расширение файла (с точкой)
-     */
-    public static Optional<String> getFileExtension(String filename) {
-        return Optional.ofNullable(filename)
-                .filter(f -> f.contains("."))
-                .map(f -> f.substring(filename.lastIndexOf(".")));
-    }
-
 }
