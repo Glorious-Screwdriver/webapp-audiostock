@@ -102,7 +102,6 @@ private final UploadRequestRepo requestRepo;
         uploadRequest.setRejectionReason(rejectionReason);
         uploadRequest.setReviewDate(LocalDateTime.now());
 
-        trackRepo.delete(uploadRequest.getTrack());
         requestRepo.save(uploadRequest);
     }
 
