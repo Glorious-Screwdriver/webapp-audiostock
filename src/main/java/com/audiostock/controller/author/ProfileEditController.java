@@ -43,13 +43,15 @@ public class ProfileEditController {
     public String releases(Principal principal, Model model) {
         User user = Utils.getUserFromPrincipal(principal, userService);
 
-        List<Track> releases = new ArrayList<>(user.getReleases());
+        List<Track> releasesActive = userService.getActiveReleasesSortedByName(user);
+        List<Track> releasesInactive = userService.getInactiveReleasesSortedByName(user);
         List<Track> pending = new ArrayList<>(uploadRequestService.getRequestedTracksByAuthor(user));
         List<Track> declined = new ArrayList<>(uploadRequestService.getDeclinedTracksByAuthor(user));
 
         model.addAttribute("user", user);
         model.addAttribute("rel", true);
-        model.addAttribute("releases", releases);
+        model.addAttribute("releases", releasesActive);
+        model.addAttribute("inactive", releasesInactive);
         model.addAttribute("pending", pending);
         model.addAttribute("declined", declined);
 

@@ -115,11 +115,22 @@ public class UserService {
         return makeASortedList(user.getPurchased());
     }
 
-    public List<Track> getReleasesSortedByName(User user) {
+    public List<Track> getActiveReleasesSortedByName(User user) {
         return makeASortedActiveList(user.getReleases());
     }
 
+    public List<Track> getInactiveReleasesSortedByName(User user) {
+        return makeASortedInactiveList(user.getReleases());
+    }
+
     private List<Track> makeASortedActiveList(Set<Track> set) {
+        return set.stream()
+                .filter(Track::isActive)
+                .sorted((o1, o2) -> o1.getName().compareToIgnoreCase(o2.getName()))
+                .collect(Collectors.toList());
+    }
+
+    private List<Track> makeASortedInactiveList(Set<Track> set) {
         return set.stream()
                 .filter(Track::isActive)
                 .sorted((o1, o2) -> o1.getName().compareToIgnoreCase(o2.getName()))

@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.security.Principal;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -63,7 +62,7 @@ public class UserController {
         }
 
         // Track map
-        List<Track> releases = userService.getReleasesSortedByName(author);
+        List<Track> releases = userService.getActiveReleasesSortedByName(author);
         Map<Track, Boolean[]> map = Utils.getTrackMap(user, releases, trackService);
         model.addAttribute("tracks", map);
 
