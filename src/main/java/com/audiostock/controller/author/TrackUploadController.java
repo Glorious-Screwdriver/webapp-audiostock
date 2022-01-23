@@ -37,8 +37,7 @@ public class TrackUploadController {
         User user = Utils.getUserFromPrincipal(principal, userService);
         model.addAttribute("user", user);
 
-        //TODO upload view
-        throw new UnsupportedOperationException("/profile/releases/upload view is not supported");
+        return "track-upload";
     }
 
     @PostMapping(consumes = "multipart/form-data")
@@ -46,6 +45,7 @@ public class TrackUploadController {
                          @RequestParam("original") MultipartFile original,
                          @RequestParam("preview") MultipartFile preview,
                          @RequestParam("cover") MultipartFile cover) {
+
         User user = Utils.getUserFromPrincipal(principal, userService);
 
         // Проверка на пустые значения
@@ -54,20 +54,19 @@ public class TrackUploadController {
                 model.addAttribute("message", "Необходимо заполнить все поля!");
                 model.addAttribute("user", user);
 
-                //TODO upload view
-                throw new UnsupportedOperationException("/profile/releases/upload view is not supported");
+                return "track-upload";
             }
         }
 
         // Сохранение трека и запись в бд
         final TrackUploadReport report = trackService.uploadTrack(
                 user,
-                params.get("username"),
+                params.get("name"),
                 params.get("description"),
                 Long.parseLong(params.get("price")),
                 params.get("genre"),
                 params.get("mood"),
-                Long.parseLong(params.get("genre")),
+                Long.parseLong(params.get("bpm")),
                 original,
                 preview,
                 cover
@@ -77,14 +76,12 @@ public class TrackUploadController {
             Track track = report.getTrack();
             uploadRequestService.createRequest(user, track);
 
-            //TODO releases view
-            throw new UnsupportedOperationException("/profile/releases view is not supported");
+            return "redirect:/profile/releases";
         } else {
             model.addAttribute("message", report.getMessage());
             model.addAttribute("user", user);
 
-            //TODO upload view
-            throw new UnsupportedOperationException("/profile/releases/upload view is not supported");
+            return "track-upload";
         }
     }
 

@@ -19,7 +19,7 @@
         <div class="nav">
             <div class="profile-mini">
                 <a th:href="@{/user/{u}(u=${user.getLogin()})}">
-                    <img th:src="@{/img/guest-icon.jpg}" src="../../static/img/guest-icon.jpg" class="profile-mini">
+                    <img th:src="@{/data/avatars/{i}.jpg(i=${user.getId()})}" onerror="this.onerror=null; this.src='/img/guest-icon.jpg'" class="profile-mini">
                 </a>
             </div>
             <div><a th:href="@{/favorite}">избранное</a></div>

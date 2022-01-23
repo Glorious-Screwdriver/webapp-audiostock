@@ -10,7 +10,7 @@
 <div class="container">
     <header th:replace="fragments/header :: ${logged}?'user-header':'guest-header'"></header>
     <div class="track-details">
-        <img src="#">
+        <img id="profile-img"th:src="@{/data/avatars/{i}.jpg(i=${track.getAuthor().getId()})}" onerror="this.onerror=null; this.src='/img/guest-icon.jpg'">
         <div class="info">
             <a th:text="${track.getName()}">Название</a>
             <a th:text="${track.getAuthor().getLogin()}"
@@ -20,7 +20,7 @@
         <div class="track">
             <div>
                 <a>
-                    <img src="#">
+                    <img th:src="@{/data/covers/{i}.jpg(i=${track.getId()})}" onerror="this.onerror=null; this.src='/img/track-icon.png'">
                 </a>
             </div>
             <div class="audio-less">
@@ -34,11 +34,19 @@
                 </form>
                 <form th:action="@{/track/{i}/{j}(i=${track.getId()},j=(${carted}?'removeFromCart':'addToCart'))}"
                       method="post">
-                    <button name="add-to-cart" th:value="cart" th:class="${carted}?'carted'">$</button>
+                    <button name="add-to-cart" th:value="cart" class="cost" th:class="(${carted||purchaced})?'carted cost':'cost'" th:text="${purchaced}?'куплено':(${track.getPrice()})" th:disabled="${purchaced}">?$</button>
                 </form>
             </div>
         </div>
+        <div class="bpm">
+          <p>
+            bpm:
+          </p>
+          <p th:text="${track.getBpm()}">
+          </p>
+        </div>
         <div class="track-description">
+          <h3>Описание</h3>
             <p th:text="${track.getDescription()}"></p>
         </div>
 </div>

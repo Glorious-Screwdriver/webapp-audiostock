@@ -13,7 +13,7 @@
             <div class="track">
                 <div>
                     <a th:href="@{/track/{u}(u=${track.getId()})}">
-                        <img src="#">
+                        <img th:src="@{/data/covers/{i}.jpg(i=${track.getId()})}" onerror="this.onerror=null; this.src='/img/track-icon.png'">
                     </a>
                 </div>
                 <div class="info">
@@ -42,7 +42,7 @@
             <div class="track">
                 <div>
                     <a th:href="@{/track/{u}(u=${track.getId()})}">
-                        <img src="#">
+                        <img th:src="@{/data/covers/{i}.jpg(i=${track.getId()})}" onerror="this.onerror=null; this.src='/img/track-icon.png'">
                     </a>
                 </div>
                 <div class="info">
@@ -59,7 +59,7 @@
                           method="post">
                         <button name="add-to-fav" th:value="star" th:class="${stared}?'stared'">лайк</button>
                     </form>
-                    <form th:action="@{/track/{i}/{j}(i=${track.getId()},j=(${carted}?'removeFromCart':'addToCart'))}"
+                    <form th:action="@{/}"
                           method="post">
                         <button name="download" th:value="download" class="download" >скачать</button>
                     </form>
@@ -70,7 +70,7 @@
             <div class="track">
                 <div>
                     <a th:href="@{/track/{u}(u=${track.getId()})}">
-                        <img src="#">
+                        <img th:src="@{/data/covers/{i}.jpg(i=${track.getId()})}" onerror="this.onerror=null; this.src='/img/track-icon.png'">
                     </a>
                 </div>
                 <div class="info">
@@ -83,13 +83,11 @@
                     <p th:text="${track.getGenre()}+' / '+${track.getMood()}">джаз/грусть</p>
                 </div>
                 <div class="buttons">
-                    <form th:action="@{/track/{i}/{j}(j=(${stared}?'removeFromFavorite':'addToFavorite'),i=${track.getId()})}"
-                          method="post">
-                        <button name="add-to-fav" th:value="star" th:class="${stared}?'stared'">лайк</button>
+                    <form th:action="@{/profile/releases/{i}(i=${track.getId()})}" method="get">
+                        <button name="edit">ред.</button>
                     </form>
-                    <form th:action="@{/track/{i}/{j}(i=${track.getId()},j=(${carted}?'removeFromCart':'addToCart'))}"
-                          method="post">
-                        <button name="download" th:value="download" class="download" >скачать</button>
+                    <form th:action="@{/profile/releases/{i}/delete(i=${track.getId()})}" method="post">
+                        <button name="delete" th:value="удалить" class="delete" onclick="return confirm('Вы уверены?')">удалить</button>
                     </form>
                 </div>
             </div>

@@ -56,6 +56,7 @@
             cursor: pointer;
         }
         form .error{
+          margin-top:10px;
             color: #cd4d4d;
         }
         form h3{
@@ -84,6 +85,22 @@
         ::placeholder{
             color: #B1B1B1;
         }
+        .poop{
+          margin-top: 35px;
+          width: 100%;
+        }
+        .poop>a{
+          margin: auto;
+          display: block;
+          text-align: center;
+          color: #AAA;
+          font-size: 16px;
+          font-family: 'Poppins', sans-serif;
+          text-decoration: underline;
+        }
+        .poop>a:hover{
+          cursor: pointer;
+        }
     </style>
 </head>
 
@@ -100,7 +117,9 @@
     <label for="password">Пароль:</label>
     <input type="password" placeholder="*****" name="password" id="password">
     <input type="submit" value="Вход">
+    <div class="poop">
+        <a th:href="@{/register}">регистрация</a>
+    </div>
 </form>
 </body>
 </html>
-

@@ -15,19 +15,18 @@
             <form th:action="@{/profile/releases}">
                 <button>Треки</button>
             </form>
+            <a th:href="@{/profile/releases/upload}">добавить трек</a>
         </div>
         <div class="about-container">
             <div class="marginBottom">
                 <p class="error" th:if="${message}!=null" th:text="${message}">error</p>
-                <!-- НОВЫЙ КОД -->
                 <h3>Сменить аватар</h3>
                 <div class="underbox marginBottom">
                     <form th:action="@{/profile}" method="post" enctype="multipart/form-data">
-                        <input type="file" name="image" accept="image/png, image/jpeg"/>
+                        <input class="upload-photo" type="file" name="image" accept="image/jpeg"/>
                         <input type="submit" value="Загрузить изображение" />
                     </form>
                 </div>
-                <!-- НОВЫЙ КОД -->
                 <form th:action="@{/profile}" method="post">
                     <label for="login"><h3>Сменить никнейм</h3></label>
                     <input type="text" name="username" id="login" th:value="${user.getLogin()}" value="login"
@@ -76,14 +75,18 @@
             <form>
                 <button class="selected">Треки</button>
             </form>
+            <a th:href="@{/profile/releases/upload}">добавить трек</a>
         </div>
-        <section class="catalogue">
+        <section class="catalogue many-catalogue">
+            <h3 style="background-color:rgb(195, 251, 177);font-weight: normal; color:rgb(155, 173, 136); margin-top:20px; border-bottom: none;" th:if="${releases.size()!=0}">Выложенные</h3>
             <ul>
                 <li th:replace="fragments/catalogue :: edit-list(${releases})"></li>
             </ul>
+            <h3  style="background-color:rgb(250, 251, 177);font-weight: normal; color:rgb(181, 190, 128); margin-top:20px; border-bottom: none;" th:if="${pending.size()!=0}">В обработке</h3>
             <ul>
                 <li th:replace="fragments/catalogue :: edit-list(${pending})"></li>
             </ul>
+            <h3  style="background-color:rgb(251, 177, 177);font-weight: normal; color:rgb(153, 117, 117); margin-top:20px; border-bottom: none;" th:if="${declined.size()!=0}">Отклоненные</h3>
             <ul>
                 <li th:replace="fragments/catalogue :: edit-list(${declined})"></li>
             </ul>

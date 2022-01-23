@@ -37,8 +37,7 @@ public class TrackEditController {
         model.addAttribute("user", author);
         model.addAttribute("track", track);
 
-        //TODO /profile/releases/{trackId} view
-        throw new UnsupportedOperationException("/profile/releases/{trackId} view is not supported");
+        return "track-edit";
     }
 
     @PostMapping(value = "/{trackId}", params = {"bpm", "description", "genre", "mood", "name", "price"})
@@ -55,13 +54,10 @@ public class TrackEditController {
                 model.addAttribute("message", "Необходимо заполнить все поля!");
                 model.addAttribute("track", track);
 
-                //TODO /profile/releases/{trackId} view
-                throw new UnsupportedOperationException("/profile/releases/{trackId} view is not supported");
+                return "track-edit";
             }
         }
 
-        // Изменение сведений о треке
-        // Наверно это можно сделать по-другому..?
         track.setBpm(Long.parseLong(params.get("bpm")));
         track.setDescription(params.get("description"));
         track.setGenre(params.get("genre"));
@@ -86,8 +82,7 @@ public class TrackEditController {
             model.addAttribute("message", "Ошибка при загрузке обложки!");
             model.addAttribute("track", track);
 
-            //TODO /profile/releases/{trackId} view
-            throw new UnsupportedOperationException("/profile/releases/{trackId} view is not supported");
+            return "track-edit";
         }
 
         return "redirect:/track/" + trackId;

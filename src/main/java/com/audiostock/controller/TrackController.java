@@ -48,7 +48,12 @@ public class TrackController {
 
             // Printing track buttons
             model.addAttribute("carted", trackService.isInCart(track, user));
+            model.addAttribute("purchaced", trackService.isPurchased(track, user));
             model.addAttribute("stared", trackService.isInFavorite(track, user));
+        }else{
+            model.addAttribute("carted", false);
+            model.addAttribute("purchaced", false);
+            model.addAttribute("stared", false);
         }
 
         return "track";
