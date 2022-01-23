@@ -70,11 +70,13 @@ public class TrackService {
                                          Long price, String genre, String mood, Long bpm,
                                          MultipartFile original, MultipartFile preview, MultipartFile cover) {
         Track track = new Track(author, name, description, price, genre, mood, bpm);
+        track = trackRepo.save(track);
 
         // Загрузка оригинального трека
         try {
             FileUploadUtil.saveFile("tracks", track.getId() + ".mp3", original);
         } catch (IOException e) {
+            trackRepo.delete(track);
             return new TrackUploadReport(false, "Ошибка при загрузке оригинального трека!");
         }
 
@@ -82,6 +84,7 @@ public class TrackService {
         try {
             FileUploadUtil.saveFile("previews", track.getId() + ".mp3", preview);
         } catch (IOException e) {
+            trackRepo.delete(track);
             return new TrackUploadReport(false, "Ошибка при загрузке превью трека!");
         }
 
@@ -89,10 +92,10 @@ public class TrackService {
         try {
             FileUploadUtil.saveFile("covers", track.getId() + ".jpg", cover);
         } catch (IOException e) {
+            trackRepo.delete(track);
             return new TrackUploadReport(false, "Ошибка при загрузке обложки!");
         }
 
-        trackRepo.save(track);
         return new TrackUploadReport(true, track);
     }
 

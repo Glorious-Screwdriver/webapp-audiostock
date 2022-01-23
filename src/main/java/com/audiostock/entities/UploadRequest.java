@@ -20,7 +20,7 @@ public class UploadRequest {
     @OneToOne
     private User moderator;
 
-    private boolean solution;
+    private Boolean solution;
 
     @Column(length = 50)
     private String rejectionReason;
@@ -70,11 +70,11 @@ public class UploadRequest {
         this.moderator = moderator;
     }
 
-    public boolean isSolution() {
+    public Boolean getSolution() {
         return solution;
     }
 
-    public void setSolution(boolean solution) {
+    public void setSolution(Boolean solution) {
         this.solution = solution;
     }
 
