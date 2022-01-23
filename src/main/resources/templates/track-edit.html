@@ -24,7 +24,7 @@
             <form th:action="@{/profile/releases/{i}(i=${track.getId()})}" method="post" enctype="multipart/form-data">
                 <div class="marginBottom">
                     <label for="name"><h3>Название</h3></label>
-                    <input type="text" name="name" id="name" maxlength="16" th:value="${track.getName()}">
+                    <input type="text" name="name" id="name" maxlength="30" th:value="${track.getName()}">
                 </div>
                 <h3>Информация о треке</h3>
                 <div class="underbox marginBottom">

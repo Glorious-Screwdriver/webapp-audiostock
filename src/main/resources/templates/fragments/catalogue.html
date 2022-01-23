@@ -59,8 +59,7 @@
                           method="post">
                         <button name="add-to-fav" th:value="star" th:class="${stared}?'stared'">лайк</button>
                     </form>
-                    <form th:action="@{/}"
-                          method="post">
+                    <form th:action="@{/purchased/{i}(i=${track.getId()})}" method="get">
                         <button name="download" th:value="download" class="download" >скачать</button>
                     </form>
                 </div>
