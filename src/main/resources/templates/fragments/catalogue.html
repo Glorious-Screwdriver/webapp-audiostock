@@ -22,7 +22,7 @@
                        th:href="@{/user/{u}(u=${track.getAuthor().getLogin()})}">Автор</a>
                 </div>
                 <div class="audio">
-                    <audio controls src="#">audio is not supported</audio>
+                    <audio controls th:src="@{/data/preview/{i}.mp3(i=${track.getId()})}">audio is not supported</audio>
                     <p th:text="${track.getGenre()}+' / '+${track.getMood()}">джаз/грусть</p>
                 </div>
                 <div class="buttons">
@@ -51,7 +51,7 @@
                        th:href="@{/user/{u}(u=${track.getAuthor().getLogin()})}">Автор</a>
                 </div>
                 <div class="audio">
-                    <audio controls src="#">audio is not supported</audio>
+                    <audio controls th:src="@{/data/previews/{i}.mp3(i=${track.getId()})}">audio is not supported</audio>
                     <p th:text="${track.getGenre()}+' / '+${track.getMood()}">джаз/грусть</p>
                 </div>
                 <div class="buttons">
@@ -79,7 +79,7 @@
                        th:href="@{/user/{u}(u=${track.getAuthor().getLogin()})}">Автор</a>
                 </div>
                 <div class="audio">
-                    <audio controls src="#">audio is not supported</audio>
+                    <audio controls th:src="@{/data/previews/{i}.mp3(i=${track.getId()})}">audio is not supported</audio>
                     <p th:text="${track.getGenre()}+' / '+${track.getMood()}">джаз/грусть</p>
                 </div>
                 <div class="buttons">
