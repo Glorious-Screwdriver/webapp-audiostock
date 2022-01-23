@@ -43,7 +43,8 @@ public class TrackUploadController {
 
     @PostMapping(consumes = "multipart/form-data")
     public String upload(Principal principal, Model model, @RequestParam Map<String, String> params,
-                         @RequestParam("audio") MultipartFile audio,
+                         @RequestParam("original") MultipartFile original,
+                         @RequestParam("preview") MultipartFile preview,
                          @RequestParam("cover") MultipartFile cover) {
         User user = Utils.getUserFromPrincipal(principal, userService);
 
@@ -67,7 +68,8 @@ public class TrackUploadController {
                 params.get("genre"),
                 params.get("mood"),
                 Long.parseLong(params.get("genre")),
-                audio,
+                original,
+                preview,
                 cover
         );
 

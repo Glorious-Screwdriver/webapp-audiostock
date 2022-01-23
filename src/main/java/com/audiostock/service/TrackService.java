@@ -68,14 +68,21 @@ public class TrackService {
 
     public TrackUploadReport uploadTrack(User author, String name, String description,
                                          Long price, String genre, String mood, Long bpm,
-                                         MultipartFile audio, MultipartFile cover) {
+                                         MultipartFile original, MultipartFile preview, MultipartFile cover) {
         Track track = new Track(author, name, description, price, genre, mood, bpm);
 
-        // Загрузка файла трека
+        // Загрузка оригинального трека
         try {
-            FileUploadUtil.saveFile("tracks", track.getId() + ".mp3", audio);
+            FileUploadUtil.saveFile("tracks", track.getId() + ".mp3", original);
         } catch (IOException e) {
-            return new TrackUploadReport(false, "Ошибка при загрузке трека!");
+            return new TrackUploadReport(false, "Ошибка при загрузке оригинального трека!");
+        }
+
+        // Загрузка превью трека
+        try {
+            FileUploadUtil.saveFile("previews", track.getId() + ".mp3", preview);
+        } catch (IOException e) {
+            return new TrackUploadReport(false, "Ошибка при загрузке превью трека!");
         }
 
         // Загрузка файла обложки
