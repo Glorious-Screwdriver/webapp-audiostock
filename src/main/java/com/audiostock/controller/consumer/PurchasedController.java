@@ -59,18 +59,24 @@ public class PurchasedController {
             throw new TrackNotFoundException(track, "Illegal download request");
         }
 
-        Path file = Paths.get("src/main/resources/static/data/tracks/" + track.getId() + ".mp3");
-        if (Files.exists(file)) {
+        Path filePath = Paths.get("src/main/resources/static/data/tracks/" + track.getId() + ".mp3");
+        if (Files.exists(filePath)) {
+            String filename = (track.getAuthor().getLogin() + " - " + track.getName())
+                    .replace(" ", "_");
+
             response.setContentType("audio/mpeg; charset=UTF-8");
             response.setCharacterEncoding("UTF-8");
             response.addHeader("Content-Disposition", String.format("attachment; filename=%s.mp3",
-                    URLEncoder.encode(track.getName(), StandardCharsets.UTF_8)));
+                    URLEncoder.encode(filename, StandardCharsets.UTF_8)));
+
             try {
-                Files.copy(file, response.getOutputStream());
+                Files.copy(filePath, response.getOutputStream());
                 response.getOutputStream().flush();
             } catch (IOException ignored) {
 
             }
+        } else {
+            throw new IllegalStateException("There is no file for track: " + track.getId());
         }
     }
 }
