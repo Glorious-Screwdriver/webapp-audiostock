@@ -15,6 +15,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+    final private String CONSUMER = "CONSUMER";
+    final private String AUTHOR = "CONSUMER"; // Пока не реализовано разделение
+    final private String MODERATOR = "MODERATOR";
+
     private final UserRepo userRepo;
 
     public WebSecurityConfig(final UserRepo userRepo) {
@@ -24,17 +28,27 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                // Styles and images
-                .antMatchers("/styles/cssandjs/*", "/img/*", "/data/*/*").permitAll()
-                // GUESTS
+                // Styles
+                .antMatchers("/styles/cssandjs/*", "/img/*").permitAll()
+                // Open data
+                .antMatchers("/data/previews/*", "/data/avatars/*", "/data/covers/*").permitAll()
+                // Prohibited data
+                .antMatchers("/data/tracks/*").hasRole(MODERATOR)
+
+                // UNAUTHORIZED
                 .antMatchers("/", "/register", "/track/*", "/user/*", "/user/*/tracks").permitAll()
+
                 // CONSUMERS
-                .antMatchers("/favorite", "/cart", "/cart/checkout", "/track/*/*", "/balance", "/purchased",
-                        "/profile", "/profile/releases", "/profile/releases/*",
-                        "/profile/releases/*/*", "/purchased/*").hasRole("CONSUMER")
+                .antMatchers("/favorite", "/cart", "/cart/checkout", "/track/*/*").hasRole(CONSUMER)
+                .antMatchers( "/balance", "/purchased", "/purchased/*").hasRole(CONSUMER)
+
+                // AUTHORS
+                .antMatchers("/profile", "/profile/releases", "/profile/releases/*", "/profile/releases/*/*").hasRole(AUTHOR)
+
                 // MODERATORS
-                .antMatchers("/moderation").hasRole("MODERATOR")
-                .anyRequest().denyAll()
+                .antMatchers("/moderation", "/moderation/*").hasRole(MODERATOR)
+
+                .anyRequest().permitAll()
             .and()
                 .formLogin()
                 .loginPage("/login")
