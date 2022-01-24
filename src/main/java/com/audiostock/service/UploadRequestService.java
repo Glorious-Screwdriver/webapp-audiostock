@@ -43,6 +43,10 @@ private final UploadRequestRepo requestRepo;
 
     // Representation
 
+    public List<Track> getNotDeclinedRequestsByAuthor(User author) {
+        return getTracksFromRequests(requestRepo.findAllByAuthorAndSolutionTrue(author));
+    }
+
     /**
      * Возвращает все треки автора, у которых еще нет решения
      * @param author Автор треков
@@ -108,5 +112,4 @@ private final UploadRequestRepo requestRepo;
 
         requestRepo.save(uploadRequest);
     }
-
 }

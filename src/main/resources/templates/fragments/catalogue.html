@@ -65,7 +65,7 @@
                 </div>
             </div>
         </li>
-        <li th:fragment="edit-list(tracks)" th:each="track:${tracks}">
+        <li th:fragment="edit-list(tracks)" th:each="track:${tracks}" th:with="active=${track.isActive()}">
             <div class="track">
                 <div>
                     <a th:href="@{/track/{u}(u=${track.getId()})}">
@@ -85,8 +85,11 @@
                     <form th:action="@{/profile/releases/{i}(i=${track.getId()})}" method="get">
                         <button name="edit">ред.</button>
                     </form>
-                    <form th:action="@{/profile/releases/{i}/delete(i=${track.getId()})}" method="post">
-                        <button name="delete" th:value="удалить" class="delete" onclick="return confirm('Вы уверены?')">удалить</button>
+                    <form th:if="${active}" th:action="@{/profile/releases/{i}/deactivate(i=${track.getId()})}" method="post">
+                        <button  name="delete" th:value="удалить" class="delete" onclick="return confirm('Вы уверены?')">убрать</button>
+                    </form>
+                    <form th:if="${!active}" th:action="@{/profile/releases/{i}/activate(i=${track.getId()})}" method="post">
+                        <button name="delete" th:value="удалить" class="delete" style="background-color:white; color: #AAA;">вернуть</button>
                     </form>
                 </div>
             </div>
@@ -138,6 +141,24 @@
             <h4 style="margin:10px; color:#AAA;">причина отказа</h4>
             <p style="padding:10px;border-radius:4px; font-size:14px; border-bottom: 1px solid #AAA;" th:text="${reason}">
             </p>
+        </li>
+        <li th:fragment="empty-list(tracks)" th:each="track:${tracks}">
+            <div class="track">
+                <div>
+                    <a th:href="@{/track/{u}(u=${track.getId()})}">
+                        <img th:src="@{/data/covers/{i}.jpg(i=${track.getId()})}" onerror="this.onerror=null; this.src='/img/track-icon.png'">
+                    </a>
+                </div>
+                <div class="info">
+                    <a th:text="${track.getName()}" th:href="@{/track/{u}(u=${track.getId()})}">Название</a>
+                    <a th:text="${track.getAuthor().getLogin()}"
+                       th:href="@{/user/{u}(u=${track.getAuthor().getLogin()})}">Автор</a>
+                </div>
+                <div class="audio">
+                    <audio controls th:src="@{/data/previews/{i}.mp3(i=${track.getId()})}">audio is not supported</audio>
+                    <p th:text="${track.getGenre()}+' / '+${track.getMood()}">джаз/грусть</p>
+                </div>
+            </div>
         </li>
     </ul>
 </div>

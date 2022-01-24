@@ -115,6 +115,7 @@ public class TrackService {
     public boolean activateTrack(Track track) {
         if (!track.isActive()) {
             track.setActive(true);
+            trackRepo.save(track);
             return true;
         } else {
             return false;
@@ -124,6 +125,7 @@ public class TrackService {
     public boolean deactivateTrack(Track track) {
         if (track.isActive()) {
             track.setActive(false);
+            trackRepo.save(track);
             return true;
         } else {
             return false;

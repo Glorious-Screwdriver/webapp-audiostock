@@ -45,23 +45,23 @@ public class ProfileEditController {
     @GetMapping("/releases")
     public String releases(Principal principal, Model model) {
         User user = Utils.getUserFromPrincipal(principal, userService);
-
-        List<Track> releasesActive = userService.getActiveReleasesSortedByName(user);
-        List<Track> releasesInactive = userService.getInactiveReleasesSortedByName(user);
-        List<Track> pending = new ArrayList<>(uploadRequestService.getRequestedTracksByAuthor(user));
+//        List<Track> releasesActive = userService.getActiveReleasesSortedByName(user);
+//        List<Track> releasesInactive = userService.getInactiveReleasesSortedByName(user);
 //        List<Track> declined = new ArrayList<>(uploadRequestService.getDeclinedTracksByAuthor(user));
 
-        List<UploadRequest> requests = uploadRequestService.getDeclinedRequestsByAuthor(user);
+        List<Track> pending = new ArrayList<>(uploadRequestService.getRequestedTracksByAuthor(user));
+        List<Track> releases = uploadRequestService.getNotDeclinedRequestsByAuthor(user);
+        List<UploadRequest> areDeclined = uploadRequestService.getDeclinedRequestsByAuthor(user);
 
         Map<Track, String> declined = new HashMap<>();
-        for (UploadRequest request : requests) {
+        for (UploadRequest request : areDeclined) {
             declined.put(request.getTrack(), request.getRejectionReason());
         }
 
+
         model.addAttribute("user", user);
         model.addAttribute("rel", true);
-        model.addAttribute("releases", releasesActive);
-        model.addAttribute("inactive", releasesInactive);
+        model.addAttribute("releases", releases);
         model.addAttribute("pending", pending);
         model.addAttribute("declined", declined);
 
