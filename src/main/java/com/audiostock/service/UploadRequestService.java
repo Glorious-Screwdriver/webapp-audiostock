@@ -37,6 +37,10 @@ private final UploadRequestRepo requestRepo;
         return requestRepo.findAllByModeratorAndSolutionNullOrderByCreationDate(moderator);
     }
 
+    public List<UploadRequest> getDeclinedRequestsByAuthor(User author) {
+        return requestRepo.findAllByAuthorAndSolutionFalse(author);
+    }
+
     // Representation
 
     /**

@@ -39,7 +39,7 @@ public class ModeratorController {
 
         Map<Track, Long> map = new HashMap<>();
         for (UploadRequest request : requests) {
-            map.put(request.getTrack(), request.getId()); // можно request тут заменить сразу на requestId, если удобнее
+            map.put(request.getTrack(), request.getId());
         }
         model.addAttribute("user", moderator);
         model.addAttribute("requests", map);
@@ -49,7 +49,7 @@ public class ModeratorController {
     @PostMapping("/{uploadRequestId}/approve")
     public String approve(Principal principal,
                           @PathVariable Long uploadRequestId,
-                          @RequestHeader String referer) // тут скорее всего не @RequestParam - все зависит от того, как ты сделаешь меню ввода текста
+                          @RequestHeader String referer)
             throws UploadRequestNotFoundException {
         User moderator = Utils.getUserFromPrincipal(principal, userService);
         UploadRequest uploadRequest = uploadRequestService.getRequest(uploadRequestId);

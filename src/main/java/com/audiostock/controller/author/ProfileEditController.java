@@ -1,6 +1,7 @@
 package com.audiostock.controller.author;
 
 import com.audiostock.entities.Track;
+import com.audiostock.entities.UploadRequest;
 import com.audiostock.entities.User;
 import com.audiostock.service.UploadRequestService;
 import com.audiostock.service.UserService;
@@ -16,7 +17,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/profile")
@@ -46,7 +49,14 @@ public class ProfileEditController {
         List<Track> releasesActive = userService.getActiveReleasesSortedByName(user);
         List<Track> releasesInactive = userService.getInactiveReleasesSortedByName(user);
         List<Track> pending = new ArrayList<>(uploadRequestService.getRequestedTracksByAuthor(user));
-        List<Track> declined = new ArrayList<>(uploadRequestService.getDeclinedTracksByAuthor(user));
+//        List<Track> declined = new ArrayList<>(uploadRequestService.getDeclinedTracksByAuthor(user));
+
+        List<UploadRequest> requests = uploadRequestService.getDeclinedRequestsByAuthor(user);
+
+        Map<Track, String> declined = new HashMap<>();
+        for (UploadRequest request : requests) {
+            declined.put(request.getTrack(), request.getRejectionReason());
+        }
 
         model.addAttribute("user", user);
         model.addAttribute("rel", true);

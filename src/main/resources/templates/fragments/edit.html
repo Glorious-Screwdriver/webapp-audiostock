@@ -88,7 +88,7 @@
             </ul>
             <h3  style="background-color:rgb(251, 177, 177);font-weight: normal; color:rgb(153, 117, 117); margin-top:20px; border-bottom: none;" th:if="${declined.size()!=0}">Отклоненные</h3>
             <ul>
-                <li th:replace="fragments/catalogue :: edit-list(${declined})"></li>
+                <li th:replace="fragments/catalogue :: declined-list(${declined})"></li>
             </ul>
         </section>
     </div>
