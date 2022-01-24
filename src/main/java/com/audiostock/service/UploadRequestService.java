@@ -96,6 +96,9 @@ private final UploadRequestRepo requestRepo;
         final User moderator = moderators.get(r.nextInt(moderators.size()));
         request.setModerator(moderator);
 
+        System.out.println("Track " + track.getName() + " [" + track.getId() + "] was assigned to moderator "
+                + moderator.getLogin() + " [" + moderator.getId() + "]");
+
         requestRepo.save(request);
     }
 

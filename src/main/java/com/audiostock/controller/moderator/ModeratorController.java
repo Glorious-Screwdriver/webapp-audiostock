@@ -65,6 +65,8 @@ public class ModeratorController {
                           @RequestParam String rejectionReason,
                           @RequestHeader String referer)
             throws UploadRequestNotFoundException {
+        if (rejectionReason == null) return "redirect:/moderation";
+
         User moderator = Utils.getUserFromPrincipal(principal, userService);
         UploadRequest uploadRequest = uploadRequestService.getRequest(uploadRequestId);
 
