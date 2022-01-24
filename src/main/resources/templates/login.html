@@ -1,5 +1,4 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
-      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
       lang="java">
 <head>
     <title>login</title>
@@ -109,7 +108,7 @@
     <a th:href="@{/}"><h3>WYM</h3></a>
 
     <p class="error" th:if="${param.error}">
-        Invalid username and password.
+        Неверный логин и/или пароль.
     </p>
 
     <label for="username">Логин:</label>
