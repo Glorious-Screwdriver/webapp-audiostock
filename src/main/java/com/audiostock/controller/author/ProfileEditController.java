@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,19 +44,15 @@ public class ProfileEditController {
     @GetMapping("/releases")
     public String releases(Principal principal, Model model) {
         User user = Utils.getUserFromPrincipal(principal, userService);
-//        List<Track> releasesActive = userService.getActiveReleasesSortedByName(user);
-//        List<Track> releasesInactive = userService.getInactiveReleasesSortedByName(user);
-//        List<Track> declined = new ArrayList<>(uploadRequestService.getDeclinedTracksByAuthor(user));
 
-        List<Track> pending = new ArrayList<>(uploadRequestService.getRequestedTracksByAuthor(user));
-        List<Track> releases = uploadRequestService.getNotDeclinedRequestsByAuthor(user);
-        List<UploadRequest> areDeclined = uploadRequestService.getDeclinedRequestsByAuthor(user);
+        List<Track> releases = uploadRequestService.getApprovedTracksByAuthor(user);
+        List<Track> pending = uploadRequestService.getRequestedTracksByAuthor(user);
 
+        List<UploadRequest> declinedRequests = uploadRequestService.getDeclinedRequestsByAuthor(user);
         Map<Track, String> declined = new HashMap<>();
-        for (UploadRequest request : areDeclined) {
+        for (UploadRequest request : declinedRequests) {
             declined.put(request.getTrack(), request.getRejectionReason());
         }
-
 
         model.addAttribute("user", user);
         model.addAttribute("rel", true);

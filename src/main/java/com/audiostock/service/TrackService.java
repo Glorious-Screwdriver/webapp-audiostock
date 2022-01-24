@@ -96,6 +96,7 @@ public class TrackService {
             return new TrackUploadReport(false, "Ошибка при загрузке обложки!");
         }
 
+        userService.addRelease(author, track);
         return new TrackUploadReport(true, track);
     }
 

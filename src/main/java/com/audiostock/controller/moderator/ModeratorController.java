@@ -41,15 +41,15 @@ public class ModeratorController {
         for (UploadRequest request : requests) {
             map.put(request.getTrack(), request.getId());
         }
+
         model.addAttribute("user", moderator);
         model.addAttribute("requests", map);
+
         return "moderation";
     }
 
     @PostMapping("/{uploadRequestId}/approve")
-    public String approve(Principal principal,
-                          @PathVariable Long uploadRequestId,
-                          @RequestHeader String referer)
+    public String approve(Principal principal, @PathVariable Long uploadRequestId, @RequestHeader String referer)
             throws UploadRequestNotFoundException {
         User moderator = Utils.getUserFromPrincipal(principal, userService);
         UploadRequest uploadRequest = uploadRequestService.getRequest(uploadRequestId);
@@ -58,11 +58,12 @@ public class ModeratorController {
 
         return "redirect:" + referer;
     }
+
     @PostMapping("/{uploadRequestId}/decline")
     public String decline(Principal principal,
                           @PathVariable Long uploadRequestId,
                           @RequestParam String rejectionReason,
-                          @RequestHeader String referer) // тут скорее всего не @RequestParam - все зависит от того, как ты сделаешь меню ввода текста
+                          @RequestHeader String referer)
             throws UploadRequestNotFoundException {
         User moderator = Utils.getUserFromPrincipal(principal, userService);
         UploadRequest uploadRequest = uploadRequestService.getRequest(uploadRequestId);

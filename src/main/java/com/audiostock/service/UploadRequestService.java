@@ -37,13 +37,23 @@ private final UploadRequestRepo requestRepo;
         return requestRepo.findAllByModeratorAndSolutionNullOrderByCreationDate(moderator);
     }
 
+    /**
+     * Возвращает все {@code UploadRequest}-ы с отрицательным решением
+     * @param author Автор треков в {@code UploadRequest}-ах
+     * @return Отклонённые {@code UploadRequest}-ы
+     */
     public List<UploadRequest> getDeclinedRequestsByAuthor(User author) {
         return requestRepo.findAllByAuthorAndSolutionFalse(author);
     }
 
     // Representation
 
-    public List<Track> getNotDeclinedRequestsByAuthor(User author) {
+    /**
+     * Возвращает все треки автора с положительным решением
+     * @param author Автор треков
+     * @return Список треков с положительным решением
+     */
+    public List<Track> getApprovedTracksByAuthor(User author) {
         return getTracksFromRequests(requestRepo.findAllByAuthorAndSolutionTrue(author));
     }
 
@@ -97,10 +107,9 @@ private final UploadRequestRepo requestRepo;
 
         final Track track = uploadRequest.getTrack();
         track.setActive(true);
-
         trackRepo.save(track);
+
         requestRepo.save(uploadRequest);
-        userService.addRelease(uploadRequest.getAuthor(), track);
     }
 
     public void declineRequest(Long id, String rejectionReason) throws UploadRequestNotFoundException {
