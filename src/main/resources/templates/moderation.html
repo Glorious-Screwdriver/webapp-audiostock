@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>wym</title>
+    <link rel="stylesheet" th:href="@{/styles/cssandjs/main.css}" href="../static/styles/cssandjs/main.css">
+
+</head>
+<body>
+<div class="container">
+    <header th:replace="fragments/header :: user-header"></header>
+    <section class="catalogue">
+        <ul>
+            <li th:replace="fragments/catalogue :: moderation-list(${requests})" th:each="requests"></li>
+        </ul>
+    </section>
+</div>
+</body>
+</html>

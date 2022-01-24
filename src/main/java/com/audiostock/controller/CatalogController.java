@@ -32,8 +32,7 @@ public class CatalogController {
         User user = Utils.getUserFromPrincipal(principal, userService);
 
         if (user != null && statusService.isModerator(user)) {
-            //TODO moderation view
-            throw new UnsupportedOperationException("/moderation view is not supported");
+            return "redirect:/moderation";
         }
 
         // Printing username in the header
