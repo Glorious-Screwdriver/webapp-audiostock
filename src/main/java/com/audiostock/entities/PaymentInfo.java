@@ -13,16 +13,16 @@ public class PaymentInfo {
     private String cardOwner;
 
     @Column(nullable = false)
-    private long cardNumber;
+    private String cardNumber;
 
     @Column(length = 5, nullable = false)
     private LocalDate expireDate;
 
     @Column(nullable = false)
-    private int cvv;
+    private String cvv;
 
     @Column(nullable = false)
-    private int postalCode;
+    private String postalCode;
 
     @Column(length = 100, nullable = false)
     private String address;
@@ -30,7 +30,7 @@ public class PaymentInfo {
     public PaymentInfo() {
     }
 
-    public PaymentInfo(String cardOwner, long cardNumber, LocalDate expireDate, int cvv, int postalCode, String address) {
+    public PaymentInfo(String cardOwner, String cardNumber, LocalDate expireDate, String cvv, String postalCode, String address) {
         this.cardOwner = cardOwner;
         this.cardNumber = cardNumber;
         this.expireDate = expireDate;
@@ -55,11 +55,11 @@ public class PaymentInfo {
         this.cardOwner = cardOwner;
     }
 
-    public long getCardNumber() {
+    public String getCardNumber() {
         return cardNumber;
     }
 
-    public void setCardNumber(long cardNumber) {
+    public void setCardNumber(String cardNumber) {
         this.cardNumber = cardNumber;
     }
 
@@ -71,19 +71,19 @@ public class PaymentInfo {
         this.expireDate = expireDate;
     }
 
-    public int getCvv() {
+    public String getCvv() {
         return cvv;
     }
 
-    public void setCvv(int cvv) {
+    public void setCvv(String cvv) {
         this.cvv = cvv;
     }
 
-    public int getPostalCode() {
+    public String getPostalCode() {
         return postalCode;
     }
 
-    public void setPostalCode(int postalCode) {
+    public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
     }
 

@@ -63,14 +63,14 @@ public class BalanceController {
         final String cardOwner = params.get("cardOwner");
         PaymentInfo paymentInfo = new PaymentInfo(
                 cardOwner,
-                Long.parseLong(params.get("cardNumber")),
+                params.get("cardNumber"),
                 LocalDate.of(
                         Integer.parseInt(params.get("year")),
                         Integer.parseInt(params.get("month")),
                         1
                 ),
-                Integer.parseInt(params.get("cvv")),
-                Integer.parseInt(params.get("postalCode")),
+                params.get("cvv"),
+                params.get("postalCode"),
                 params.get("address")
         );
         userService.savePaymentMethod(user, paymentInfo);
