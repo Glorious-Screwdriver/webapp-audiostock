@@ -12,8 +12,8 @@
         <div class="about-container">
             <form th:action="@{/profile/releases/upload}" method="post" enctype="multipart/form-data">
                 <div class="marginBottom">
-                    <p class="error" th:if="${message}!=null" th:text="${message}">error</p>
-                    <h3>Загрузить обложку</h3>
+                    <p style="margin-top:30px;" class="error" th:if="${message}!=null" th:text="${message}">error</p>
+                    <h3 style="margin-top:40px;">Загрузить обложку</h3>
 
                     <div class="underbox marginBottom">
                         <input class="upload-photo" type="file" name="cover" accept="image/jpeg"/ required>

@@ -78,7 +78,7 @@
             <a th:href="@{/profile/releases/upload}">добавить трек</a>
         </div>
         <section class="catalogue many-catalogue">
-            <h3 style="background-color:rgb(195, 251, 177);font-weight: normal; color:rgb(155, 173, 136); margin-top:20px; border-bottom: none;" th:if="${releases.size()!=0}">Выложенные</h3>
+            <h3 style="background-color:rgb(195, 251, 177);font-weight: normal; color:rgb(155, 173, 136); margin-top:20px; border-bottom: none;" th:if="${releases.size()!=0}">Принятые</h3>
             <ul>
                 <li th:replace="fragments/catalogue :: edit-list(${releases})"></li>
             </ul>

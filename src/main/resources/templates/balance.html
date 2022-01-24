@@ -16,7 +16,7 @@
 		</div>
 		<div>
 			<label for="cardOwner">Владелец</label>
-			<input type="text" id="cardOwner" name="cardOwner" maxlength="30" required>
+			<input th:value="${paymentInfo.getCardOwner()}" type="text" id="cardOwner" name="cardOwner" maxlength="30" required>
 		</div>
 		<div>
 			<label for="cvv">CVV</label>
@@ -24,43 +24,43 @@
 		</div>
 		<div>
 			<label for="cardNumber">Номер</label>
-			<input type="number" id="cardNumber" name="cardNumber" min="0" max="9999999999999999" oninput="if (this.value.length > 16) {this.value = this.value.slice(0,16);}" required>
+			<input th:value="${paymentInfo.getCardNumber()}" type="number" id="cardNumber" name="cardNumber" min="0" max="9999999999999999" oninput="if (this.value.length > 16) {this.value = this.value.slice(0,16);}" required>
 		</div>
 		<div>
 			<label>Срок действия<br>
 			</label>
-			<select name="month" id="month" required>
-			  <option value="1">Январь</option>
-				<option value="2">Февраль </option>
-				<option value="3">Март</option>
-				<option value="4">Апрель</option>
-				<option value="5">Май</option>
-				<option value="6">Июнь</option>
-				<option value="7">Июль</option>
-				<option value="8">Август</option>
-				<option value="9">Сентябрь</option>
-				<option value="10">Октябрь</option>
-				<option value="11">Ноябрь</option>
-				<option value="12">Декабрь</option>
+			<select name="month" id="month" required th:with="m = ${paymentInfo.getExpireDate.getMonthValue()}">
+			  <option value="1" th:selected="${m==1}">Январь</option>
+				<option value="2" th:selected="${m==2}">Февраль </option>
+				<option value="3" th:selected="${m==3}">Март</option>
+				<option value="4" th:selected="${m==4}">Апрель</option>
+				<option value="5" th:selected="${m==5}">Май</option>
+				<option value="6" th:selected="${m==6}">Июнь</option>
+				<option value="7" th:selected="${m==7}">Июль</option>
+				<option value="8" th:selected="${m==8}">Август</option>
+				<option value="9" th:selected="${m==9}">Сентябрь</option>
+				<option value="10" th:selected="${m==10}">Октябрь</option>
+				<option value="11" th:selected="${m==11}">Ноябрь</option>
+				<option value="12" th:selected="${m==12}">Декабрь</option>
 			</select>
-			<select name = "year" id="year" required>
-				<option value="2022"> 2022</option>
-				<option value="2023"> 2023</option>
-				<option value="2024"> 2024</option>
-				<option value="2025"> 2025</option>
-				<option value="2026"> 2026</option>
-				<option value="2027"> 2027</option>
-				<option value="2028"> 2028</option>
-				<option value="2029"> 2029</option>
+			<select name = "year" id="year" required th:with="y = ${paymentInfo.getExpireDate.getYear()}">
+				<option value="2022" th:selected="${y==2022}"> 2022</option>
+				<option value="2023" th:selected="${y==2023}"> 2023</option>
+				<option value="2024" th:selected="${y==2024}"> 2024</option>
+				<option value="2025" th:selected="${y==2025}"> 2025</option>
+				<option value="2026" th:selected="${y==2026}"> 2026</option>
+				<option value="2027" th:selected="${y==2027}"> 2027</option>
+				<option value="2028" th:selected="${y==2028}"> 2028</option>
+				<option value="2029" th:selected="${y==2029}"> 2029</option>
 			</select>
 		</div>
 		<div>
 			<label for="address">Адрес</label>
-			<input type="text" id="address" name="address" required>
+			<input th:value="${paymentInfo.getAddress()}" type="text" id="address" name="address" required>
 		</div>
 		<div>
 			<label for="postalCode">Почтовый индекс</label>
-			<input type="text" id="postalCode" name="postalCode" pattern="[0-9]{6}" maxlength="6" required>
+			<input th:value="${paymentInfo.getPostalCode()}" type="text" id="postalCode" name="postalCode" pattern="[0-9]{6}" maxlength="6" required>
 		</div>
 		<div>
 			<input type="submit" id="confirm-purchase" value = "Оплатить">

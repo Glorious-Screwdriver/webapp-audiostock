@@ -22,7 +22,7 @@
                        th:href="@{/user/{u}(u=${track.getAuthor().getLogin()})}">Автор</a>
                 </div>
                 <div class="audio">
-                    <audio controls th:src="@{/data/preview/{i}.mp3(i=${track.getId()})}">audio is not supported</audio>
+                    <audio controls th:src="@{/data/previews/{i}.mp3(i=${track.getId()})}">audio is not supported</audio>
                     <p th:text="${track.getGenre()}+' / '+${track.getMood()}">джаз/грусть</p>
                 </div>
                 <div class="buttons">
@@ -86,7 +86,7 @@
                         <button name="edit">ред.</button>
                     </form>
                     <form th:if="${active}" th:action="@{/profile/releases/{i}/deactivate(i=${track.getId()})}" method="post">
-                        <button  name="delete" th:value="удалить" class="delete" onclick="return confirm('Вы уверены?')">убрать</button>
+                        <button  name="delete" th:value="удалить" class="delete" onclick="return confirm('Вы уверены?')">скрыть</button>
                     </form>
                     <form th:if="${!active}" th:action="@{/profile/releases/{i}/activate(i=${track.getId()})}" method="post">
                         <button name="delete" th:value="удалить" class="delete" style="background-color:white; color: #AAA;">вернуть</button>
@@ -113,7 +113,7 @@
                 </div>
                 <div class="buttons">
                     <form th:action="@{/moderation/{i}/approve(i=${rid})}" method="post">
-                        <button class="ok-button" name="ok">норм</button>
+                        <button class="ok-button" name="ok">ок</button>
                     </form>
                     <form th:action="@{/moderation/{i}/decline(i=${rid})}" method="post">
                         <button name="rejectionReason" class="delete" onclick="this.value = prompt('Enter something!');">отклонить</button>
