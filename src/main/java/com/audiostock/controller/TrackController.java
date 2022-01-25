@@ -125,13 +125,11 @@ public class TrackController {
 
     @ExceptionHandler(TrackNotFoundException.class)
     public String trackNotFound(TrackNotFoundException e) {
-        //TODO trackNotFound view
-        throw new UnsupportedOperationException(e);
+        return "trackNotFound";
     }
 
     @ExceptionHandler(TrackIsNotActiveException.class)
     public String trackIsNotActive(TrackIsNotActiveException e) throws TrackNotFoundException {
-        //TODO trackIsNotActive view
         throw new TrackNotFoundException(e);
     }
 

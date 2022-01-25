@@ -77,9 +77,8 @@ public class ModeratorController {
     }
 
     @ExceptionHandler(UploadRequestNotFoundException.class)
-    public String uploadRequestNotFound(UploadRequestNotFoundException e) {
-        //TODO uploadRequestNotFound view
-        throw new UnsupportedOperationException(e);
+    public void uploadRequestNotFound(UploadRequestNotFoundException e) {
+        e.printStackTrace();
     }
 
 }

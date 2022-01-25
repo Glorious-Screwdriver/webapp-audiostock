@@ -7,10 +7,10 @@
 </head>
 <body>
 <div class="container">
-    <section th:fragment="searchbar" class="searchbar">
+    <section th:action="@{/}" th:fragment="searchbar" class="searchbar">
         <form method="get">
             <div class="bar">
-                <input type="text" id="search" placeholder="поиск">
+                <input type="text" id="name" placeholder="поиск">
             </div>
             <div class="mood">
                 <input type="text" id="mood" placeholder="Настроение">

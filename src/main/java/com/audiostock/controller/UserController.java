@@ -75,8 +75,7 @@ public class UserController {
     public String userNotFound(UserNotFoundException e) {
         e.printStackTrace();
 
-        //TODO userNotFound view
-        throw new UnsupportedOperationException(e);
+        return "userNotFound";
     }
 
 }
