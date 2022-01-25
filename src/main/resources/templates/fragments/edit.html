@@ -23,7 +23,7 @@
                 <h3>Сменить аватар</h3>
                 <div class="underbox marginBottom">
                     <form th:action="@{/profile}" method="post" enctype="multipart/form-data">
-                        <input class="upload-photo" type="file" name="image" accept="image/jpeg"/>
+                        <input class="upload-photo" type="file" name="avatar" accept="image/jpeg"/>
                         <input type="submit" value="Загрузить изображение" />
                     </form>
                 </div>
@@ -33,7 +33,7 @@
                            maxlength="16">
                 </form>
             </div>
-            <h3>Сменить пароль</h3>
+            <h3>Сменить ФИО</h3>
             <div class="underbox marginBottom">
                 <form th:action="@{/profile}" method="post">
                     <label for="firstname">Имя</label>
