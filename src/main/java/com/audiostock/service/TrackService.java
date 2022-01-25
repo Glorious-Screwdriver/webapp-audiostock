@@ -39,9 +39,9 @@ public class TrackService {
 
     public List<Track> search(String name, String genre, String mood) {
         return getAllActive().stream()
-                .filter(track -> name.equals("") || track.getName().contains(name))
-                .filter(track -> genre.equals("") || track.getGenre().contains(genre))
-                .filter(track -> mood.equals("") || track.getMood().contains(mood))
+                .filter(track -> name.equals("") || track.getName().toLowerCase().contains(name.toLowerCase()))
+                .filter(track -> genre.equals("") || track.getGenre().toLowerCase().contains(genre.toLowerCase()))
+                .filter(track -> mood.equals("") || track.getMood().toLowerCase().contains(mood.toLowerCase()))
                 .collect(Collectors.toList());
     }
 
