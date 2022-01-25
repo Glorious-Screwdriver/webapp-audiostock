@@ -59,7 +59,7 @@ public class PurchasedController {
             throw new TrackNotFoundException(track, "Illegal download request");
         }
 
-        Path filePath = Paths.get("src/main/resources/static/data/tracks/" + track.getId() + ".mp3");
+        Path filePath = Paths.get("data/tracks/" + track.getId() + ".mp3");
         if (Files.exists(filePath)) {
             String filename = (track.getAuthor().getLogin() + " - " + track.getName())
                     .replace(" ", "_");
