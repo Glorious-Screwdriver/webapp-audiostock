@@ -6,8 +6,6 @@ import com.audiostock.repos.TrackRepo;
 import com.audiostock.service.exceptions.TrackNotFoundException;
 import com.audiostock.service.reports.TrackUploadReport;
 import com.audiostock.service.util.FileUploadUtil;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -39,15 +37,12 @@ public class TrackService {
         return trackRepo.findAllByActiveTrue();
     }
 
-    public List<Track> getCatalog(int page, int size) {
-        return getCatalog(page, size, "name", "", "", 0L, 999L);
-    }
-
-    public List<Track> getCatalog(int page, int size, String sorting,
-                                  String mood, String genre, Long lbpm, Long hbpm) {
-        return trackRepo.findAllByGenreAndMoodAndBpmIsGreaterThanAndBpmIsLessThan(
-                PageRequest.of(page, size).withSort(Sort.by(sorting)), genre, mood, lbpm, hbpm
-        ).stream().collect(Collectors.toList());
+    public List<Track> search(String name, String genre, String mood) {
+        return getAllActive().stream()
+                .filter(track -> name.equals("") || track.getName().contains(name))
+                .filter(track -> genre.equals("") || track.getGenre().contains(genre))
+                .filter(track -> mood.equals("") || track.getMood().contains(mood))
+                .collect(Collectors.toList());
     }
 
     // Presence in user lists
