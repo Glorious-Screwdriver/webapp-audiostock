@@ -4,11 +4,14 @@
     <meta charset="UTF-8">
     <title>main</title>
     <link rel="stylesheet" th:href="@{/styles/cssandjs/main.css}" href="../static/styles/cssandjs/main.css">
-
+	<link rel="shortcut icon" th:href="@{/img/favicon.ico}" type="image/x-icon">
 </head>
 <body>
 <div class="balance">
     <h2>Пополнение баланса</h2>
+    <p style = "сolor:#AAA;" th:text="${'баланс: ' user.getBalance()}">
+      баланс:
+    </p>
 	<form th:action="@{/balance}" method="post">
 		<div>
 			<label for="amount">Сумма</label>

@@ -119,7 +119,7 @@ header .nav div.dropdown-content{
 }
 .searchbar div:first-of-type{
   margin-right: 45px;
-  margin-left: 40px;
+  margin-left: 20px;
 }
 .searchbar input{
   font-size: 15px;
@@ -127,7 +127,7 @@ header .nav div.dropdown-content{
 }
 .search-btn{
   position:absolute;
-  right:2px;
+  right:10px;
   width:30px;
   height:30px;
   background:#EEE;
@@ -172,15 +172,15 @@ header .nav div.dropdown-content{
   width: 150px;
 }
 .track .info a {
+  font-size: 15px;
   color:black;
-  font-size: 18px;
   text-decoration: none;
   margin-top: 10px;
   display: block;
 }
 .track .info a:nth-of-type(2) {
   color: #AAA;
-  font-size: 15px;
+  font-size: 14px;
   text-decoration: underline;
 }
 .track .audio{

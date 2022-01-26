@@ -8,14 +8,14 @@
 <body>
 <div class="container">
     <header th:fragment="guest-header">
-        <a th:href="@{/}" class="logo"><h1>WYM</h1></a>
+        <a th:href="@{/}" class="logo"><img th:src="@{/img/logo.png}" src="../../static/img/logo.png" height="38px" /></a>
         <div class="nav">
             <div><a th:href="@{/register}">Регистрация</a></div>
             <div><a th:href="@{/login}">Вход</a></div>
         </div>
     </header>
     <header th:fragment="user-header">
-        <a th:href="@{/}" class="logo"><h1>WYM</h1></a>
+        <a th:href="@{/}" class="logo"><img th:src="@{/img/logo.png}" src="../../static/img/logo.png" height="38px" /></a>
         <div class="nav">
             <div class="profile-mini">
                 <a th:href="@{/user/{u}(u=${user.getLogin()})}">
@@ -29,6 +29,7 @@
                 <div class="dropdown-content">
                     <a th:href="@{/profile}">редактировать профиль</a>
                     <a th:href="@{/balance}" th:text="'баланс: '+${user.getBalance()}">баланс: 2р</a>
+                    <a th:href="@{/withdraw}">вывод средств</a>
                     <a th:href="@{/purchased}">купленные треки</a>
                     <a th:href="@{/logout}" class="logout">выйти</a>
                 </div>
