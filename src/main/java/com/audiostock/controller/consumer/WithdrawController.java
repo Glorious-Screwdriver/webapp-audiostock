@@ -78,7 +78,7 @@ public class WithdrawController {
         boolean completed = userService.makeWithdrawal(user, Long.parseLong(params.get("amount")));
 
         if(!completed){
-            model.addAttribute("message", "не возможно снять средства");
+            model.addAttribute("message", "Невозможно снять средства");
             model.addAttribute("paymentInfo", user.getPaymentInfo());
             model.addAttribute("balance", user.getBalance());
             return"withdraw";
