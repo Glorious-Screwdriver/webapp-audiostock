@@ -36,8 +36,14 @@ public class TrackController {
         Track track = trackService.getTrackById(trackId);
         User user = Utils.getUserFromPrincipal(principal, userService);
 
-        if (!track.isActive() && !statusService.isModerator(user)) {
-            throw new TrackIsNotActiveException(String.valueOf(track.getId()));
+        if (!track.isActive()) {
+            if (user == null) {
+                throw new TrackIsNotActiveException(String.valueOf(track.getId()));
+            }
+
+            if (!statusService.isModerator(user)) {
+                throw new TrackIsNotActiveException(String.valueOf(track.getId()));
+            }
         }
         model.addAttribute("track", track);
 
@@ -119,18 +125,6 @@ public class TrackController {
         if (!track.isActive()) {
             throw new TrackIsNotActiveException(String.valueOf(track.getId()));
         }
-    }
-
-    // Exceptions
-
-    @ExceptionHandler(TrackNotFoundException.class)
-    public String trackNotFound(TrackNotFoundException e) {
-        return "trackNotFound";
-    }
-
-    @ExceptionHandler(TrackIsNotActiveException.class)
-    public String trackIsNotActive(TrackIsNotActiveException e) throws TrackNotFoundException {
-        throw new TrackNotFoundException(e);
     }
 
 }
