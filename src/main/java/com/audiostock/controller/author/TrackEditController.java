@@ -69,7 +69,7 @@ public class TrackEditController {
         return "redirect:/track/" + trackId;
     }
 
-    @PostMapping(value = "/{trackId}", params = "cover", consumes = "multipart/form-data")
+    @PostMapping(value = "/{trackId}", consumes = "multipart/form-data")
     public String changeCover(Principal principal, @PathVariable long trackId, Model model,
                               @RequestParam("cover") MultipartFile cover) throws TrackNotFoundException {
         User author = Utils.getUserFromPrincipal(principal, userService);

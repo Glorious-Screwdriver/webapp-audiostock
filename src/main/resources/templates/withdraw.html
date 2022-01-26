@@ -8,15 +8,15 @@
 </head>
 <body>
 <div class="balance">
-    <h2>Пополнение баланса</h2>
+    <h2>Списание средств</h2>
 	<p class="error" th:if="${message!=null}" th:text="${message}"></p>
     <p style = "color:#AAA;" th:text="'текущий баланс: ' + ${balance}">
       баланс:
     </p>
-	<form th:action="@{/balance}" method="post">
+	<form th:action="@{/withdraw}" method="post">
 		<div>
 			<label for="amount">Сумма</label>
-			<input type="number" id="amount" min="0" max="10000" name="amount" th:value="${total}" required>
+			<input type="number" id="amount" min="0" max="10000" name="amount" required>
 		</div>
 		<div>
 			<label for="cardOwner">Владелец</label>
@@ -67,7 +67,7 @@
 			<input th:value="${paymentInfo != null ? paymentInfo.getPostalCode() : ''}" type="text" id="postalCode" name="postalCode" pattern="[0-9]{6}" maxlength="6" required>
 		</div>
 		<div>
-			<input type="submit" id="confirm-purchase" value = "Оплатить">
+			<input type="submit" id="confirm-purchase" value = "Списать">
 		</div>
 	</form>
 </div>

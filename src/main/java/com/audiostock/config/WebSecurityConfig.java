@@ -40,7 +40,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
                 // CONSUMERS
                 .antMatchers("/favorite", "/cart", "/cart/checkout", "/track/*/*").hasRole(CONSUMER)
-                .antMatchers( "/balance", "/purchased", "/purchased/*").hasRole(CONSUMER)
+                .antMatchers( "/balance","/withdraw", "/purchased", "/purchased/*").hasRole(CONSUMER)
 
                 // AUTHORS
                 .antMatchers("/profile", "/profile/releases", "/profile/releases/*", "/profile/releases/*/*").hasRole(AUTHOR)

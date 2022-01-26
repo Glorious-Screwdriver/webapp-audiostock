@@ -15,8 +15,7 @@
                 <p class="error" th:if="${message}!=null" th:text="${message}">error</p>
                 <h3>Загрузить обложку</h3>
                 <div class="underbox marginBottom">
-                    <form th:action="@{/profile/releases/{i}(i=${track.getId()})}" method="post"
-                          enctype="multipart/form-data">
+                    <form th:action="@{/profile/releases/{i}(i=${track.getId()})}" method="post" enctype="multipart/form-data">
                         <input class="upload-photo" type="file" name="cover" accept="image/jpeg">
                         <input type="submit" value="Изменить">
                     </form>

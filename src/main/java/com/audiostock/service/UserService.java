@@ -252,7 +252,7 @@ public class UserService {
         userRepo.save(user);
     }
 
-    public boolean withdrawFunds(User user, Long amount) {
+    public boolean makeWithdrawal(User user, Long amount) {
         if (user.getBalance() < amount) {
             System.out.println(user.getLogin() + " doesn't have enough money to withdraw");
             return false;
@@ -376,5 +376,4 @@ public class UserService {
         userRepo.save(user);
         return true;
     }
-
 }
