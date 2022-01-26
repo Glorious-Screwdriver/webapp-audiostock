@@ -118,12 +118,25 @@ header .nav div.dropdown-content{
   margin-right:16px;
 }
 .searchbar div:first-of-type{
-  margin-right: 70px;
+  margin-right: 45px;
   margin-left: 40px;
 }
 .searchbar input{
   font-size: 15px;
   padding: 4px 10px;
+}
+.search-btn{
+  position:absolute;
+  right:2px;
+  width:30px;
+  height:30px;
+  background:#EEE;
+  border:1px solid #AAA;
+  margin-top:5px;
+  border-radius: 4px;
+}
+.search-btn:hover{
+  background-color: white;
 }
 .catalogue{
   border: 1px solid #AAA;
