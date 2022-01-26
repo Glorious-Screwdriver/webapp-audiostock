@@ -16,7 +16,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     final private String CONSUMER = "CONSUMER";
-    final private String AUTHOR = "CONSUMER"; // Пока не реализовано разделение
     final private String MODERATOR = "MODERATOR";
 
     private final UserRepo userRepo;
@@ -43,7 +42,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers( "/balance", "/purchased", "/purchased/*").hasRole(CONSUMER)
 
                 // AUTHORS
-                .antMatchers("/profile", "/profile/releases", "/profile/releases/*", "/profile/releases/*/*").hasRole(AUTHOR)
+                .antMatchers("/profile", "/profile/releases", "/profile/releases/*", "/profile/releases/*/*").hasRole(CONSUMER)
 
                 // MODERATORS
                 .antMatchers("/moderation", "/moderation/*").hasRole(MODERATOR)
