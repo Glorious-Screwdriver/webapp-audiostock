@@ -35,11 +35,8 @@ public class User {
     @OneToOne
     private PaymentInfo paymentInfo;
 
-    @Column(length = 100)
+    @Column(length = 500)
     private String biography;
-
-    @Lob
-    private byte[] avatar;
 
     @OneToMany
     private Set<Track> releases;
@@ -144,14 +141,6 @@ public class User {
         this.biography = biography;
     }
 
-    public byte[] getAvatar() {
-        return avatar;
-    }
-
-    public void setAvatar(byte[] avatar) {
-        this.avatar = avatar;
-    }
-
     public Set<Track> getReleases() {
         return releases;
     }
@@ -194,7 +183,7 @@ public class User {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj.getClass() == User.class) return false;
+        if (obj.getClass() != User.class) return false;
         User user = (User) obj;
         return id.equals(user.getId());
     }

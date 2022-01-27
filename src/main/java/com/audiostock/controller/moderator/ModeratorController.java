@@ -9,6 +9,7 @@ import com.audiostock.service.UserService;
 import com.audiostock.service.exceptions.UploadRequestNotFoundException;
 import com.audiostock.service.util.Utils;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -31,45 +32,53 @@ public class ModeratorController {
     }
 
     @GetMapping
-    public String moderation(Principal principal) {
+    public String moderation(Principal principal, Model model) {
         User moderator = Utils.getUserFromPrincipal(principal, userService);
 
         List<UploadRequest> requests = uploadRequestService.getRequestsByModerator(moderator);
 
-        Map<Track, UploadRequest> map = new HashMap<>();
+        Map<Track, Long> map = new HashMap<>();
         for (UploadRequest request : requests) {
-            map.put(request.getTrack(), request); // можно request тут заменить сразу на requestId, если удобнее
+            map.put(request.getTrack(), request.getId());
         }
 
-        //TODO moderation view
-        throw new UnsupportedOperationException();
+        model.addAttribute("user", moderator);
+        model.addAttribute("requests", map);
+
+        return "moderation";
     }
 
-    @PostMapping("/{uploadRequestId}")
-    public String process(Principal principal,
-                          @PathVariable Long uploadRequestId,
-                          @RequestParam boolean decision,
-                          @RequestParam String rejectionReason,
-                          @RequestHeader String referer) // тут скорее всего не @RequestParam - все зависит от того, как ты сделаешь меню ввода текста
+    @PostMapping("/{uploadRequestId}/approve")
+    public String approve(Principal principal, @PathVariable Long uploadRequestId, @RequestHeader String referer)
             throws UploadRequestNotFoundException {
         User moderator = Utils.getUserFromPrincipal(principal, userService);
         UploadRequest uploadRequest = uploadRequestService.getRequest(uploadRequestId);
 
-        if (uploadRequest.getModerator().equals(moderator)) {
-            if (decision) {
-                uploadRequestService.approveRequest(uploadRequestId);
-            } else {
-                uploadRequestService.declineRequest(uploadRequestId, rejectionReason);
-            }
-        }
+        if (uploadRequest.getModerator().equals(moderator)) uploadRequestService.approveRequest(uploadRequestId);
+
+        return "redirect:" + referer;
+    }
+
+    @PostMapping("/{uploadRequestId}/decline")
+    public String decline(Principal principal,
+                          @PathVariable Long uploadRequestId,
+                          @RequestParam String rejectionReason,
+                          @RequestHeader String referer)
+            throws UploadRequestNotFoundException {
+        if (rejectionReason == null) return "redirect:/moderation";
+
+        User moderator = Utils.getUserFromPrincipal(principal, userService);
+        UploadRequest uploadRequest = uploadRequestService.getRequest(uploadRequestId);
+
+        if (uploadRequest.getModerator().equals(moderator))
+            uploadRequestService.declineRequest(uploadRequestId, rejectionReason);
 
         return "redirect:" + referer;
     }
 
     @ExceptionHandler(UploadRequestNotFoundException.class)
-    public String uploadRequestNotFound(UploadRequestNotFoundException e) {
-        //TODO uploadRequestNotFound view
-        throw new UnsupportedOperationException(e);
+    public void uploadRequestNotFound(UploadRequestNotFoundException e) {
+        e.printStackTrace();
     }
 
 }

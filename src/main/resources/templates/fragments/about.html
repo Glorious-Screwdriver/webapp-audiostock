@@ -18,6 +18,7 @@
         </div>
         <div class="about-container">
             <h2 th:text="${author.getLogin()}">Имя исполнителя</h2>
+            <h4 style="text-align: center; color: #AAA;" th:text="${author.getLastname()+' '+author.getFirstname()+' '+author.getMiddlename()}">Фамилия Имя Отчество</h4>
             <div class="description">
                 <h3>Описание</h3>
                 <p th:text="${author.getBiography()}">2021-12-28 20:25:39.757 WARN 17896 —- [nio-8080-exec-2]

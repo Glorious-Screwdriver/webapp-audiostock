@@ -8,11 +8,11 @@
 </head>
 <body>
 <div class="container">
-    <header th:replace="fragments/header :: ${logged}?'user-header':'guest-header'"></header>
+    <header th:replace="fragments/header :: 'user-header'"></header>
     <div class="profile">
-        <img class="profile-maxi" th:src="@{/data/avatars/{i}.jpg(i=${author.getId()})}" onerror="this.onerror=null; this.src='/img/guest-icon.jpg'">
+        <img class="profile-maxi" th:src="@{/data/avatars/{i}.jpg(i=${user.getId()})}" onerror="this.onerror=null; this.src='/img/guest-icon.jpg'">
     </div>
-    <div th:replace="fragments/about :: ${tracks!=null}? 'tracks':'info'" class="about"></div>
+    <div th:replace="fragments/edit :: ${rel}?'tracks':'info'" class="about"></div>
 </div>
 </body>
 </html>

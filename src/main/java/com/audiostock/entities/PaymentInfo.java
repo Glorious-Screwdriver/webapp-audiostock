@@ -1,28 +1,28 @@
 package com.audiostock.entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.time.LocalDate;
 
 @Entity
 public class PaymentInfo {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column(length = 30, nullable = false)
     private String cardOwner;
 
     @Column(nullable = false)
-    private int cardNumber;
+    private String cardNumber;
 
     @Column(length = 5, nullable = false)
-    private String expireDate; // формат: 04/22
+    private LocalDate expireDate;
 
     @Column(nullable = false)
-    private int cvv;
+    private String cvv;
 
     @Column(nullable = false)
-    private int postalCode;
+    private String postalCode;
 
     @Column(length = 100, nullable = false)
     private String address;
@@ -30,7 +30,7 @@ public class PaymentInfo {
     public PaymentInfo() {
     }
 
-    public PaymentInfo(String cardOwner, int cardNumber, String expireDate, int cvv, int postalCode, String address) {
+    public PaymentInfo(String cardOwner, String cardNumber, LocalDate expireDate, String cvv, String postalCode, String address) {
         this.cardOwner = cardOwner;
         this.cardNumber = cardNumber;
         this.expireDate = expireDate;
@@ -55,35 +55,35 @@ public class PaymentInfo {
         this.cardOwner = cardOwner;
     }
 
-    public int getCardNumber() {
+    public String getCardNumber() {
         return cardNumber;
     }
 
-    public void setCardNumber(int cardNumber) {
+    public void setCardNumber(String cardNumber) {
         this.cardNumber = cardNumber;
     }
 
-    public String getExpireDate() {
+    public LocalDate getExpireDate() {
         return expireDate;
     }
 
-    public void setExpireDate(String expireDate) {
+    public void setExpireDate(LocalDate expireDate) {
         this.expireDate = expireDate;
     }
 
-    public int getCvv() {
+    public String getCvv() {
         return cvv;
     }
 
-    public void setCvv(int cvv) {
+    public void setCvv(String cvv) {
         this.cvv = cvv;
     }
 
-    public int getPostalCode() {
+    public String getPostalCode() {
         return postalCode;
     }
 
-    public void setPostalCode(int postalCode) {
+    public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
     }
 

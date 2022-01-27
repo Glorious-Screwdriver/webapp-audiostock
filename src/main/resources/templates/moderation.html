@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>cart</title>
+    <title>wym</title>
     <link rel="stylesheet" th:href="@{/styles/cssandjs/main.css}" href="../static/styles/cssandjs/main.css">
     <link rel="shortcut icon" th:href="@{/img/favicon.ico}" type="image/x-icon">
 </head>
@@ -11,12 +11,7 @@
     <header th:replace="fragments/header :: user-header"></header>
     <section class="catalogue">
         <ul>
-            <li th:if="${tracks.size()==0}" class="checkout">
-                <div>
-                    <p class="error">В избранном еще ничего нет...</p>
-                </div>
-            </li>
-            <li th:replace="fragments/catalogue :: star-list" th:each="track:${tracks}"></li>
+            <li th:replace="fragments/catalogue :: moderation-list(${requests})" th:each="requests"></li>
         </ul>
     </section>
 </div>

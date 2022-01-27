@@ -26,56 +26,35 @@ private final UploadRequestRepo requestRepo;
         this.userService = userService;
     }
 
-    public UploadRequest addRequest(User author, Track track){
-        UploadRequest request = new UploadRequest(author, track);
-
-        // Назначение случайному модератору
-        List<User> moderators = userService.getAllModerators();
-        Random r = new Random();
-        request.setModerator(moderators.get(r.nextInt(moderators.size())));
-
-        request.setCreationDate(LocalDateTime.now());
-
-        requestRepo.save(request);
-
-        return request;
-    }
-
-    public void approveRequest(Long id) throws UploadRequestNotFoundException {
-        final UploadRequest uploadRequest = getRequest(id);
-
-        uploadRequest.setSolution(true);
-        uploadRequest.setReviewDate(LocalDateTime.now());
-
-        final Track track = uploadRequest.getTrack();
-        track.setActive(true);
-
-        trackRepo.save(track);
-        requestRepo.save(uploadRequest);
-    }
-
-    public void declineRequest(Long id, String rejectionReason) throws UploadRequestNotFoundException {
-        final UploadRequest uploadRequest = getRequest(id);
-
-        uploadRequest.setSolution(false);
-        uploadRequest.setRejectionReason(rejectionReason);
-        uploadRequest.setReviewDate(LocalDateTime.now());
-
-        trackRepo.delete(uploadRequest.getTrack());
-        requestRepo.save(uploadRequest);
-    }
+    // Getters
 
     public UploadRequest getRequest(Long id) throws UploadRequestNotFoundException {
         return requestRepo.findById(id)
                 .orElseThrow(() -> new UploadRequestNotFoundException(String.valueOf(id)));
     }
 
-    public List<UploadRequest> getRequests(){
-        return requestRepo.findAll();
-    }
-
     public List<UploadRequest> getRequestsByModerator(User moderator) {
         return requestRepo.findAllByModeratorAndSolutionNullOrderByCreationDate(moderator);
+    }
+
+    /**
+     * Возвращает все {@code UploadRequest}-ы с отрицательным решением
+     * @param author Автор треков в {@code UploadRequest}-ах
+     * @return Отклонённые {@code UploadRequest}-ы
+     */
+    public List<UploadRequest> getDeclinedRequestsByAuthor(User author) {
+        return requestRepo.findAllByAuthorAndSolutionFalse(author);
+    }
+
+    // Representation
+
+    /**
+     * Возвращает все треки автора с положительным решением
+     * @param author Автор треков
+     * @return Список треков с положительным решением
+     */
+    public List<Track> getApprovedTracksByAuthor(User author) {
+        return getTracksFromRequests(requestRepo.findAllByAuthorAndSolutionTrue(author));
     }
 
     /**
@@ -102,5 +81,47 @@ private final UploadRequestRepo requestRepo;
                 .collect(Collectors.toList());
     }
 
+    // Processing
 
+    public void createRequest(User author, Track track){
+        UploadRequest request = new UploadRequest(author, track);
+
+        request.setCreationDate(LocalDateTime.now());
+
+        // Назначение случайному модератору
+        List<User> moderators = userService.getAllModerators();
+        if (moderators.isEmpty()) throw new IllegalStateException("No moderators exist");
+
+        Random r = new Random();
+        final User moderator = moderators.get(r.nextInt(moderators.size()));
+        request.setModerator(moderator);
+
+        System.out.println("Track " + track.getName() + " [" + track.getId() + "] was assigned to moderator "
+                + moderator.getLogin() + " [" + moderator.getId() + "]");
+
+        requestRepo.save(request);
+    }
+
+    public void approveRequest(Long id) throws UploadRequestNotFoundException {
+        final UploadRequest uploadRequest = getRequest(id);
+
+        uploadRequest.setSolution(true);
+        uploadRequest.setReviewDate(LocalDateTime.now());
+
+        final Track track = uploadRequest.getTrack();
+        track.setActive(true);
+        trackRepo.save(track);
+
+        requestRepo.save(uploadRequest);
+    }
+
+    public void declineRequest(Long id, String rejectionReason) throws UploadRequestNotFoundException {
+        final UploadRequest uploadRequest = getRequest(id);
+
+        uploadRequest.setSolution(false);
+        uploadRequest.setRejectionReason(rejectionReason);
+        uploadRequest.setReviewDate(LocalDateTime.now());
+
+        requestRepo.save(uploadRequest);
+    }
 }

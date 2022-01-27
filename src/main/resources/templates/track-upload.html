@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>main</title>
+    <link rel="stylesheet" th:href="@{/styles/cssandjs/main.css}" href="../static/styles/cssandjs/main.css">
+    <link rel="shortcut icon" th:href="@{/img/favicon.ico}" type="image/x-icon">
+</head>
+<body>
+<div class="container">
+    <header th:replace="fragments/header :: 'user-header'"></header>
+    <div class="about" style="padding-bottom: 10px">
+        <div class="about-container">
+            <form th:action="@{/profile/releases/upload}" method="post" enctype="multipart/form-data">
+                <div class="marginBottom">
+                    <p style="margin-top:30px;" class="error" th:if="${message}!=null" th:text="${message}">error</p>
+                    <h3 style="margin-top:40px;">Загрузить обложку</h3>
+
+                    <div class="underbox marginBottom">
+                        <input class="upload-photo" type="file" name="cover" accept="image/jpeg" required>
+                    </div>
+                    <h3>Загрузить трек</h3>
+                    <div class="underbox marginBottom">
+                        <input class="upload-photo" type="file" name="original" accept="audio/x-mpeg" required>
+                    </div>
+                    <h3>Загрузить превью</h3>
+                    <div class="underbox marginBottom">
+                        <input class="upload-photo" type="file" name="preview" accept="audio/x-mpeg" required>
+                    </div>
+                    <label for="name"><h3>Название</h3></label>
+                    <input type="text" name="name" id="name" maxlength="30" required>
+                </div>
+                <h3>Информация о треке</h3>
+                <div class="underbox marginBottom">
+                    <label for="genre">жанр</label>
+                    <input type="text" name="genre" id="genre" maxlength="20" required>
+                    <label for="mood">настроение</label>
+                    <input type="text" name="mood" id="mood" maxlength="20" required>
+                    <label for="bpm">bpm</label>
+                    <input type="number" name="bpm" id="bpm" min="0" max="1000" required>
+                    <label for="price">цена</label>
+                    <input type="number" name="price" id="price" min="0" max="10000" required>
+                </div>
+                <div class="description">
+                    <h3>Описание</h3>
+                    <textarea name="description" maxlength="500" required></textarea>
+                </div>
+                <input type="submit" value="Подтвердить">
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

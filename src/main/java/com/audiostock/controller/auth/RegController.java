@@ -1,7 +1,7 @@
 package com.audiostock.controller.auth;
 
 import com.audiostock.service.UserService;
-import com.audiostock.service.util.RegisterReport;
+import com.audiostock.service.reports.RegisterReport;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,6 +30,6 @@ public class RegController {
             return "register";
         }
 
-        return "redirect:/";
+        return "redirect:/login";
     }
 }

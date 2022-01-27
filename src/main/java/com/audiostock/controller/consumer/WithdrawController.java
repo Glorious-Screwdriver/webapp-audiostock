@@ -14,19 +14,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/balance")
-public class BalanceController {
-
+@RequestMapping("/withdraw")
+public class WithdrawController {
     UserService userService;
     private final Map<Principal, String> referers;
 
-    public BalanceController(UserService userService) {
+    public WithdrawController(UserService userService) {
         this.userService = userService;
         referers = new HashMap<>();
     }
 
     @GetMapping
-    public String prepareDeposit(Principal principal, Model model, @RequestHeader String referer) {
+    public String prepareWithdrawal(Principal principal, Model model, @RequestHeader String referer) {
         if (referers.containsKey(principal)) {
             referers.replace(principal, referer);
         } else {
@@ -35,16 +34,15 @@ public class BalanceController {
 
         User user = Utils.getUserFromPrincipal(principal, userService);
 
-        model.addAttribute("total", Math.max(0, userService.totalCartPrice(user) - user.getBalance()));
         model.addAttribute("paymentInfo", user.getPaymentInfo());
         model.addAttribute("balance", user.getBalance());
 
-        return "balance";
+        return "withdraw";
     }
 
 
     @PostMapping
-    public String makeDeposit(Principal principal, @RequestParam Map<String, String> params, Model model) {
+    public String makeWithdrawal(Principal principal, @RequestParam Map<String, String> params, Model model) {
         User user = Utils.getUserFromPrincipal(principal, userService);
 
         // Проверяем на пустые поля
@@ -52,12 +50,12 @@ public class BalanceController {
             if (value == null) {
                 model.addAttribute("message", "Необходимо заполнить все поля!");
                 model.addAttribute("paymentInfo", user.getPaymentInfo());
-                return "balance";
+                return "withdraw";
             }
         }
 
 
-        // Тут была бы проверка платежных данных...
+        // Тут была бы проверка платежных данных... :)
 
 
         // Сохраняем новую платежную информацию
@@ -77,12 +75,17 @@ public class BalanceController {
         userService.savePaymentMethod(user, paymentInfo);
 
         // Добавляем деньги пользователю
-        userService.makeDeposit(user, Long.parseLong(params.get("amount")));
+        boolean completed = userService.makeWithdrawal(user, Long.parseLong(params.get("amount")));
 
+        if(!completed){
+            model.addAttribute("message", "Невозможно снять средства");
+            model.addAttribute("paymentInfo", user.getPaymentInfo());
+            model.addAttribute("balance", user.getBalance());
+            return"withdraw";
+        }
         // Возвращаем на страницу, с которой пришел пользователь
         String referer = referers.get(principal);
         referers.remove(principal);
         return "redirect:" + referer;
     }
-
 }

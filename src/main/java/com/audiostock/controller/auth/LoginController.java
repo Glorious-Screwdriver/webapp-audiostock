@@ -8,13 +8,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.security.Principal;
 
 @Controller
 public class LoginController {
 
-    // Этот маппинг просто предоставляет View для /login
     @GetMapping("/login")
-    public String getLogin() {
+    public String getLogin(Principal principal) {
+        if (principal != null) {
+            return "redirect:/";
+        }
         return "login";
     }
 
@@ -24,7 +27,7 @@ public class LoginController {
         if (auth != null){
             new SecurityContextLogoutHandler().logout(request, response, auth);
         }
-        return "redirect:/";
+        return "redirect:/login";
     }
 
 }

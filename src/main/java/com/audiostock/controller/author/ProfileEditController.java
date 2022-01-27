@@ -1,10 +1,11 @@
 package com.audiostock.controller.author;
 
 import com.audiostock.entities.Track;
+import com.audiostock.entities.UploadRequest;
 import com.audiostock.entities.User;
 import com.audiostock.service.UploadRequestService;
 import com.audiostock.service.UserService;
-import com.audiostock.service.util.ChangeProfileInfoReport;
+import com.audiostock.service.reports.ChangeProfileInfoReport;
 import com.audiostock.service.util.Utils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,8 +16,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/profile")
@@ -33,57 +35,93 @@ public class ProfileEditController {
     // Representation
 
     @GetMapping
-    public String profile(Principal principal) {
+    public String profile(Principal principal, Model model) {
         User user = Utils.getUserFromPrincipal(principal, userService);
-
-        //TODO profile view
-        throw new UnsupportedOperationException("/profile view is not supported");
+        model.addAttribute("user", user);
+        return "profile-edit";
     }
 
     @GetMapping("/releases")
-    public String releases(Principal principal) {
+    public String releases(Principal principal, Model model) {
         User user = Utils.getUserFromPrincipal(principal, userService);
 
-        List<Track> releases = new ArrayList<>(user.getReleases());
-        List<Track> pending = new ArrayList<>(uploadRequestService.getRequestedTracksByAuthor(user));
-        List<Track> declined = new ArrayList<>(uploadRequestService.getDeclinedTracksByAuthor(user));
+        List<Track> releases = uploadRequestService.getApprovedTracksByAuthor(user);
+        List<Track> pending = uploadRequestService.getRequestedTracksByAuthor(user);
 
-        //TODO releases view
-        throw new UnsupportedOperationException("/profile/releases/releases view is not supported");
+        List<UploadRequest> declinedRequests = uploadRequestService.getDeclinedRequestsByAuthor(user);
+        Map<Track, String> declined = new HashMap<>();
+        for (UploadRequest request : declinedRequests) {
+            declined.put(request.getTrack(), request.getRejectionReason());
+        }
+
+        model.addAttribute("user", user);
+        model.addAttribute("rel", true);
+        model.addAttribute("releases", releases);
+        model.addAttribute("pending", pending);
+        model.addAttribute("declined", declined);
+
+        return "profile-edit";
     }
 
-    // Editing
+    // Editing profile info
 
-    /* Мне кажется логично сделать следующим образом:
-    * будет 2 формы - для смены публичных данных автора (полное имя и биография),
-    * и для смены пароля. Каждый метод принимает определенное количество параметров,
-    * которые приходят из одной из форм */
-
-    @PostMapping(params = {"firstname", "lastname", "middlename", "biography"})
-    public String changeAuthorInfo(Principal principal, Model model,
-                              @RequestParam String firstname,
-                              @RequestParam String lastname,
-                              @RequestParam String middlename,
-                              @RequestParam String biography) {
+    @PostMapping(consumes = "multipart/form-data")
+    public String changeAvatar(Principal principal, @RequestParam("avatar") MultipartFile avatar, Model model) {
         User user = Utils.getUserFromPrincipal(principal, userService);
-        final ChangeProfileInfoReport report = userService.changeProfileInfo(
-                user, firstname, lastname, middlename, biography
+
+        // Смена аватара
+        final boolean successful = userService.changeProfileAvatar(user, avatar);
+
+        if (!successful) {
+            model.addAttribute("message", "Во время загрузки файла произошла ошибка!");
+        }
+        model.addAttribute("user", user);
+
+        return "profile-edit";
+    }
+
+    @PostMapping(params = "username")
+    public String changeUsername(Principal principal, @RequestParam String username, Model model) {
+        User user = Utils.getUserFromPrincipal(principal, userService);
+
+        final ChangeProfileInfoReport report = userService.changeUsername(user, username);
+        if (report.isSuccessful()) {
+            return "redirect:/logout";
+        } else {
+            model.addAttribute("user", user);
+            model.addAttribute("message", report.getMessage());
+            return "profile-edit";
+        }
+    }
+
+    @PostMapping(params = {"firstname", "lastname", "middlename"})
+    public String changeFullName(Principal principal, Model model,
+                                 @RequestParam String firstname,
+                                 @RequestParam String lastname,
+                                 @RequestParam String middlename) {
+        User user = Utils.getUserFromPrincipal(principal, userService);
+
+        // Изменение полного имени пользователя
+        final ChangeProfileInfoReport report = userService.changeFullName(
+                user, firstname, lastname, middlename
         );
 
         if (!report.isSuccessful()) {
             model.addAttribute("message", report.getMessage());
         }
+        model.addAttribute("user", user);
 
-        //TODO profile view
-        throw new UnsupportedOperationException("/profile view is not supported");
+        return "profile-edit";
     }
 
-    @PostMapping(params = {"oldPassword", "newPassword", "newPasswordAgain"})
+    @PostMapping(params = {"old-password", "new-password", "repeat"})
     public String changePassword(Principal principal, Model model,
-                                 @RequestParam String oldPassword,
-                                 @RequestParam String newPassword,
-                                 @RequestParam String newPasswordAgain) {
+                                 @RequestParam("old-password") String oldPassword,
+                                 @RequestParam("new-password") String newPassword,
+                                 @RequestParam("repeat") String newPasswordAgain) {
         User user = Utils.getUserFromPrincipal(principal, userService);
+
+        // Изменение пароля пользователя
         final ChangeProfileInfoReport report = userService.changePassword(
                 user, oldPassword, newPassword, newPasswordAgain
         );
@@ -91,22 +129,24 @@ public class ProfileEditController {
         if (!report.isSuccessful()) {
             model.addAttribute("message", report.getMessage());
         }
+        model.addAttribute("user", user);
 
-        //TODO profile view
-        throw new UnsupportedOperationException("/profile view is not supported");
+        return "profile-edit";
     }
 
-    @PostMapping(params = "file")
-    public String changeAvatar(Principal principal, @RequestParam MultipartFile file, Model model) {
+    @PostMapping(params = "bio")
+    public String changePassword(Principal principal, Model model, @RequestParam("bio") String biography) {
         User user = Utils.getUserFromPrincipal(principal, userService);
-        final boolean successful = userService.changeProfileAvatar(user, file);
 
-        if (!successful) {
-            model.addAttribute("message", "Image upload error");
+        // Изменение биографии пользователя
+        final ChangeProfileInfoReport report = userService.changeBiography(user, biography);
+
+        if (!report.isSuccessful()) {
+            model.addAttribute("message", report.getMessage());
         }
+        model.addAttribute("user", user);
 
-        //TODO profile view
-        throw new UnsupportedOperationException("/profile view is not supported");
+        return "profile-edit";
     }
 
 }

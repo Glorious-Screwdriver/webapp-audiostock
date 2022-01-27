@@ -8,15 +8,16 @@
 <body>
 <div class="container">
     <section th:fragment="searchbar" class="searchbar">
-        <form>
+        <form th:action="@{/}" method="get">
+            <input type="submit" class="search-btn" style="padding:0;" value="ок"/>
             <div class="bar">
-                <input type="text" id="search" placeholder="поиск">
+                <input type="text" id="name" name="name" placeholder="название">
             </div>
             <div class="mood">
-                <input type="text" id="mood" placeholder="Настроение">
+                <input type="text" id="mood" name="mood" placeholder="настроение">
             </div>
             <div class="genre">
-                <input type="text" id="genre" placeholder="жанр">
+                <input type="text" id="genre" name="genre" placeholder="жанр">
             </div>
         </form>
     </section>

@@ -4,18 +4,16 @@ import com.audiostock.entities.Track;
 import com.audiostock.entities.User;
 import com.audiostock.service.TrackService;
 import com.audiostock.service.UserService;
-import com.audiostock.service.util.CheckoutFailureReason;
-import com.audiostock.service.util.CheckoutReport;
+import com.audiostock.service.reports.CheckoutFailureReason;
+import com.audiostock.service.reports.CheckoutReport;
 import com.audiostock.service.util.Utils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.security.Principal;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -61,30 +59,25 @@ public class CartController {
         model.addAttribute("total", totalCost);
         model.addAttribute("nem", totalCost > balance);
 
-        return "order";
+        return "checkout";
     }
 
     @PostMapping("/checkout")
-    public String checkout(Principal principal, Model model, @RequestHeader String referer) {
+    public String checkout(Principal principal, Model model) {
         User user = Utils.getUserFromPrincipal(principal, userService);
 
         final CheckoutReport report = userService.checkout(user);
 
         if (report.isSuccessful()) {
-            //TODO /purchased view
-            throw new UnsupportedOperationException("/purchased view is not supported");
+            return "redirect:/purchased";
         } else {
+            model.addAttribute("message", report.getMessage());
             if (report.getCheckoutFailureReason() == CheckoutFailureReason.NOT_ENOUGH_MONEY) {
-                //TODO /deposit view
-                throw new UnsupportedOperationException("/deposit view is not supported");
-            } else if (report.getCheckoutFailureReason() == CheckoutFailureReason.TRACK_IS_ALREADY_PURCHASED) {
-                model.addAttribute("message", report.getMessage());
-
-                //TODO /cart/checkout view
-                throw new UnsupportedOperationException();
+                return "forward:/balance";
+            } else { // CheckoutFailureReason.TRACK_IS_ALREADY_PURCHASED
+                return "forward:/checkout";
             }
         }
-        return "redirect:" + referer;
     }
 
 }

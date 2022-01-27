@@ -15,6 +15,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+    final private String CONSUMER = "CONSUMER";
+    final private String MODERATOR = "MODERATOR";
+
     private final UserRepo userRepo;
 
     public WebSecurityConfig(final UserRepo userRepo) {
@@ -24,19 +27,30 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                // Styles and images
+                // Styles
                 .antMatchers("/styles/cssandjs/*", "/img/*").permitAll()
-                // GUESTS
+                // Open data
+                .antMatchers("/data/previews/*", "/data/avatars/*", "/data/covers/*").permitAll()
+                // Prohibited data
+                .antMatchers("/data/tracks/*").hasRole(MODERATOR)
+
+                // UNAUTHORIZED
                 .antMatchers("/", "/register", "/track/*", "/user/*", "/user/*/tracks").permitAll()
+
                 // CONSUMERS
-                .antMatchers("/favorite", "/cart", "/balance", "/purchased", "/profile").hasRole("CONSUMER")
+                .antMatchers("/favorite", "/cart", "/cart/checkout", "/track/*/*").hasRole(CONSUMER)
+                .antMatchers( "/balance","/withdraw", "/purchased", "/purchased/*").hasRole(CONSUMER)
+
+                // AUTHORS
+                .antMatchers("/profile", "/profile/releases", "/profile/releases/*", "/profile/releases/*/*").hasRole(CONSUMER)
+
                 // MODERATORS
-                .antMatchers("/moderation").hasRole("MODERATOR")
-                .anyRequest().authenticated()
+                .antMatchers("/moderation", "/moderation/*").hasRole(MODERATOR)
+
+                .anyRequest().permitAll()
             .and()
                 .formLogin()
                 .loginPage("/login")
-//                .successForwardUrl("/")
                 .permitAll()
             .and()
                 .logout()

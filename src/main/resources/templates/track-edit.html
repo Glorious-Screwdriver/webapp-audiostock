@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>main</title>
+    <link rel="stylesheet" th:href="@{/styles/cssandjs/main.css}" href="../static/styles/cssandjs/main.css">
+    <link rel="shortcut icon" th:href="@{/img/favicon.ico}" type="image/x-icon">
+</head>
+<body>
+<div class="container">
+    <header th:replace="fragments/header :: 'user-header'"></header>
+    <div class="about" style="padding-bottom: 10px">
+        <div class="about-container">
+            <div class="marginBottom">
+                <p class="error" th:if="${message}!=null" th:text="${message}">error</p>
+                <h3>Загрузить обложку</h3>
+                <div class="underbox marginBottom">
+                    <form th:action="@{/profile/releases/{i}(i=${track.getId()})}" method="post" enctype="multipart/form-data">
+                        <input class="upload-photo" type="file" name="cover" accept="image/jpeg">
+                        <input type="submit" value="Изменить">
+                    </form>
+                </div>
+            </div>
+            <form th:action="@{/profile/releases/{i}(i=${track.getId()})}" method="post" enctype="multipart/form-data">
+                <div class="marginBottom">
+                    <label for="name"><h3>Название</h3></label>
+                    <input type="text" name="name" id="name" maxlength="30" th:value="${track.getName()}">
+                </div>
+                <h3>Информация о треке</h3>
+                <div class="underbox marginBottom">
+                    <label for="genre">жанр</label>
+                    <input type="text" name="genre" id="genre" maxlength="20" th:value="${track.getGenre()}" required>
+                    <label for="mood">настроение</label>
+                    <input type="text" name="mood" id="mood" maxlength="20" th:value="${track.getMood()}" required>
+                    <label for="bpm">bpm</label>
+                    <input type="number" name="bpm" id="bpm" min="0" max="1000" th:value="${track.getBpm()}" required>
+                    <label for="price">цена</label>
+                    <input type="number" name="price" id="price" min="0" max="10000" th:value="${track.getPrice()}" required>
+                </div>
+                <div class="description">
+                    <h3>Описание</h3>
+                    <textarea name="description" maxlength="500" th:text="${track.getDescription()}" required></textarea>
+                </div>
+                <input type="submit" value="Подтвердить">
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

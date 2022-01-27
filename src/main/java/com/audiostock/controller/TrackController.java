@@ -2,6 +2,7 @@ package com.audiostock.controller;
 
 import com.audiostock.entities.Track;
 import com.audiostock.entities.User;
+import com.audiostock.service.StatusService;
 import com.audiostock.service.TrackService;
 import com.audiostock.service.UserService;
 import com.audiostock.service.exceptions.TrackIsNotActiveException;
@@ -17,12 +18,14 @@ import java.security.Principal;
 @RequestMapping("/track")
 public class TrackController {
 
-    UserService userService;
-    TrackService trackService;
+    private final UserService userService;
+    private final TrackService trackService;
+    private final StatusService statusService;
 
-    public TrackController(UserService userService, TrackService trackService) {
+    public TrackController(UserService userService, TrackService trackService, StatusService statusService) {
         this.userService = userService;
         this.trackService = trackService;
+        this.statusService = statusService;
     }
 
     // Representation
@@ -31,38 +34,46 @@ public class TrackController {
     public String getTrack(@PathVariable Long trackId, Model model, Principal principal)
             throws TrackNotFoundException, TrackIsNotActiveException {
         Track track = trackService.getTrackById(trackId);
-
         User user = Utils.getUserFromPrincipal(principal, userService);
-        if (user != null) {
-            // Checking if track is active
-            if (!track.isActive() && !user.getStatus().getName().equals("MODERATOR")) {
-                throw new TrackIsNotActiveException(String.valueOf(trackId));
+
+        if (!track.isActive()) {
+            if (user == null) {
+                throw new TrackIsNotActiveException(String.valueOf(track.getId()));
             }
 
+            if (!statusService.isModerator(user)) {
+                throw new TrackIsNotActiveException(String.valueOf(track.getId()));
+            }
+        }
+        model.addAttribute("track", track);
+
+        if (user != null) {
             // Printing username in the header
             model.addAttribute("logged", true);
             model.addAttribute("user", user);
 
             // Printing track buttons
             model.addAttribute("carted", trackService.isInCart(track, user));
+            model.addAttribute("purchaced", trackService.isPurchased(track, user));
             model.addAttribute("stared", trackService.isInFavorite(track, user));
-
-        } else {
-            if (!track.isActive()) throw new TrackIsNotActiveException(String.valueOf(trackId));
+        }else{
+            model.addAttribute("carted", false);
+            model.addAttribute("purchaced", false);
+            model.addAttribute("stared", false);
         }
 
-        model.addAttribute("track", track);
         return "track";
     }
 
-    // Buttons
 
+    // Buttons
     @PostMapping("/{trackId}/addToFavorite")
     public String addTrackToFavorite(@PathVariable Long trackId, Principal principal, @RequestHeader String referer)
-            throws TrackNotFoundException {
+            throws TrackNotFoundException, TrackIsNotActiveException {
         Track track = trackService.getTrackById(trackId);
         User user = Utils.getUserFromPrincipal(principal, userService);
-        System.out.println(track.getName() + " to favorite-->" + user.getLogin());
+
+        checkTrackIsActive(track);
 
         boolean added = userService.addTrackToFavorite(user, track);
         System.err.println(added);
@@ -71,9 +82,11 @@ public class TrackController {
 
     @PostMapping("/{trackId}/removeFromFavorite")
     public String removeTrackFromFavorite(@PathVariable Long trackId, Principal principal, @RequestHeader String referer)
-            throws TrackNotFoundException {
+            throws TrackNotFoundException, TrackIsNotActiveException {
         Track track = trackService.getTrackById(trackId);
         User user = Utils.getUserFromPrincipal(principal, userService);
+
+        checkTrackIsActive(track);
 
         boolean removed = userService.removeTrackFromFavorites(user, track);
         return "redirect:" + referer;
@@ -81,9 +94,11 @@ public class TrackController {
 
     @PostMapping("/{trackId}/addToCart")
     public String addTrackToCart(@PathVariable Long trackId, Principal principal, @RequestHeader String referer)
-            throws TrackNotFoundException {
+            throws TrackNotFoundException, TrackIsNotActiveException {
         Track track = trackService.getTrackById(trackId);
         User user = Utils.getUserFromPrincipal(principal, userService);
+
+        checkTrackIsActive(track);
 
         boolean added = userService.addTrackToCart(user, track);
         return "redirect:" + referer;
@@ -91,26 +106,25 @@ public class TrackController {
 
     @PostMapping("/{trackId}/removeFromCart")
     public String removeTrackFromCart(@PathVariable Long trackId, Principal principal, @RequestHeader String referer)
-            throws TrackNotFoundException {
+            throws TrackNotFoundException, TrackIsNotActiveException {
         Track track = trackService.getTrackById(trackId);
         User user = Utils.getUserFromPrincipal(principal, userService);
+
+        checkTrackIsActive(track);
 
         boolean removed = userService.removeTrackFromCart(user, track);
         return "redirect:" + referer;
     }
 
-    // Exceptions
-
-    @ExceptionHandler(TrackNotFoundException.class)
-    public String trackNotFound(TrackNotFoundException e) {
-        //TODO trackNotFound view
-        throw new UnsupportedOperationException(e);
-    }
-
-    @ExceptionHandler(TrackIsNotActiveException.class)
-    public String trackIsNotActive(TrackIsNotActiveException e) {
-        //TODO trackIsNotActive view
-        throw new UnsupportedOperationException(e);
+    /**
+     * Запрещает производить действия с неактивным треком
+     * @param track неактивный(?) трек
+     * @throws TrackIsNotActiveException если трек неактивен
+     */
+    private void checkTrackIsActive(Track track) throws TrackIsNotActiveException {
+        if (!track.isActive()) {
+            throw new TrackIsNotActiveException(String.valueOf(track.getId()));
+        }
     }
 
 }
