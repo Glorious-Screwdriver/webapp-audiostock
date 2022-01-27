@@ -12,3 +12,7 @@
 2. [Use cases.md](docs/Use%20cases.md)
 3. [Persistence.md](docs/Persistence.md)
 4. [UI.md](docs/UI.md)
+
+## Пояснительная записка
+
+[ПЗ webapp-audiostock.pdf](docs/ПЗ%20webapp-audiostock.pdf)
